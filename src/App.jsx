@@ -139,30 +139,14 @@ export default function App() {
 
   return (
     <ProfileSync>
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px' }}>
+      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px' }}>
         <h2>🏪 NoTungPhoCo Marketplace</h2>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <SignedOut>
-            <SignInButton 
-              redirectUrl="/"
-              afterSignInUrl="/"
-              afterSignUpUrl="/"
-              style={{ 
-                padding: '10px 20px', 
-                background: '#007bff', 
-                color: 'white', 
-                border: 'none', 
-                borderRadius: '5px',
-                cursor: 'pointer'
-              }}
-            >
-              📧 Đăng nhập với Email
-            </SignInButton>
-          </SignedOut>
-          <SignedIn>
-            <UserButton afterSignOutUrl="/" />
-          </SignedIn>
-        </div>
+        <SignedOut>
+          <SignInButton />
+        </SignedOut>
+        <SignedIn>
+          <UserButton />
+        </SignedIn>
       </header>
       
       <div>
@@ -177,20 +161,7 @@ export default function App() {
       
       <ClerkStatus />
       
-      {/* Clerk Email Authentication Instructions */}
-      <SignedOut>
-        <div style={{ 
-          padding: '20px', 
-          background: '#e7f3ff', 
-          borderRadius: '8px',
-          margin: '20px 0',
-          textAlign: 'center'
-        }}>
-          <h3>🔐 Đăng nhập với Clerk</h3>
-          <p>Bấm nút "📧 Đăng nhập với Email" ở góc trên để sử dụng Clerk authentication</p>
-          <p><small>Hỗ trợ: Email/Password, Google, GitHub, và nhiều providers khác</small></p>
-        </div>
-      </SignedOut>
+
       
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
