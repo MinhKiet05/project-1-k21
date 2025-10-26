@@ -5,6 +5,7 @@ import './App.css'
 import { SignedIn, SignedOut, SignInButton, UserButton, useUser, useAuth } from '@clerk/clerk-react'
 import ProfileSync from './components/profileSync/ProfileSync.jsx'
 import DebugPanel from './components/DebugPanel.jsx'
+import ClerkErrorDebugger from './components/ClerkErrorDebugger.jsx'
 import { locationService, categoryService, postService } from './lib/database.js'
 
 function ClerkDebugInfo() {
@@ -138,7 +139,7 @@ export default function App() {
         </p>
       </div>
       
-      <ClerkDebugInfo />
+      <ClerkErrorDebugger />
       
       <SignedIn>
         <DatabaseTest />
