@@ -2,10 +2,36 @@ import { useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from '@clerk/clerk-react'
+import { SignedIn, SignedOut, SignInButton, UserButton, useUser, useAuth } from '@clerk/clerk-react'
 import ProfileSync from './components/profileSync/ProfileSync.jsx'
 import DebugPanel from './components/DebugPanel.jsx'
 import { locationService, categoryService, postService } from './lib/database.js'
+
+function ClerkDebugInfo() {
+  const { isLoaded, isSignedIn, user } = useUser()
+  const { getToken } = useAuth()
+
+  if (!isLoaded) return <div>🔄 Loading Clerk...</div>
+
+  return (
+    <div style={{ marginTop: '10px', padding: '15px', background: '#f8f9fa', borderRadius: '8px', fontSize: '12px' }}>
+      <h4>🔐 Clerk Status</h4>
+      <ul style={{ margin: 0, paddingLeft: '20px' }}>
+        <li><strong>Loaded:</strong> {isLoaded ? '✅' : '❌'}</li>
+        <li><strong>Signed In:</strong> {isSignedIn ? '✅' : '❌'}</li>
+        <li><strong>User ID:</strong> {user?.id || 'N/A'}</li>
+        <li><strong>Email:</strong> {user?.emailAddresses?.[0]?.emailAddress || 'N/A'}</li>
+        <li><strong>Domain:</strong> {window.location.hostname}</li>
+      </ul>
+      {!isSignedIn && (
+        <div style={{ marginTop: '10px', padding: '10px', background: '#fff3cd', borderRadius: '4px' }}>
+          <strong>⚠️ Not signed in</strong><br />
+          If you see authorization errors, check that <code>{window.location.hostname}</code> is added to Clerk domains.
+        </div>
+      )}
+    </div>
+  )
+}
 
 function DatabaseTest() {
   const { user } = useUser()
@@ -111,6 +137,8 @@ export default function App() {
           Edit <code>src/App.jsx</code> and save to test HMR
         </p>
       </div>
+      
+      <ClerkDebugInfo />
       
       <SignedIn>
         <DatabaseTest />
