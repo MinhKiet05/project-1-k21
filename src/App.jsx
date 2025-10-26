@@ -2,11 +2,38 @@ import { useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import { SignedIn, SignedOut, SignInButton, UserButton, useUser, useAuth } from '@clerk/clerk-react'
+import { SignedIn, SignedOut, SignInButton, UserButton, useUser, useAuth, useClerk } from '@clerk/clerk-react'
 import ProfileSync from './components/profileSync/ProfileSync.jsx'
 import DebugPanel from './components/DebugPanel.jsx'
 import ClerkErrorDebugger from './components/ClerkErrorDebugger.jsx'
 import { locationService, categoryService, postService } from './lib/database.js'
+
+function ClerkStatus() {
+  const { isLoaded } = useUser()
+  const clerk = useClerk()
+
+  if (!isLoaded) {
+    return (
+      <div style={{ 
+        padding: '20px', 
+        background: '#fff3cd', 
+        border: '1px solid #ffeaa7', 
+        borderRadius: '8px',
+        margin: '20px 0'
+      }}>
+        <h3>🔄 Loading Clerk...</h3>
+        <p>Please wait while authentication is initializing...</p>
+        {!clerk && (
+          <p style={{ color: 'red' }}>
+            ⚠️ Clerk instance not available. Check console for errors.
+          </p>
+        )}
+      </div>
+    )
+  }
+
+  return null
+}
 
 function ClerkDebugInfo() {
   const { isLoaded, isSignedIn, user } = useUser()
@@ -111,14 +138,28 @@ export default function App() {
 
   return (
     <ProfileSync>
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px' }}>
+      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px' }}>
         <h2>🏪 NoTungPhoCo Marketplace</h2>
-        <SignedOut>
-          <SignInButton />
-        </SignedOut>
-        <SignedIn>
-          <UserButton />
-        </SignedIn>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <SignedOut>
+            <SignInButton 
+              mode="modal"
+              style={{ 
+                padding: '10px 20px', 
+                background: '#007bff', 
+                color: 'white', 
+                border: 'none', 
+                borderRadius: '5px',
+                cursor: 'pointer'
+              }}
+            >
+              🔐 Đăng nhập
+            </SignInButton>
+          </SignedOut>
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
+        </div>
       </header>
       
       <div>
@@ -130,6 +171,9 @@ export default function App() {
         </a>
       </div>
       <h1>Vite + React + Supabase + Clerk</h1>
+      
+      <ClerkStatus />
+      
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}

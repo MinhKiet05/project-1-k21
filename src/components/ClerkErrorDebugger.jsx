@@ -24,33 +24,7 @@ export default function ClerkErrorDebugger() {
     }
   }, [isSignedIn, getToken])
 
-  // Listen for Clerk errors
-  useEffect(() => {
-    const handleError = (error) => {
-      console.error('Clerk Error Caught:', error)
-      setAuthError(error)
-    }
-
-    // Try to listen for Clerk events
-    if (clerk) {
-      // Note: This might not work in all Clerk versions, but worth trying
-      try {
-        clerk.addListener && clerk.addListener('error', handleError)
-      } catch (e) {
-        console.log('Could not add Clerk error listener')
-      }
-    }
-
-    return () => {
-      if (clerk && clerk.removeListener) {
-        try {
-          clerk.removeListener('error', handleError)
-        } catch (e) {
-          console.log('Could not remove Clerk error listener')
-        }
-      }
-    }
-  }, [clerk])
+  // Listen for Clerk errors - removed problematic addListener
 
   if (!isLoaded) {
     return (
