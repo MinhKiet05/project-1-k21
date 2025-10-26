@@ -8,11 +8,13 @@ import DebugPanel from './components/DebugPanel.jsx'
 import ClerkErrorDebugger from './components/ClerkErrorDebugger.jsx'
 import CustomAuth from './components/CustomAuth.jsx'
 import URLCleanup from './components/URLCleanup.jsx'
+import EnvDebugger from './components/EnvDebugger.jsx'
 import { locationService, categoryService, postService } from './lib/database.js'
 
 function ClerkStatus() {
   const { isLoaded } = useUser()
   const clerk = useClerk()
+  const [showEnvDebug, setShowEnvDebug] = useState(false)
 
   if (!isLoaded) {
     return (
@@ -30,6 +32,21 @@ function ClerkStatus() {
             ⚠️ Clerk instance not available. Check console for errors.
           </p>
         )}
+        <button 
+          onClick={() => setShowEnvDebug(true)}
+          style={{
+            padding: '10px 20px',
+            background: '#dc3545',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            marginTop: '10px'
+          }}
+        >
+          🔍 Debug Environment Variables
+        </button>
+        {showEnvDebug && <EnvDebugger />}
       </div>
     )
   }
