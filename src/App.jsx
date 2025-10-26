@@ -6,6 +6,7 @@ import { SignedIn, SignedOut, SignInButton, UserButton, useUser, useAuth, useCle
 import ProfileSync from './components/profileSync/ProfileSync.jsx'
 import DebugPanel from './components/DebugPanel.jsx'
 import ClerkErrorDebugger from './components/ClerkErrorDebugger.jsx'
+import CustomAuth from './components/CustomAuth.jsx'
 import { locationService, categoryService, postService } from './lib/database.js'
 
 function ClerkStatus() {
@@ -141,21 +142,6 @@ export default function App() {
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px' }}>
         <h2>🏪 NoTungPhoCo Marketplace</h2>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <SignedOut>
-            <SignInButton 
-              mode="modal"
-              style={{ 
-                padding: '10px 20px', 
-                background: '#007bff', 
-                color: 'white', 
-                border: 'none', 
-                borderRadius: '5px',
-                cursor: 'pointer'
-              }}
-            >
-              🔐 Đăng nhập
-            </SignInButton>
-          </SignedOut>
           <SignedIn>
             <UserButton />
           </SignedIn>
@@ -173,6 +159,9 @@ export default function App() {
       <h1>Vite + React + Supabase + Clerk</h1>
       
       <ClerkStatus />
+      
+      {/* Custom Authentication Form */}
+      <CustomAuth />
       
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
