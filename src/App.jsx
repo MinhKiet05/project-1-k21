@@ -113,7 +113,7 @@ export default function App() {
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px' }}>
         <h2>🏪 NoTungPhoCo Marketplace</h2>
         <SignedOut>
-          <SignInButton />
+          <SignInButton mode="modal" />
         </SignedOut>
         <SignedIn>
           <UserButton />
