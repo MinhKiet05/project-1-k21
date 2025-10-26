@@ -2,57 +2,10 @@ import { useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import { SignedIn, SignedOut, SignInButton, UserButton, useUser, useAuth, useClerk } from '@clerk/clerk-react'
+import { SignedIn, SignedOut, SignInButton, UserButton, useUser, useAuth } from '@clerk/clerk-react'
 import ProfileSync from './components/profileSync/ProfileSync.jsx'
 import DebugPanel from './components/DebugPanel.jsx'
-import ClerkErrorDebugger from './components/ClerkErrorDebugger.jsx'
-import CustomAuth from './components/CustomAuth.jsx'
-import URLCleanup from './components/URLCleanup.jsx'
-import EnvDebugger from './components/EnvDebugger.jsx'
 import { locationService, categoryService, postService } from './lib/database.js'
-
-function ClerkStatus() {
-  const { isLoaded } = useUser()
-  const clerk = useClerk()
-  const [showEnvDebug, setShowEnvDebug] = useState(false)
-
-  if (!isLoaded) {
-    return (
-      <div style={{ 
-        padding: '20px', 
-        background: '#fff3cd', 
-        border: '1px solid #ffeaa7', 
-        borderRadius: '8px',
-        margin: '20px 0'
-      }}>
-        <h3>🔄 Loading Clerk...</h3>
-        <p>Please wait while authentication is initializing...</p>
-        {!clerk && (
-          <p style={{ color: 'red' }}>
-            ⚠️ Clerk instance not available. Check console for errors.
-          </p>
-        )}
-        <button 
-          onClick={() => setShowEnvDebug(true)}
-          style={{
-            padding: '10px 20px',
-            background: '#dc3545',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            marginTop: '10px'
-          }}
-        >
-          🔍 Debug Environment Variables
-        </button>
-        {showEnvDebug && <EnvDebugger />}
-      </div>
-    )
-  }
-
-  return null
-}
 
 function ClerkDebugInfo() {
   const { isLoaded, isSignedIn, user } = useUser()
@@ -157,20 +110,13 @@ export default function App() {
 
   return (
     <ProfileSync>
-      <URLCleanup />
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px' }}>
         <h2>🏪 NoTungPhoCo Marketplace</h2>
         <SignedOut>
-          <SignInButton 
-            mode="modal"
-            afterSignInUrl="/"
-            afterSignUpUrl="/"
-          />
+          <SignInButton />
         </SignedOut>
         <SignedIn>
-          <UserButton 
-            afterSignOutUrl="/"
-          />
+          <UserButton />
         </SignedIn>
       </header>
       
@@ -183,11 +129,6 @@ export default function App() {
         </a>
       </div>
       <h1>Vite + React + Supabase + Clerk</h1>
-      
-      <ClerkStatus />
-      
-
-      
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
@@ -197,7 +138,7 @@ export default function App() {
         </p>
       </div>
       
-      <ClerkErrorDebugger />
+      <ClerkDebugInfo />
       
       <SignedIn>
         <DatabaseTest />

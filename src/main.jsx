@@ -30,14 +30,7 @@ if (!isClerkConfigured || !isSupabaseConfigured) {
   // Normal app with Clerk
   createRoot(document.getElementById('root')).render(
     <StrictMode>
-      <ClerkProvider 
-        publishableKey={PUBLISHABLE_KEY}
-        navigate={(to) => window.history.pushState(null, '', to)}
-        signInUrl="/"
-        signUpUrl="/"
-        afterSignInUrl="/"
-        afterSignUpUrl="/"
-      >
+      <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
         <App />
       </ClerkProvider>
     </StrictMode>
