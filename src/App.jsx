@@ -14,7 +14,7 @@ function ClerkDebugInfo() {
   if (!isLoaded) return <div>🔄 Loading Clerk...</div>
 
   return (
-    <div style={{ marginTop: '10px', padding: '15px', background: '#f8f9fa', borderRadius: '8px', fontSize: '12px' }}>
+    <div style={{ marginTop: '10px', padding: '15px', background: '#181718ff', borderRadius: '8px', fontSize: '12px' }}>
       <h4>🔐 Clerk Status</h4>
       <ul style={{ margin: 0, paddingLeft: '20px' }}>
         <li><strong>Loaded:</strong> {isLoaded ? '✅' : '❌'}</li>
