@@ -7,6 +7,7 @@ import ProfileSync from './components/profileSync/ProfileSync.jsx'
 import DebugPanel from './components/DebugPanel.jsx'
 import ClerkErrorDebugger from './components/ClerkErrorDebugger.jsx'
 import CustomAuth from './components/CustomAuth.jsx'
+import URLCleanup from './components/URLCleanup.jsx'
 import { locationService, categoryService, postService } from './lib/database.js'
 
 function ClerkStatus() {
@@ -139,13 +140,20 @@ export default function App() {
 
   return (
     <ProfileSync>
+      <URLCleanup />
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px' }}>
         <h2>🏪 NoTungPhoCo Marketplace</h2>
         <SignedOut>
-          <SignInButton />
+          <SignInButton 
+            mode="modal"
+            afterSignInUrl="/"
+            afterSignUpUrl="/"
+          />
         </SignedOut>
         <SignedIn>
-          <UserButton />
+          <UserButton 
+            afterSignOutUrl="/"
+          />
         </SignedIn>
       </header>
       
