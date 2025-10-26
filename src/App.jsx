@@ -4,6 +4,7 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from '@clerk/clerk-react'
 import ProfileSync from './components/profileSync/ProfileSync.jsx'
+import DebugPanel from './components/DebugPanel.jsx'
 import { locationService, categoryService, postService } from './lib/database.js'
 
 function DatabaseTest() {
@@ -118,6 +119,8 @@ export default function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
+      
+      <DebugPanel />
     </ProfileSync>
   )
 }
