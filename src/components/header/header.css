@@ -1,1 +1,125 @@
-﻿/* Header styles */
+﻿/* ==== HEADER CHUNG ==== */
+.header {
+  background-color: #e9925c;
+  padding: 10px 4vw;
+  font-family: "Be Vietnam Pro", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.header-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.logo img {
+  height: clamp(36px, 4vw, 50px);
+}
+
+.nav ul {
+  display: flex;
+  list-style: none;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  flex-wrap: wrap;
+  gap: 2vw;
+}
+
+.nav a {
+  color: #2d2d2d;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: clamp(14px, 1.2vw, 16px);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: 0.2s;
+}
+
+.nav a:hover {
+  color: #fff;
+}
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1.2vw;
+  flex-wrap: wrap;
+  width: 50%;
+  max-width: 600px;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background-color: #eccfb2;
+  border-radius: 10px;
+  padding: 6px 1vw;
+  gap: 10px;
+  flex: 1;
+  max-width: 400px;
+  min-width: 180px;
+}
+
+.search-box input {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: clamp(12px, 1vw, 14px);
+  width: 100%;
+}
+
+.search-icon {
+  color: #5a4635;
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+}
+
+.icon-btn {
+  color: #5a4635;
+  font-size: clamp(18px, 1.6vw, 22px);
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.icon-btn:hover {
+  color: #fff;
+}
+
+.btn-login {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: clamp(13px, 1vw, 14px);
+}
+
+.h-icon {
+  width: clamp(16px, 1.2vw, 18px);
+  height: clamp(16px, 1.2vw, 18px);
+}
+
+@media (max-width: 768px) {
+  .header-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  .nav ul {
+    gap: 10px;
+    width: 100%;
+  }
+  .search-box {
+    order: 2;
+  }
+}
