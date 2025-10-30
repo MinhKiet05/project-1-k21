@@ -4,7 +4,6 @@ import Header from './components/header/Header.jsx'
 import Footer from './components/footer/Footer.jsx'  
 import HomePage from './pages/homePage/HomePage.jsx'
 import { useUser } from '@clerk/clerk-react'
-import logo from './assets/logo.png';
 function DebugInfo() {
   const { isLoaded, isSignedIn, user } = useUser()
 
@@ -37,7 +36,6 @@ export default function App() {
       
       <div style={{ flex: 1 }}>
         <HomePage />
-        <img src={logo} alt="Logo" />
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
           <DebugInfo />
         </div>
