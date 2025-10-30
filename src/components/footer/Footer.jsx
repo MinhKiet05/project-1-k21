@@ -1,13 +1,13 @@
 import React from "react";
 import "./Footer.css";
-
+import FooterLogo from '../../assets/logo.png';
 function Footer() {
   return (
     <footer className="footer">
       <div className="footer-container">
         {/* Logo */}
         <div className="footer-logo">
-          <img src="images/LOGO.jpg" alt="Logo Nổ Tung Phố Cổ" />
+          <img src={FooterLogo} alt="Logo Nổ Tung Phố Cổ" />
         </div>
 
         {/* Liên kết nhanh */}
