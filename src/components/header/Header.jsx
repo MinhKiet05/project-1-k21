@@ -1,4 +1,4 @@
-﻿import "./Header.css";
+import "./Header.css";
 import logo from "../../assets/HeaderLogo.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -9,6 +9,7 @@ import {
   faUser,
   faSearch,
   faComment,
+  faRightToBracket,
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
@@ -55,24 +56,27 @@ export default function Header() {
 
         {/* ==== NHÓM 4: USER ACTIONS & ICONS ==== */}
         <div className="header-user-actions">
-          <a href="/comment" className="header-icon-btn">
-            <FontAwesomeIcon icon={faComment} className="icon-btn" />
-          </a>
+          <SignedOut>
+            <SignInButton mode="modal">
+              <div className="login-button">
+                <FontAwesomeIcon icon={faRightToBracket} className="login-icon" />
+                Đăng nhập
+              </div>
+            </SignInButton>
+          </SignedOut>
+          <SignedIn>
+            <a href="/comment" className="header-icon-btn">
+              <FontAwesomeIcon icon={faComment} className="icon-btn" />
+            </a>
 
-          <a href="/bell" className="header-icon-btn">
-            <FontAwesomeIcon icon={faBell} className="icon-btn-bell" />
-          </a>
+            <a href="/bell" className="header-icon-btn">
+              <FontAwesomeIcon icon={faBell} className="icon-btn-bell" />
+            </a>
 
-          <div className="header-user-display">
-            <SignedOut>
-              <SignInButton mode="modal">
-                <FontAwesomeIcon icon={faUser} className="icon-btn-user" />
-              </SignInButton>
-            </SignedOut>
-            <SignedIn>
+            <div className="header-user-display">
               <UserButton afterSignOutUrl="/" />
-            </SignedIn>
-          </div>
+            </div>
+          </SignedIn>
         </div>
       </div>
     </header>

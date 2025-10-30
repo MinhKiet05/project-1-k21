@@ -146,6 +146,35 @@
   width: 40px !important;
   height: 40px !important;
 }
+/* ==== NÚT ĐĂNG NHẬP (SignedOut) ==== */
+.login-button {
+  display: flex !important;
+  align-items: center;
+  gap: 8px;
+  background-color: #eccfb2 !important; /* Cùng màu với search box */
+  color: #000000 !important; /* Màu chữ đen */
+  border: none !important;
+  border-radius: 10px !important;
+  padding: 9px 16px !important;
+  font-size: clamp(14px, 1.1vw, 15px);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  font-family: "Be Vietnam Pro", sans-serif;
+}
+
+.login-button:hover {
+  background-color: rgba(236, 207, 178, 0.8) !important;
+  transform: translateY(-1px);
+}
+
+.login-icon {
+  width: 16px;
+  height: 16px;
+  color: #000000;
+}
+
 /* Tăng kích thước cho icon (SignedOut) */
 .icon-btn-user {
   width: 22px;
