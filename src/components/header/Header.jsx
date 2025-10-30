@@ -1,6 +1,6 @@
 import "./Header.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import logo from '../../assets/logo3.png';
+import logo from '../../assets/logo.png';
 import {
   faHouse,
   faPen,
@@ -25,8 +25,13 @@ export default function Header() {
     <header className="header">
       <div className="header-container">
         {/* ==== NHÓM 1: LOGO ==== */}
-        <div className="logo">
-          <img src={logo} alt="Logo"/>
+        <div className="header-logo">
+          <img src={logo} alt="Logo" />
+          
+          <div>
+            <div className="header-name-top">Nổ Tung </div>
+            <div className="header-name-bottom">Phố Cổ</div>
+          </div>
         </div>
 
         {/* ==== NHÓM 2: NAV ==== */}
