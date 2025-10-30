@@ -16,6 +16,7 @@ function Footer() {
           <ul>
             <li><a href="#">Trang chủ</a></li>
             <li><a href="#">Về chúng tôi</a></li>
+            
           </ul>
         </div>
 
