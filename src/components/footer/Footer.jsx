@@ -9,7 +9,6 @@ function Footer() {
         <div className="footer-logo">
           <img src={FooterLogo} alt="Logo Nổ Tung Phố Cổ" />
         </div>
-
         {/* Liên kết nhanh */}
         <div className="footer-links">
           <h3>Liên kết nhanh</h3>
