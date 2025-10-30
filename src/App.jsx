@@ -4,7 +4,7 @@ import Header from './components/header/Header.jsx'
 import Footer from './components/footer/Footer.jsx'  
 import HomePage from './pages/homePage/HomePage.jsx'
 import { useUser } from '@clerk/clerk-react'
-import logo from './assets/logo2.png';
+import logo from './assets/logo.png';
 function DebugInfo() {
   const { isLoaded, isSignedIn, user } = useUser()
 
