@@ -1,56 +1,71 @@
-﻿import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/clerk-react'
+﻿import "./header.css";
+import HeaderLogo from "../../assets/img/Headerlogo.png";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faHouse,
+  faPen,
+  faInfoCircle,
+  faBell,
+  faUser,
+  faSearch,
+  faComment,
+} from "@fortawesome/free-solid-svg-icons";
+
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  UserButton,
+} from "@clerk/clerk-react";
 
 export default function Header() {
   return (
-    <header style={{
-      background: 'white',
-      borderBottom: '1px solid #e0e0e0',
-      padding: '10px 20px',
-      boxShadow: '0 2px 5px rgba(0,0,0,0.1)'
-    }}>
-      <div style={{
-        maxWidth: '1200px',
-        margin: '0 auto',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-      }}>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '10px'
-        }}>
-          <h1 style={{
-            margin: 0,
-            fontSize: '1.5rem',
-            color: '#333'
-          }}>
-             NoTungPhoCo Marketplace
-          </h1>
+    <header className="header">
+      <div className="header-container">
+        <div className="logo">
+          <img src={HeaderLogo} alt="Logo" />
         </div>
-        
-        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+        <nav className="nav">
+          <ul>
+            <li>
+              <a href="/home">
+                <FontAwesomeIcon icon={faHouse} className="h-icon" /> Trang chủ
+              </a>
+            </li>
+            <li>
+              <a href="/post">
+                <FontAwesomeIcon icon={faPen} className="h-icon" /> Đăng bài
+              </a>
+            </li>
+            <li>
+              <a href="/about">
+                <FontAwesomeIcon icon={faInfoCircle} className="h-icon" /> Giới
+                thiệu
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <div className="header-right">
+          <div className="search-box">
+            <FontAwesomeIcon icon={faSearch} className="search-icon" />
+            <input type="text" placeholder="Search" />
+          </div>
+          <a href="/comment">
+            <FontAwesomeIcon icon={faComment} className="icon-btn" />
+          </a>
+          <a href="/bell">
+            <FontAwesomeIcon icon={faBell} className="icon-btn" />
+          </a>
           <SignedOut>
             <SignInButton mode="modal">
-              <button style={{
-                background: '#007bff',
-                color: 'white',
-                border: 'none',
-                padding: '8px 16px',
-                borderRadius: '5px',
-                cursor: 'pointer',
-                fontSize: '14px'
-              }}>
-                 Đăng nhập
-              </button>
+              <FontAwesomeIcon icon={faUser} className="icon-btn" />
             </SignInButton>
           </SignedOut>
-          
           <SignedIn>
             <UserButton afterSignOutUrl="/" />
           </SignedIn>
         </div>
       </div>
     </header>
-  )
+  );
 }
