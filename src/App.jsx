@@ -3,7 +3,6 @@ import './App.css'
 import Header from './components/header/Header.jsx'
 import Footer from './components/footer/Footer.jsx'  
 import HomePage from './pages/homePage/HomePage.jsx'
-import DebugPanel from './components/DebugPanel.jsx'
 import { useUser } from '@clerk/clerk-react'
 
 function DebugInfo() {
@@ -41,7 +40,6 @@ export default function App() {
         
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
           <DebugInfo />
-          <DebugPanel />
         </div>
       </div>
       

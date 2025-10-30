@@ -1,29 +1,38 @@
 ﻿/* ==== HEADER CHUNG ==== */
 .header {
   background-color: #e9925c;
-  padding: 10px 4vw;
   font-family: "Be Vietnam Pro", sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
-  z-index: 1000;
+  z-index: 1000; /* Thêm z-index để header luôn ở trên cùng */
 }
 
 .header-container {
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  justify-content: space-between; /* 4 nhóm sẽ tự động căn cách đều với space-between */
+  flex-wrap: nowrap; /* Giữ trên cùng 1 dòng */
+  padding: 10px 4vw;
+  box-sizing: border-box;
+  gap: 20px; /* Thêm gap để đảm bảo spacing */
 }
 
+/* ==== NHÓM 1: LOGO ==== */
+.logo {
+  width: clamp(100px, 10vw, 150px);
+}
 .logo img {
-  height: clamp(36px, 4vw, 50px);
+  height: 100%;
 }
 
+/* ==== NHÓM 2: NAV ==== */
+.nav {
+  /* Cho nav co giãn một chút nếu cần */
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+}
 .nav ul {
   display: flex;
   list-style: none;
@@ -31,9 +40,8 @@
   margin: 0;
   padding: 0;
   flex-wrap: wrap;
-  gap: 2vw;
+  gap: 1vw;
 }
-
 .nav a {
   color: #2d2d2d;
   text-decoration: none;
@@ -43,40 +51,44 @@
   align-items: center;
   gap: 6px;
   transition: 0.2s;
+  padding: 8px 12px;
+  border-radius: 8px;
 }
-
 .nav a:hover {
-  color: #fff;
+  color: #000000;
+  background-color: rgba(255, 255, 255, 0.3);
 }
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 1.2vw;
-  flex-wrap: wrap;
-  width: 50%;
-  max-width: 600px;
+.nav a.active {
+  background-color: rgba(255, 255, 255, 0.8);
+  color: #000000;
+}
+.h-icon {
+  width: clamp(16px, 1.2vw, 18px);
+  height: clamp(16px, 1.2vw, 18px);
 }
 
+/* ==== NHÓM 3: SEARCH ==== */
 .search-box {
   display: flex;
   align-items: center;
   background-color: #eccfb2;
   border-radius: 10px;
-  padding: 6px 1vw;
+  /* Làm "to hơn" bằng cách tăng padding */
+  padding: 9px 1vw;
   gap: 10px;
-  flex: 1;
-  max-width: 400px;
+  /* Đặt chiều rộng cho nhóm này */
+  width: 100%;
+  max-width: 350px; /* Giới hạn chiều rộng tối đa */
   min-width: 180px;
+  box-sizing: border-box;
 }
-
 .search-box input {
   border: none;
   outline: none;
   background: transparent;
-  font-size: clamp(12px, 1vw, 14px);
+  font-size: clamp(14px, 1.1vw, 15px); /* Cho chữ to hơn 1 xíu */
   width: 100%;
 }
-
 .search-icon {
   color: #5a4635;
   cursor: pointer;
@@ -84,42 +96,100 @@
   height: 20px;
 }
 
-.icon-btn {
+/* ==== NHÓM 4: USER ACTIONS ==== */
+.header-user-actions { /* (Trước đây là .header-right) */
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* Dồn các icon về bên phải */
+  gap: 1.2vw;
+  flex-wrap: wrap;
+}
+.header-icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px; /* Tăng kích thước nút tròn */
+  height: 36px;
   color: #5a4635;
-  font-size: clamp(18px, 1.6vw, 22px);
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+.icon-btn {
+  width: 18px; /* Tăng kích thước icon bên trong */
+  height: 18px;
+}
+.icon-btn-bell {
+  width: 20px; /* Giữ kích thước riêng cho icon chuông */
+  height: 20px;
+}
+.header-icon-btn:hover {
+  background-color: rgba(255, 255, 255, 0.6);
+}
+.header-icon-btn:hover .icon-btn {
+  color: #5a4635;
+}
+
+/* Style cho nút "Sign" to lên */
+.header-user-display {
+  display: flex;
+  align-items: center;
+  /* Tăng kích thước cho avatar (SignedIn) */
+  /* Dùng class của Clerk để ghi đè */
+}
+.header-user-display .cl-userButtonBox {
+  width: 40px !important;
+  height: 40px !important;
+}
+.header-user-display .cl-avatarBox {
+  width: 40px !important;
+  height: 40px !important;
+}
+/* Tăng kích thước cho icon (SignedOut) */
+.icon-btn-user {
+  width: 22px;
+  height: 22px;
+  color: #5a4635;
   cursor: pointer;
   transition: 0.2s;
 }
-
-.icon-btn:hover {
+.icon-btn-user:hover {
   color: #fff;
 }
 
-.btn-login {
-  background: #007bff;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: clamp(13px, 1vw, 14px);
-}
-
-.h-icon {
-  width: clamp(16px, 1.2vw, 18px);
-  height: clamp(16px, 1.2vw, 18px);
-}
-
+/* ==== RESPONSIVE ==== */
 @media (max-width: 768px) {
   .header-container {
-    flex-direction: column;
+    flex-direction: column; /* Xếp 4 nhóm theo chiều dọc */
     align-items: center;
+    gap: 15px; /* Thêm gap cho chế độ mobile */
+  }
+
+  .nav {
+    width: 100%;
+    order: 2; /* Đưa nav xuống dưới logo */
   }
   .nav ul {
     gap: 10px;
     width: 100%;
+    justify-content: space-around; /* Căn đều nav trên mobile */
   }
+
   .search-box {
-    order: 2;
+    width: 90%; /* Cho search-box rộng ra trên mobile */
+    max-width: 400px;
+    order: 3; /* Đưa search xuống dưới nav */
+    padding: 8px 12px;
+  }
+
+  .header-user-actions {
+    width: 100%;
+    justify-content: center; /* Căn giữa các icon */
+    max-width: none;
+    order: 4; /* Cuối cùng */
+  }
+
+  .logo {
+    order: 1; /* Logo luôn ở trên cùng */
   }
 }

@@ -1,4 +1,4 @@
-﻿import "./header.css";
+﻿import "./Header.css";
 import HeaderLogo from "../../assets/img/Headerlogo.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -22,9 +22,12 @@ export default function Header() {
   return (
     <header className="header">
       <div className="header-container">
+        {/* ==== NHÓM 1: LOGO ==== */}
         <div className="logo">
           <img src={HeaderLogo} alt="Logo" />
         </div>
+
+        {/* ==== NHÓM 2: NAV ==== */}
         <nav className="nav">
           <ul>
             <li>
@@ -39,31 +42,37 @@ export default function Header() {
             </li>
             <li>
               <a href="/about">
-                <FontAwesomeIcon icon={faInfoCircle} className="h-icon" /> Giới
-                thiệu
+                <FontAwesomeIcon icon={faInfoCircle} className="h-icon" /> Giới thiệu
               </a>
             </li>
           </ul>
         </nav>
-        <div className="header-right">
-          <div className="search-box">
-            <FontAwesomeIcon icon={faSearch} className="search-icon" />
-            <input type="text" placeholder="Search" />
-          </div>
-          <a href="/comment">
+        {/* ==== NHÓM 3: SEARCH BOX ==== */}
+        <div className="search-box">
+          <FontAwesomeIcon icon={faSearch} className="search-icon" />
+          <input type="text" placeholder="Tìm kiếm..." />
+        </div>
+
+        {/* ==== NHÓM 4: USER ACTIONS & ICONS ==== */}
+        <div className="header-user-actions">
+          <a href="/comment" className="header-icon-btn">
             <FontAwesomeIcon icon={faComment} className="icon-btn" />
           </a>
-          <a href="/bell">
-            <FontAwesomeIcon icon={faBell} className="icon-btn" />
+
+          <a href="/bell" className="header-icon-btn">
+            <FontAwesomeIcon icon={faBell} className="icon-btn-bell" />
           </a>
-          <SignedOut>
-            <SignInButton mode="modal">
-              <FontAwesomeIcon icon={faUser} className="icon-btn" />
-            </SignInButton>
-          </SignedOut>
-          <SignedIn>
-            <UserButton afterSignOutUrl="/" />
-          </SignedIn>
+
+          <div className="header-user-display">
+            <SignedOut>
+              <SignInButton mode="modal">
+                <FontAwesomeIcon icon={faUser} className="icon-btn-user" />
+              </SignInButton>
+            </SignedOut>
+            <SignedIn>
+              <UserButton afterSignOutUrl="/" />
+            </SignedIn>
+          </div>
         </div>
       </div>
     </header>
