@@ -1,6 +1,6 @@
 import "./Header.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import HeaderLogo from '../../assets/headerLogo.png';
+import HeaderLogo from '../../assets/logo2.png';
 import {
   faHouse,
   faPen,
