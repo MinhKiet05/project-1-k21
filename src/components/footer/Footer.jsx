@@ -1,7 +1,17 @@
 import React from "react";
 import "./Footer.css";
+import { Link, useLocation } from "react-router-dom";
 import logo from '../../assets/logo.png';
 function Footer() {
+  const location = useLocation();
+  
+  // Function to check if current path is active
+  const isActive = (path) => {
+    if (path === '/home') {
+      return location.pathname === '/' || location.pathname === '/home';
+    }
+    return location.pathname === path;
+  };
   return (
     <footer className="footer">
       <div className="footer-container">
@@ -18,8 +28,10 @@ function Footer() {
         <div className="footer-links">
           <h3>Các liên kết</h3>
           <ul>
-            <li><a href="#"><u>Trang chủ</u></a></li>
-            <li><a href="#"><u>Giới thiệu</u></a></li>
+            <li><Link to="/home" className={isActive('/home') ? 'active' : ''}><u>Trang chủ</u></Link></li>
+            <li><Link to="/post" className={isActive('/post') ? 'active' : ''}><u>Đăng bài</u></Link></li>
+            <li><Link to="/management" className={isActive('/management') ? 'active' : ''}><u>Quản lý</u></Link></li>
+            <li><Link to="/about" className={isActive('/about') ? 'active' : ''}><u>Về chúng tôi</u></Link></li>
           </ul>
         </div>
 

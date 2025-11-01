@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&display=swap');
 .footer {
   width: 100%;
-  height: 200px;
+  height: 240px;
   background-color: #E59462;
   display: flex;
   flex-direction: column;
@@ -15,7 +15,7 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  padding: 30px 10vw 0 10vw;
+  padding: 30px 10vw 30px 10vw;
 }
 
 /* Logo và tên thương hiệu */
@@ -53,7 +53,7 @@
 .footer-contact h3 {
   font-weight: bolder;
   font-size: 22px;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 
 .footer-links ul {
@@ -68,18 +68,24 @@
   margin: 0;
 } 
 .footer-links a,
+.footer-links a[data-rr-ui-link],
 .footer-contact a {
   color: #2b2b2b;
   text-decoration: none;
 }
 .footer-links a:hover,
+.footer-links a[data-rr-ui-link]:hover,
 .footer-contact a:hover {
   text-decoration: underline;
+}
+.footer-links a.active,
+.footer-links a[data-rr-ui-link].active {
+  font-weight: bold;
+  color: #1a1a1a;
 }
 .footer-links ul li,
 .footer-contact ul li {
   margin-bottom: 8px;
-  margin-left: 8px;
 }
 /* Phần dòng bản quyền */
 .footer-bottom {

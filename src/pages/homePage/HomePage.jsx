@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { SignedIn, useUser } from '@clerk/clerk-react'
 import { locationService, categoryService, postService } from '../../lib/database.js'
-
+import './HomePage.css'
 function WelcomeSection() {
   return (
     <section style={{

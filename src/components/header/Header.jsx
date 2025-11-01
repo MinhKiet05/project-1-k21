@@ -1,5 +1,6 @@
 import "./Header.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link, useLocation } from "react-router-dom";
 import logo from '../../assets/logo.png';
 import {
   faHouse,
@@ -21,6 +22,16 @@ import {
 
 
 export default function Header() {
+  const location = useLocation();
+  
+  // Function to check if current path is active
+  const isActive = (path) => {
+    if (path === '/home') {
+      return location.pathname === '/' || location.pathname === '/home';
+    }
+    return location.pathname === path;
+  };
+
   return (
     <header className="header">
       <div className="header-container">
@@ -38,20 +49,26 @@ export default function Header() {
         <nav className="nav">
           <ul>
             <li>
-              <a href="/home">
-                <FontAwesomeIcon icon={faHouse} className="h-icon" /> Trang chủ
-              </a>
+              <Link to="/home" className={isActive('/home') ? 'active' : ''}>
+                Trang chủ
+              </Link>
             </li>
             <li>
-              <a href="/post">
-                <FontAwesomeIcon icon={faPen} className="h-icon" /> Đăng bài
-              </a>
+              <Link to="/post" className={isActive('/post') ? 'active' : ''}>
+                Đăng bài
+              </Link>
             </li>
             <li>
-              <a href="/about">
-                <FontAwesomeIcon icon={faInfoCircle} className="h-icon" /> Giới thiệu
-              </a>
+              <Link to="/management" className={isActive('/management') ? 'active' : ''}>
+                 Quản lý
+              </Link>
             </li>
+            <li>
+              <Link to="/about" className={isActive('/about') ? 'active' : ''}>
+                 Về chúng tôi
+              </Link>
+            </li>
+            
           </ul>
         </nav>
         {/* ==== NHÓM 3: SEARCH BOX ==== */}
@@ -71,10 +88,6 @@ export default function Header() {
             </SignInButton>
           </SignedOut>
           <SignedIn>
-            <a href="/comment" className="header-icon-btn">
-              <FontAwesomeIcon icon={faComment} className="icon-btn" />
-            </a>
-
             <a href="/bell" className="header-icon-btn">
               <FontAwesomeIcon icon={faBell} className="icon-btn-bell" />
             </a>
