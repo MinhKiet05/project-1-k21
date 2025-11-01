@@ -1,0 +1,189 @@
+/* Upload Post Page Styles */
+
+.upload-post-page{
+    min-height: calc(100vh - 260px -58px); /* Adjust based on header and footer height */
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+.upload-post-container{
+    max-width: 900px;
+    margin: 0 auto;
+    background: #FBF8EF;
+    padding: 30px 80px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 8px;
+}
+.upload-post-container h1{
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #EE5A24;
+    text-align: center;
+    margin-bottom: 40px;
+}
+.upload-post-container label{
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #EE5A24;
+    width: 150px;
+    font-size: 16px;
+}
+.upload-post-form-row{
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    gap: 15px;
+}
+.upload-post-form-row span{
+    color: red;
+    margin-left: 2px;
+}
+
+/* Input, Select, Textarea Styling */
+.upload-post-form input[type="text"],
+.upload-post-form input[type="file"],
+.upload-post-form select,
+.upload-post-form textarea {
+    flex: 1;
+    padding: 12px 15px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: #ffffff;
+    transition: border-color 0.3s ease;
+    font-family: inherit;
+}
+
+.upload-post-form input[type="text"]:focus,
+.upload-post-form select:focus,
+.upload-post-form textarea:focus {
+    outline: none;
+    border-color: #E2703F;
+    box-shadow: 0 0 0 3px rgba(226, 112, 63, 0.1);
+}
+
+/* File input special styling */
+.upload-post-form input[type="file"] {
+    padding: 40px 15px;
+    background-color: #f8f8f8;
+    cursor: pointer;
+    border: 2px dashed #ddd;
+    text-align: center;
+}
+
+.upload-post-form input[type="file"]:hover {
+    border-color: #E2703F;
+    background-color: #faf7f3;
+}
+
+/* Select dropdown arrow */
+.upload-post-form select {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 20px;
+    padding-right: 45px;
+    cursor: pointer;
+}
+
+/* Textarea specific */
+.upload-post-form textarea {
+    min-height: 120px;
+    resize: vertical;
+    font-family: inherit;
+}
+
+/* Price input with VND */
+.upload-post-form-row.price-row {
+    position: relative;
+}
+
+.upload-post-form-row.price-row input {
+    padding-right: 60px;
+}
+
+.price-row-wrapper {
+    position: relative;
+    flex: 1;
+}
+
+.price-row-wrapper::after {
+    content: "VNĐ";
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+    font-size: 16px;
+    pointer-events: none;
+}
+/* Rules and Notes styling */
+.upload-post-form-row ul {
+    flex: 1;
+    margin-top: -4px;
+    padding-left: 20px;
+    color: #E74C3C;
+    font-size: 16px;
+    line-height: 1.6;
+    list-style-type: none;
+}
+
+.upload-post-form-row li {
+    margin-bottom: 8px;
+}
+.upload-post-form-row li::before {
+    content: "–  ";
+    color: #E74C3C;
+}
+
+/* Submit button */
+.upload-post-submit-button{
+    background-color: #E2703F;
+    color: white;
+    padding: 15px 0px;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 20px;
+    width: 100%;
+    max-width: 540px;
+    transition: background-color 0.3s ease;
+}
+
+.upload-post-submit-button:hover {
+    background-color: #d85c2a;
+}
+
+.upload-post-form-row-btn{
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .upload-post-container {
+        padding: 20px 30px;
+        margin: 10px;
+    }
+    
+    .upload-post-form-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+    
+    .upload-post-container label {
+        width: auto;
+        margin-bottom: 5px;
+    }
+    
+    .upload-post-submit-button {
+        width: 100%;
+        max-width: none;
+    }
+}
