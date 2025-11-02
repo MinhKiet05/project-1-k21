@@ -40,14 +40,38 @@ export function useUserSync() {
               email: user.primaryEmailAddress?.emailAddress || user.emailAddresses[0]?.emailAddress,
               full_name: user.fullName || `${user.firstName || ''} ${user.lastName || ''}`.trim() || null,
               avatar_url: user.imageUrl,
-              role: 'user', // Mặc định là 'user'
+              roles: ['user'], // Mặc định là array ['user']
               location_id: null, // Mặc định là null
               created_at: new Date().toISOString()
             }
           ])
           .select()
+
+        if (insertError) {
+          if (insertError.code === '23505') {
+            // Duplicate email - update existing profile with new Clerk ID
+            const userEmail = user.primaryEmailAddress?.emailAddress || user.emailAddresses[0]?.emailAddress
+            const { data: updatedProfile, error: updateError } = await supabase
+              .from('profiles')
+              .update({
+                id: user.id,
+                full_name: user.fullName || `${user.firstName || ''} ${user.lastName || ''}`.trim() || null,
+                avatar_url: user.imageUrl,
+              })
+              .eq('email', userEmail)
+              .select()
+
+            if (!updateError) {
+              // Trigger a page refresh to reload role context
+              window.location.reload()
+            }
+          }
+        } else {
+          // Trigger a page refresh to reload role context
+          window.location.reload()
+        }
       } catch (error) {
-        // Silent fail - không hiển thị error
+        // Silent fail
       }
     }
 

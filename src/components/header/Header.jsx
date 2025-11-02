@@ -11,6 +11,8 @@ import {
   faSearch,
   faComment,
   faRightToBracket,
+  faCrown
+
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
@@ -19,10 +21,12 @@ import {
   SignInButton,
   UserButton,
 } from "@clerk/clerk-react";
+import { useUserRole } from '../../contexts/UserRoleContext';
 
 
 export default function Header() {
   const location = useLocation();
+  const { isAdmin } = useUserRole();
   
   // Function to check if current path is active
   const isActive = (path) => {
@@ -88,9 +92,17 @@ export default function Header() {
             </SignInButton>
           </SignedOut>
           <SignedIn>
-            <a href="/bell" className="header-icon-btn">
+            <Link to="/chat" className="header-icon-btn">
+              <FontAwesomeIcon icon={faComment} className="icon-btn-bell" />
+            </Link>
+            <button className="header-icon-btn">
               <FontAwesomeIcon icon={faBell} className="icon-btn-bell" />
-            </a>
+            </button>
+            {isAdmin() && (
+              <Link to="/dashboard" className="header-icon-btn">
+                <FontAwesomeIcon icon={faCrown} className="icon-btn-bell" />
+              </Link>
+            )}
 
             <div className="header-user-display">
               <UserButton afterSignOutUrl="/" />
