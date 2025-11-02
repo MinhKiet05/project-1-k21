@@ -3,8 +3,8 @@ import { SignedIn, useUser } from '@clerk/clerk-react'
 import { locationService, categoryService, postService } from '../../lib/database.js'
 import CardProduct from '../../components/cardProduct/CardProduct.jsx'
 import './HomePage.css'
-import banner1 from '../../assets/banner1.png'
-import banner2 from '../../assets/banner2.png'
+import banner1 from '/src/assets/banner1.png'
+import banner2 from '/src/assets/banner2.png'
 export default function HomePage() {
   return (
     <>
