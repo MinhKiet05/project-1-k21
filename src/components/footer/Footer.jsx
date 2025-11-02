@@ -13,6 +13,8 @@ function Footer() {
     return location.pathname === path;
   };
   return (
+    <>
+    
     <footer className="footer">
       <div className="footer-container">
         {/* Logo */}
@@ -44,12 +46,15 @@ function Footer() {
             <li><b>Địa chỉ:</b> 13 Nguyễn Văn Bảo, Gò Vấp, TP.HCM</li>
           </ul>
         </div>
+
       </div>
 
-      <div className="footer-bottom">
+      
+    </footer>
+    <div className="footer-bottom">
         <p>© 2025 Nổ Tung Phố Cổ. All rights reserved.</p>
       </div>
-    </footer>
+      </>
   );
 }
 
