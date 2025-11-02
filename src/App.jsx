@@ -7,9 +7,12 @@ import HomePage from './pages/homePage/HomePage.jsx'
 import UploadPost from './pages/uploadPost/UploadPost.jsx'
 import Management from './pages/management/Management.jsx'
 import AboutUs from './pages/aboutUs/AboutUs.jsx'
-import { useUser } from '@clerk/clerk-react'
+import { useUserSync } from './hooks/useUserSync'
 
 export default function App() {
+  // 🔄 JIT Provisioning: Tự động tạo profile khi user đăng nhập
+  useUserSync()
+
   return (
     <Router>
       <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
