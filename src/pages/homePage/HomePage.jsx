@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { SignedIn, useUser } from '@clerk/clerk-react'
 import { locationService, categoryService, postService } from '../../lib/database.js'
-
+import CardProduct from '../../components/cardProduct/CardProduct.jsx'
 function WelcomeSection() {
   return (
     <section style={{
@@ -14,6 +14,12 @@ function WelcomeSection() {
         <h1 style={{ fontSize: '3rem', margin: '0 0 20px 0', fontWeight: 'bold' }}>
           🏪 NoTungPhoCo Marketplace
         </h1>
+        <CardProduct product={{
+          image: 'https://via.placeholder.com/150',
+          name: 'Sách giáo trình',
+          description: 'Sách giáo trình lập trình React',
+          price: 150000
+        }} />
         <p style={{ fontSize: '1.2rem', margin: '0 0 30px 0', opacity: 0.9 }}>
           Nền tảng mua bán dành riêng cho sinh viên
         </p>
