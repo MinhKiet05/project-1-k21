@@ -1,18 +1,13 @@
 import "./Header.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, useLocation } from "react-router-dom";
-import logo from '../../assets/logo.png';
+import logo from "../../assets/logo.png";
 import {
-  faHouse,
-  faPen,
-  faInfoCircle,
   faBell,
-  faUser,
   faSearch,
   faComment,
   faRightToBracket,
-  faCrown
-
+  faCrown,
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
@@ -21,17 +16,16 @@ import {
   SignInButton,
   UserButton,
 } from "@clerk/clerk-react";
-import { useUserRole } from '../../contexts/UserRoleContext';
-
+import { useUserRole } from "../../contexts/UserRoleContext";
 
 export default function Header() {
   const location = useLocation();
   const { isAdmin } = useUserRole();
-  
+
   // Function to check if current path is active
   const isActive = (path) => {
-    if (path === '/home') {
-      return location.pathname === '/' || location.pathname === '/home';
+    if (path === "/home") {
+      return location.pathname === "/" || location.pathname === "/home";
     }
     return location.pathname === path;
   };
@@ -42,7 +36,7 @@ export default function Header() {
         {/* ==== NHÓM 1: LOGO ==== */}
         <div className="header-logo">
           <img src={logo} alt="Logo" />
-          
+
           <div>
             <div className="header-name-top">Nổ Tung </div>
             <div className="header-name-bottom">Phố Cổ</div>
@@ -53,26 +47,28 @@ export default function Header() {
         <nav className="nav">
           <ul>
             <li>
-              <Link to="/home" className={isActive('/home') ? 'active' : ''}>
+              <Link to="/home" className={isActive("/home") ? "active" : ""}>
                 Trang chủ
               </Link>
             </li>
             <li>
-              <Link to="/post" className={isActive('/post') ? 'active' : ''}>
+              <Link to="/post" className={isActive("/post") ? "active" : ""}>
                 Đăng bài
               </Link>
             </li>
             <li>
-              <Link to="/management" className={isActive('/management') ? 'active' : ''}>
-                 Quản lý
+              <Link
+                to="/management"
+                className={isActive("/management") ? "active" : ""}
+              >
+                Quản lý
               </Link>
             </li>
             <li>
-              <Link to="/about" className={isActive('/about') ? 'active' : ''}>
-                 Về chúng tôi
+              <Link to="/about" className={isActive("/about") ? "active" : ""}>
+                Về chúng tôi
               </Link>
             </li>
-            
           </ul>
         </nav>
         {/* ==== NHÓM 3: SEARCH BOX ==== */}
@@ -86,7 +82,10 @@ export default function Header() {
           <SignedOut>
             <SignInButton mode="modal">
               <div className="login-button">
-                <FontAwesomeIcon icon={faRightToBracket} className="login-icon" />
+                <FontAwesomeIcon
+                  icon={faRightToBracket}
+                  className="login-icon"
+                />
                 Đăng nhập
               </div>
             </SignInButton>

@@ -1,1 +1,317 @@
 /* Home Page Styles */
+@import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap");
+
+/* Banner Section Layout - Shopee Style */
+.banner-section {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 0 20px;
+}
+
+/* Left Carousel (Main Banner) */
+.left-carousel {
+  flex: 2;
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.carousel-wrapper {
+  position: relative;
+  width: 100%;
+  height: 280px;
+  overflow: hidden;
+}
+
+.carousel-slides {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+  height: 100%;
+}
+
+.carousel-slide {
+  min-width: 100%;
+  height: 100%;
+}
+
+.carousel-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Right Banner Group */
+.right-banners {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 280px;
+}
+
+.right-banner-top,
+.right-banner-bottom {
+  flex: 1;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.right-banner-top img,
+.right-banner-bottom img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.right-banner-top:hover img,
+.right-banner-bottom:hover img {
+  transform: scale(1.02);
+}
+
+/* Navigation Arrows */
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.3);
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 20px;
+  font-weight: bold;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(5px);
+}
+
+.carousel-btn:hover {
+  background: rgba(255, 255, 255, 0.5);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-btn-prev {
+  left: 15px;
+}
+
+.carousel-btn-next {
+  right: 15px;
+}
+
+/* Dots Indicators */
+.carousel-dots {
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+
+.carousel-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px; /* fully rounded */
+  border: none;
+  background: rgba(255, 255, 255, 0.65);
+  cursor: pointer;
+  transition: transform 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+.carousel-dot:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: scale(1.15);
+}
+
+.carousel-dot.active {
+  background: #ff7a18; /* orange when active */
+  transform: scale(1.25);
+  box-shadow: 0 6px 14px rgba(255, 122, 24, 0.22);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .banner-section {
+    flex-direction: column;
+    gap: 12px;
+    padding: 0 15px;
+  }
+
+  .left-carousel {
+    flex: none;
+  }
+
+  .carousel-wrapper {
+    height: 200px;
+  }
+
+  .right-banners {
+    flex-direction: row;
+    gap: 8px;
+    height: auto;
+  }
+
+  .right-banner-top,
+  .right-banner-bottom {
+    height: 120px;
+  }
+
+  .carousel-btn {
+    width: 35px;
+    height: 35px;
+    font-size: 16px;
+  }
+
+  .carousel-btn-prev {
+    left: 10px;
+  }
+
+  .carousel-btn-next {
+    right: 10px;
+  }
+
+  .carousel-dots {
+    bottom: 10px;
+    gap: 6px;
+  }
+  .carousel-dot {
+    width: 10px;
+    height: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .banner-section {
+    flex-direction: column;
+    gap: 8px;
+    padding: 0 10px;
+  }
+
+  .carousel-wrapper {
+    height: 160px;
+  }
+
+  .right-banners {
+    flex-direction: column;
+    gap: 6px;
+    height: auto;
+  }
+
+  .right-banner-top,
+  .right-banner-bottom {
+    height: 80px;
+  }
+}
+
+/* Homepage Content Styles */
+.homepage-container {
+  margin: 0 auto;
+  padding: 40px 60px;
+  background-color: #fcfafa;
+}
+
+.homepage-section {
+  margin-bottom: 50px;
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.section-title {
+  color: #4b0e0e;
+  font-family: "Be Vietnam Pro", sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 25px;
+  padding-bottom: 12px;
+  position: relative;
+  text-shadow: 2px 2px 3px #00000040;
+  display: inline-block;
+  width: 100%;
+}
+
+.section-title::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background-color: #b3aeaa;
+  border-radius: 2px;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 25px;
+}
+
+/* Responsive Grid */
+@media (max-width: 968px) {
+  .products-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .homepage-container {
+    padding: 30px 15px;
+  }
+
+  .homepage-section {
+    padding: 25px 20px;
+    margin-bottom: 40px;
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+
+  .section-title {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .homepage-container {
+    padding: 20px 10px;
+  }
+
+  .homepage-section {
+    padding: 20px 15px;
+    margin-bottom: 30px;
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+
+  .section-title {
+    font-size: 20px;
+  }
+
+  .section-title::after {
+    width: 60px;
+    height: 3px;
+  }
+}
