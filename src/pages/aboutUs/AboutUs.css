@@ -1,1 +1,205 @@
-/* About Us Page Styles */
+/* -------------------- CÀI ĐẶT CƠ BẢN -------------------- */
+.about-us {
+  width: 100%;
+  background-color: #fbf8ef;
+  font-family: "Inter", sans-serif;
+  color: #1a1a1a;
+  line-height: 1.7;
+  letter-spacing: 0.2px;
+}
+
+/* -------------------- PHẦN CÂU CHUYỆN -------------------- */
+.story-section {
+  width: 100%;
+  min-height: calc(100vh - 60px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fbf8ef;
+  padding: 30px 0 80px 0; /* dịch phần này lên cao hơn */
+}
+
+.story-container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 42px; /* to hơn */
+  font-weight: 700;
+  color: #000;
+  margin-bottom: 60px;
+  font-family: "Be Vietnam Pro", sans-serif;
+}
+
+.story-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 60px;
+  flex-wrap: wrap;
+}
+
+.story-image {
+  width: 448;
+  height: 338;
+  opacity: 1;
+  top: 250px;
+  left: 126px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.story-text {
+  flex: 1;
+  max-width: 700px;
+}
+
+.story-heading {
+  width: 305;
+  height: 60;
+  opacity: 1;
+  top: 258px;
+  left: 821px;
+
+  font-size: 35px;
+  font-weight: 700;
+  color: #7a5230;
+  font-style: italic;
+  text-align: center;
+  font-family: "Be Vietnam Pro", sans-serif;
+  margin-bottom: 18px;
+}
+
+.story-description {
+  font-size: 24px;
+  style: semibold;
+  color: #222;
+  text-align: justify;
+  line-height: 1.8;
+  font-family: "Horizontal", sans-serif;
+}
+
+/* -------------------- PHẦN GIÁ TRỊ -------------------- */
+.values-section {
+  width: 100%;
+  background-color: #ffffff; /* đổi nền sang trắng */
+  padding: 100px 0;
+}
+
+.values-section .section-title {
+  margin-bottom: 60px;
+  font-size: 42px; /* chữ Giá trị to hơn */
+  font-weight: 700;
+  color: #000;
+  text-align: center;
+  font-family: "Be Vietnam Pro", sans-serif;
+}
+
+.values-container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 90px;
+}
+
+/* --- Mỗi khối giá trị --- */
+.value-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 60px;
+  flex-wrap: wrap;
+  padding: 20px;
+  border-radius: 16px;
+  background-color: #ffffff;
+}
+
+/* --- Ảnh và nội dung --- */
+.value-image {
+  width: 528px;
+  height: 346px;
+  border-radius: 12px;
+  flex-shrink: 0;
+  box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.12);
+  background-color: #fff;
+}
+
+.value-text {
+  flex: 1;
+  max-width: 700px;
+}
+
+.value-heading {
+  font-size: 36px; /* to hơn rõ rệt */
+  font-weight: 700;
+  color: #7a5230;
+  font-style: italic;
+  text-align: center;
+  margin-bottom: 15px;
+  font-family: "Be Vietnam Pro", sans-serif;
+}
+
+.value-text p {
+  font-size: 22px;
+  line-height: 1.8;
+  color: #222;
+  text-align: justify;
+  font-family: "Horizontal", sans-serif;
+}
+
+/* -------------------- RESPONSIVE -------------------- */
+@media (max-width: 900px) {
+  .story-content,
+  .value-item {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .story-image,
+  .value-image {
+    width: 85%;
+    max-width: 380px;
+  }
+
+  .story-text,
+  .value-text {
+    max-width: 95%;
+  }
+
+  .section-title {
+    font-size: 32px;
+  }
+
+  .story-heading,
+  .value-heading {
+    font-size: 22px;
+  }
+
+  .story-description,
+  .value-text p {
+    font-size: 16px;
+    text-align: justify;
+  }
+}
+
+@media (max-width: 600px) {
+  .section-title {
+    font-size: 26px;
+  }
+
+  .story-heading,
+  .value-heading {
+    font-size: 36px;
+  }
+
+  .story-description,
+  .value-text p {
+    font-size: 22px;
+  }
+}
