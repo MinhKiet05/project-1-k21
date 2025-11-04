@@ -1,7 +1,7 @@
 /* Upload Post Page Styles */
 
 .upload-post-page{
-    min-height: calc(100vh - 280px -58px); /* Adjust based on header and footer height */
+    min-height: calc(100vh - 280px - 58px); /* Adjust based on header and footer height */
     padding: 20px;
     background-color: #f9f9f9;
     font-family: 'BeVietNamPro', sans-serif;

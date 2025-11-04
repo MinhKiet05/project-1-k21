@@ -11,12 +11,11 @@
 /* -------------------- PHẦN CÂU CHUYỆN -------------------- */
 .story-section {
   width: 100%;
-  min-height: calc(100vh - 60px);
+  min-height: calc(100vh - 58px);
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: #fbf8ef;
-  padding: 30px 0 80px 0; /* dịch phần này lên cao hơn */
 }
 
 .story-container {
@@ -33,7 +32,14 @@
   margin-bottom: 60px;
   font-family: "Be Vietnam Pro", sans-serif;
 }
-
+.section-title-value {
+  text-align: center;
+  font-size: 42px; /* to hơn */
+  font-weight: 700;
+  color: #000;
+  margin-bottom: 60px;
+  font-family: "Be Vietnam Pro", sans-serif;
+}
 .story-content {
   display: flex;
   align-items: center;
@@ -75,7 +81,6 @@
 
 .story-description {
   font-size: 24px;
-  style: semibold;
   color: #222;
   text-align: justify;
   line-height: 1.8;
@@ -87,6 +92,7 @@
   width: 100%;
   background-color: #ffffff; /* đổi nền sang trắng */
   padding: 100px 0;
+  border-top: 1px solid #eee; /* thêm đường viền trên để phân tách */
 }
 
 .values-section .section-title {

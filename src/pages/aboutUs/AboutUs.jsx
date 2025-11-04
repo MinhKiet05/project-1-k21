@@ -1,11 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./AboutUs.css";
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 const AboutUs = () => {
+  useEffect(() => {
+    AOS.init({
+      duration: 1000, // Animation duration in milliseconds
+      easing: 'ease-out', // Easing function
+      once: true, // Whether animation should happen only once
+      offset: 100, // Offset (in px) from the original trigger point
+    });
+  }, []);
+
   return (
     <div className="about-us">
       {/* --- SECTION 1: Câu chuyện --- */}
-      <section className="story-section">
+      <section className="story-section" data-aos="fade-up">
         <div className="story-container">
           <h2 className="section-title">Câu chuyện</h2>
           <div className="story-content">
@@ -26,9 +37,9 @@ const AboutUs = () => {
 
       {/* --- SECTION 2: Giá trị --- */}
       <section className="values-section">
-        <h2 className="section-title">Giá trị</h2>
+        <h2 className="section-title-value" data-aos="fade-up">Giá trị</h2>
         <div className="values-container">
-          <div className="value-item">
+          <div className="value-item" data-aos="fade-up" data-aos-delay="200">
             <img src="/images/gtri1.png" alt="Tiện ích" className="value-image" />
             <div className="value-text">
               <h3 className="value-heading">Tiện ích</h3>
@@ -42,7 +53,7 @@ const AboutUs = () => {
             </div>
           </div>
 
-          <div className="value-item reverse">
+          <div className="value-item reverse" data-aos="fade-up" data-aos-delay="400">
             <div className="value-text">
               <h3 className="value-heading">Chất lượng sản phẩm</h3>
               <p>
@@ -56,7 +67,7 @@ const AboutUs = () => {
             <img src="/images/gtri2.png" alt="Chất lượng sản phẩm" className="value-image" />
           </div>
 
-          <div className="value-item">
+          <div className="value-item" data-aos="fade-up" data-aos-delay="600">
             <img src="/images/gtri3.png" alt="Kết nối nhanh chóng" className="value-image" />
             <div className="value-text">
               <h3 className="value-heading">Kết nối nhanh chóng</h3>
