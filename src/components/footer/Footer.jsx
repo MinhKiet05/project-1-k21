@@ -1,7 +1,7 @@
 import React from "react";
 import "./Footer.css";
 import { Link, useLocation } from "react-router-dom";
-import logo from '../../assets/logo.png';
+import logo from '../../assets/logo.webp';
 function Footer() {
   const location = useLocation();
   

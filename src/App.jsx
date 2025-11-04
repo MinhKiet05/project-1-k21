@@ -8,7 +8,9 @@ import UploadPost from "./pages/uploadPost/UploadPost.jsx";
 import Management from "./pages/management/Management.jsx";
 import AboutUs from "./pages/aboutUs/AboutUs.jsx";
 import ChatPage from "./pages/chatPage/ChatPage.jsx";
-import AdminManagement from "./pages/adminManagement/AdminManagement.jsx";
+import DashboardLayout from "./pages/dashboard/DashboardLayout.jsx";
+import DashboardUsers from "./pages/dashboard/DashboardUsers.jsx";
+import DashboardPosts from "./pages/dashboard/DashboardPosts.jsx";
 import ProtectedAdminRoute from "./components/ProtectedAdminRoute/ProtectedAdminRoute.jsx";
 import { useUserSync } from "./hooks/useUserSync";
 import { UserRoleProvider } from "./contexts/UserRoleContext";
@@ -41,10 +43,14 @@ export default function App() {
                 path="/dashboard"
                 element={
                   <ProtectedAdminRoute>
-                    <AdminManagement />
+                    <DashboardLayout />
                   </ProtectedAdminRoute>
                 }
-              />
+              >
+                <Route path="users" element={<DashboardUsers />} />
+                <Route path="posts" element={<DashboardPosts />} />
+                <Route index element={<DashboardPosts />} />
+              </Route>
             </Routes>
           </div>
 

@@ -1,7 +1,7 @@
 import "./Header.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, useLocation } from "react-router-dom";
-import logo from "../../assets/logo.png";
+import logo from "../../assets/logo.webp";
 import {
   faBell,
   faSearch,
@@ -37,10 +37,6 @@ export default function Header() {
         <div className="header-logo">
           <img src={logo} alt="Logo" />
 
-          <div>
-            <div className="header-name-top">Nổ Tung </div>
-            <div className="header-name-bottom">Phố Cổ</div>
-          </div>
         </div>
 
         {/* ==== NHÓM 2: NAV ==== */}

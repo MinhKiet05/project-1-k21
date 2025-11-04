@@ -11,7 +11,7 @@ import banner1 from '../../assets/banner1.webp';
 import banner2 from '../../assets/banner2.webp';
 import banner3 from '../../assets/banner3.webp';
 import banner4 from '../../assets/banner4.webp';
-import logoImg from '../../assets/logo.png';
+import logoImg from '../../assets/logo.webp';
 
 export default function HomePage() {
   const [currentSlide, setCurrentSlide] = useState(0);

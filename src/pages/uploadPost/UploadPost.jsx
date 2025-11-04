@@ -1,5 +1,10 @@
 import './UploadPost.css';
 import { useState, useRef } from 'react';
+import { useCategories } from '../../hooks/useCategories';
+import { useLocations } from '../../hooks/useLocations';
+import { useCreatePost } from '../../hooks/useCreatePost';
+import { uploadImages } from '../../utils/uploadImages';
+import { useUser } from '@clerk/clerk-react';
 
 export default function UploadPost() {
     const [images, setImages] = useState([]);
@@ -8,6 +13,12 @@ export default function UploadPost() {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const fileInputRef = useRef(null);
+    
+    // Hooks
+    const { user } = useUser(); // Lấy thông tin user từ Clerk
+    const { categories, loading: categoriesLoading, error: categoriesError } = useCategories();
+    const { locations, loading: locationsLoading, error: locationsError } = useLocations();
+    const { createPost } = useCreatePost();
 
     const handleImageChange = (e) => {
         const files = Array.from(e.target.files);
@@ -112,10 +123,16 @@ export default function UploadPost() {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setFormErrors({});
         setError('');
+
+        // Kiểm tra user đăng nhập
+        if (!user) {
+            setError('Vui lòng đăng nhập để đăng bài');
+            return;
+        }
 
         // Validate images
         const errors = {};
@@ -127,6 +144,8 @@ export default function UploadPost() {
         const name = (formData.get('productName') || '').toString().trim();
         const price = (formData.get('productPrice') || '').toString().trim();
         const description = (formData.get('description') || '').toString().trim();
+        const categoryId = formData.get('category') || '';
+        const locationId = formData.get('location') || '';
 
         const containsLetter = (s) => /\p{L}/u.test(s || '');
         const isValidNumber = (s) => {
@@ -148,6 +167,14 @@ export default function UploadPost() {
             errors.description = 'Mô tả phải chứa ít nhất một chữ cái';
         }
 
+        if (!categoryId) {
+            errors.category = 'Vui lòng chọn danh mục';
+        }
+
+        if (!locationId) {
+            errors.location = 'Vui lòng chọn khu vực';
+        }
+
         if (Object.keys(errors).length > 0) {
             setFormErrors(errors);
             // scroll to first error field
@@ -159,26 +186,52 @@ export default function UploadPost() {
             return;
         }
 
-        // Passed validation - prepare FormData for submission
-        setIsSubmitting(true);
-        const payload = new FormData();
-        payload.append('productName', name);
-        payload.append('productPrice', price);
-        payload.append('description', description);
-        payload.append('category', formData.get('category') || '');
-        payload.append('location', formData.get('location') || '');
-        images.forEach((img, idx) => {
-            payload.append('images', img.file, img.file.name);
-        });
+        try {
+            setIsSubmitting(true);
 
-        // Placeholder: replace with actual upload call
-        console.log('Submitting payload (placeholder)', { name, price, description, images });
-        setTimeout(() => {
-            setIsSubmitting(false);
-            alert('Đã gửi (placeholder)');
+            // Debug: Kiểm tra user authentication
+            console.log('User info:', { id: user?.id, email: user?.emailAddresses?.[0]?.emailAddress });
+
+            // 1. Upload ảnh lên Supabase Storage
+            const imageFiles = images.map(img => img.file);
+            const uploadResult = await uploadImages(imageFiles, 'images');
+            
+            if (!uploadResult.success) {
+                setError('Lỗi khi tải ảnh lên: ' + uploadResult.error);
+                return;
+            }
+
+            // 2. Tạo post trong database
+            const postData = {
+                title: name,
+                description: description,
+                price: price.replace(/[.,\s]/g, ''), // Loại bỏ định dạng
+                imageUrls: uploadResult.urls,
+                authorId: user.id,
+                categoryId: categoryId,
+                locationId: locationId
+            };
+
+            const createResult = await createPost(postData);
+            
+            if (!createResult.success) {
+                setError('Lỗi khi tạo bài đăng: ' + createResult.error);
+                return;
+            }
+
+            // 3. Thành công - reset form
+            alert('Đã tạo bài đăng thành công! Bài đăng đang chờ duyệt.');
             e.target.reset();
             setImages([]);
-        }, 600);
+            if (fileInputRef.current) {
+                fileInputRef.current.files = new DataTransfer().files;
+            }
+
+        } catch (err) {
+            setError('Có lỗi xảy ra: ' + err.message);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -264,27 +317,40 @@ export default function UploadPost() {
 
                     <div className='upload-post-form-row'>
                         <label>Danh mục:<span>*</span></label>
-                        <select name="category" required>
-                            <option value="">Chọn danh mục</option>
-                            <option value="electronics">Điện tử</option>
-                            <option value="fashion">Thời trang</option>
-                            <option value="home">Nhà cửa</option>
-                            <option value="food">Thực phẩm</option>
-                            <option value="books">Sách</option>
-                            <option value="sports">Thể thao</option>
+                        <select name="category" required disabled={categoriesLoading}>
+                            <option value="">
+                                {categoriesLoading ? 'Đang tải...' : 
+                                 categoriesError ? 'Lỗi tải dữ liệu' : 
+                                 'Chọn danh mục'}
+                            </option>
+                            {categories.map((category) => (
+                                <option key={category.id} value={category.id}>
+                                    {category.name}
+                                </option>
+                            ))}
                         </select>
+                        {categoriesError && (
+                            <div className="field-error">Không thể tải danh mục: {categoriesError}</div>
+                        )}
                     </div>
 
                     <div className='upload-post-form-row'>
                         <label>Khu vực:<span>*</span></label>
-                        <select name="location" required>
-                            <option value="">Chọn khu vực</option>
-                            <option value="hanoi">Hà Nội</option>
-                            <option value="hochiminh">TP. Hồ Chí Minh</option>
-                            <option value="danang">Đà Nẵng</option>
-                            <option value="haiphong">Hải Phòng</option>
-                            <option value="cantho">Cần Thơ</option>
+                        <select name="location" required disabled={locationsLoading}>
+                            <option value="">
+                                {locationsLoading ? 'Đang tải...' : 
+                                 locationsError ? 'Lỗi tải dữ liệu' : 
+                                 'Chọn khu vực'}
+                            </option>
+                            {locations.map((location) => (
+                                <option key={location.id} value={location.id}>
+                                    {location.name}
+                                </option>
+                            ))}
                         </select>
+                        {locationsError && (
+                            <div className="field-error">Không thể tải khu vực: {locationsError}</div>
+                        )}
                     </div>
 
                     <div className='upload-post-form-row'>

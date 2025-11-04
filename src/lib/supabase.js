@@ -11,3 +11,12 @@ if (!supabaseAnonKey) {
 }
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+
+// Hàm để set auth token từ Clerk
+export const setSupabaseAuth = (token) => {
+  if (token) {
+    supabase.auth.setSession({ access_token: token, refresh_token: '' })
+  } else {
+    supabase.auth.signOut()
+  }
+}
