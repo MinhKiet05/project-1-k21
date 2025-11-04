@@ -1,1 +1,148 @@
-/* Management Page Styles */
+.manager-container {
+  background-color: #faf6ed;
+  padding: 30px 40px;
+  border-radius: 12px;
+  width: 90%;
+  margin: 30px auto;
+}
+
+.manager-title {
+  font-size: 40px;
+  font-weight: 600;
+  font: Be Vietnam Pro;
+  font-style: SemiBold;
+  color: #c62828;
+  text-shadow: 1px 1px 2px #ffbaba;
+  margin-bottom: 10px;
+}
+
+.manager-filter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  font-family: "Be Vietnam Pro", sans-serif;
+}
+
+.manager-select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  position: relative;
+  background-color: #ffefe0; /* Màu nền be */
+  border: 1px solid #f2cfa6;
+  border-radius: 12px;
+  padding: 6px 26px 6px 14px; /* chừa khoảng cho mũi tên */
+  color: #6b5f58;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  width: auto; /* tự co theo nội dung */
+  min-width: 90px; /* không quá nhỏ */
+  transition: background-color 0.2s ease;
+  font-family: "Be Vietnam Pro", sans-serif;
+}
+
+/* Tạo mũi tên hướng xuống bằng phần tử giả */
+.manager-select::after {
+  content: "v";
+  font-size: 10px;
+  color: #6b5f58;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* Tạo hiệu ứng hover nhẹ */
+.manager-select:hover {
+  background-color: #ffe7d1;
+}
+
+
+
+.manager-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fffefb;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.manager-table th {
+  background-color: #8b5e3b;
+  color: white;
+  font-weight: 400;
+  font-size: 20px;
+  font-style: Regular;
+  padding: 10px 0;
+  text-align: center;
+  font-family: "Be Vietnam Pro", sans-serif;
+}
+
+.manager-table td {
+  text-align: center;
+  padding: 15px 10px;
+  border-bottom: 1px solid #ececec;
+  font-family: "Be Vietnam Pro", sans-serif;
+}
+
+.manager-img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.manager-img-placeholder {
+  width: 80px;
+  height: 80px;
+  background-color: #f3f3f3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #aaa;
+  border-radius: 8px;
+}
+
+.status-sold {
+  display: inline-block;
+  background-color: #ffe2e2;
+  color: #ff7043;
+  padding: 4px 10px;
+  border-radius: 10px;
+  font-size: 13px;
+  margin-bottom: 3px;
+}
+
+.status-sub {
+  color: #555;
+  font-size: 13px;
+  margin: 0;
+}
+
+.status-rejected {
+  color: #c62828;
+  font-size: 14px;
+}
+
+.status-pending {
+  color: #666;
+  font-size: 14px;
+}
+
+.select-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.select-wrapper::after {
+  content: "▼";
+  font-size: 10px;
+  color: #6b5f58;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
