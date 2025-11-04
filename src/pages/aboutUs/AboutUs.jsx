@@ -40,8 +40,9 @@ const AboutUs = () => {
 
       {/* --- SECTION 2: Giá trị --- */}
       <section className="values-section">
-        <h2 className="section-title-value" data-aos="fade-up">Giá trị</h2>
+        
         <div className="values-container">
+          <h2 className="section-title value" data-aos="fade-up">Giá trị</h2>
           <div className="value-item" data-aos="fade-up" data-aos-delay="200">
             <img src={gtri1IMG} alt="Tiện ích" className="value-image" />
             <div className="value-text">
