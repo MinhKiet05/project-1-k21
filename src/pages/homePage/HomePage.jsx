@@ -11,6 +11,7 @@ import banner1 from '../../assets/banner1.webp';
 import banner2 from '../../assets/banner2.webp';
 import banner3 from '../../assets/banner3.webp';
 import banner4 from '../../assets/banner4.webp';
+import logoImg from '../../assets/logo.png';
 
 export default function HomePage() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -107,28 +108,28 @@ export default function HomePage() {
               product={{
                 name: "Sách quốc phòng quốc phòng quốc phòng quốc phòng",
                 price: 15000,
-                image: "/src/assets/sachQuocPhong.png",
+                image: logoImg,
               }}
             />
             <CardProduct
               product={{
                 name: "Sách quốc phòng quốc phòng quốc phòng quốc phòng",
                 price: 15000,
-                image: "/src/assets/sachQuocPhong.png",
+                image: logoImg,
               }}
             />
             <CardProduct
               product={{
                 name: "Sách quốc phòng quốc phòng quốc phòng quốc phòng",
                 price: 15000,
-                image: "/src/assets/sachQuocPhong.png",
+                image: logoImg,
               }}
             />
             <CardProduct
               product={{
                 name: "Sách quốc phòng quốc phòng quốc phòng quốc phòng",
                 price: 15000,
-                image: "/src/assets/sachQuocPhong.png",
+                image: logoImg,
               }}
             />
           </div>
@@ -142,28 +143,28 @@ export default function HomePage() {
               product={{
                 name: "Sách quốc phòng quốc phòng quốc phòng quốc phòng",
                 price: 15000,
-                image: "/src/assets/sachQuocPhong.png",
+                image: logoImg,
               }}
             />
             <CardProduct
               product={{
                 name: "Sách quốc phòng quốc phòng quốc phòng quốc phòng",
                 price: 15000,
-                image: "/src/assets/sachQuocPhong.png",
+                image: logoImg,
               }}
             />
             <CardProduct
               product={{
                 name: "Sách quốc phòng quốc phòng quốc phòng quốc phòng",
                 price: 15000,
-                image: "/src/assets/sachQuocPhong.png",
+                image: logoImg,
               }}
             />
             <CardProduct
               product={{
                 name: "Sách quốc phòng quốc phòng quốc phòng quốc phòng",
                 price: 15000,
-                image: "/src/assets/sachQuocPhong.png",
+                image: logoImg,
               }}
             />
           </div>
@@ -177,28 +178,28 @@ export default function HomePage() {
               product={{
                 name: "Sách quốc phòng quốc phòng quốc phòng quốc phòng",
                 price: 15000,
-                image: "/src/assets/sachQuocPhong.png",
+                image: logoImg,
               }}
             />
             <CardProduct
               product={{
                 name: "Sách quốc phòng quốc phòng quốc phòng quốc phòng",
                 price: 15000,
-                image: "/src/assets/sachQuocPhong.png",
+                image: logoImg,
               }}
             />
             <CardProduct
               product={{
                 name: "Sách quốc phòng quốc phòng quốc phòng quốc phòng",
                 price: 15000,
-                image: "/src/assets/sachQuocPhong.png",
+                image: logoImg,
               }}
             />
             <CardProduct
               product={{
                 name: "Sách quốc phòng quốc phòng quốc phòng quốc phòng",
                 price: 15000,
-                image: "/src/assets/sachQuocPhong.png",
+                image: logoImg,
               }}
             />
           </div>
