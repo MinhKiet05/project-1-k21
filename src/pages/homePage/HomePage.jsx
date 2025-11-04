@@ -7,10 +7,10 @@ import {
 } from "../../lib/database.js";
 import CardProduct from "../../components/cardProduct/CardProduct.jsx";
 import "./HomePage.css";
-import banner1 from "/src/assets/banner1.png";
-import banner2 from "/src/assets/banner2.png";
-import banner3 from "/src/assets/banner3.png";
-import banner4 from "/src/assets/banner4.png";
+import banner1 from '../../assets/banner1.webp';
+import banner2 from '../../assets/banner2.webp';
+import banner3 from '../../assets/banner3.webp';
+import banner4 from '../../assets/banner4.webp';
 
 export default function HomePage() {
   const [currentSlide, setCurrentSlide] = useState(0);

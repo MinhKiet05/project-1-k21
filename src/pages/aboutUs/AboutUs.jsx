@@ -2,7 +2,10 @@ import React, { useEffect } from "react";
 import "./AboutUs.css";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-
+import storyIMG from '../../assets/story.webp';
+import gtri1IMG from '../../assets/gtri1.webp';
+import gtri2IMG from '../../assets/gtri2.webp';
+import gtri3IMG from '../../assets/gtri3.webp';
 const AboutUs = () => {
   useEffect(() => {
     AOS.init({
@@ -20,7 +23,7 @@ const AboutUs = () => {
         <div className="story-container">
           <h2 className="section-title">Câu chuyện</h2>
           <div className="story-content">
-            <img src="/images/story.png" alt="Our Story" className="story-image" />
+            <img src={storyIMG} alt="Our Story" className="story-image" />
             <div className="story-text">
               <h3 className="story-heading">Nổ Tung Phố Cổ</h3>
               <p className="story-description">
@@ -40,7 +43,7 @@ const AboutUs = () => {
         <h2 className="section-title-value" data-aos="fade-up">Giá trị</h2>
         <div className="values-container">
           <div className="value-item" data-aos="fade-up" data-aos-delay="200">
-            <img src="/images/gtri1.png" alt="Tiện ích" className="value-image" />
+            <img src={gtri1IMG} alt="Tiện ích" className="value-image" />
             <div className="value-text">
               <h3 className="value-heading">Tiện ích</h3>
               <p>
@@ -64,11 +67,11 @@ const AboutUs = () => {
                 nhất.
               </p>
             </div>
-            <img src="/images/gtri2.png" alt="Chất lượng sản phẩm" className="value-image" />
+            <img src={gtri2IMG} alt="Chất lượng sản phẩm" className="value-image" />
           </div>
 
           <div className="value-item" data-aos="fade-up" data-aos-delay="600">
-            <img src="/images/gtri3.png" alt="Kết nối nhanh chóng" className="value-image" />
+            <img src={gtri3IMG} alt="Kết nối nhanh chóng" className="value-image" />
             <div className="value-text">
               <h3 className="value-heading">Kết nối nhanh chóng</h3>
               <p>
