@@ -13,23 +13,20 @@ INSERT INTO public.locations (name, slug) VALUES
 ('Cần Thơ', 'can-tho'),
 ('Huế', 'hue'),
 ('Nha Trang', 'nha-trang'),
-('Quy Nhon', 'quy-nhon'),
+('Quy Nhơn', 'quy-nhon'),
 ('Vũng Tàu', 'vung-tau'),
 ('Đà Lạt', 'da-lat')
 ON CONFLICT (slug) DO NOTHING;
 
 -- Insert sample categories for student marketplace
 INSERT INTO public.categories (name, slug) VALUES 
-('Sách giáo trình', 'sach-giao-trinh'),
-('Đồ điện tử', 'do-dien-tu'),
-('Quần áo', 'quan-ao'),
+('Sách & Tài liệu', 'sach-tai-lieu'),
 ('Đồ dùng học tập', 'do-dung-hoc-tap'),
-('Xe đạp - Xe máy', 'xe-dap-xe-may'),
+('Đồ điện tử', 'do-dien-tu'),
 ('Đồ gia dụng', 'do-gia-dung'),
-('Thể thao', 'the-thao'),
-('Âm nhạc - Nhạc cụ', 'am-nhac-nhac-cu'),
-('Mỹ phẩm', 'my-pham'),
-('Đồ ăn - Thực phẩm', 'do-an-thuc-pham'),
+('Thời trang', 'thoi-trang'),
+('Nội thất', 'noi-that'),
+('Thể thao & Giải trí', 'the-thao-giai-tri'),
 ('Khác', 'khac')
 ON CONFLICT (slug) DO NOTHING;
 

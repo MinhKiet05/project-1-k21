@@ -104,8 +104,8 @@ export default function UploadPost() {
             }
 
             if (fieldName === 'productPrice') {
-                if (!value || !isValidNumber(value)) {
-                    next.productPrice = 'Giá bán phải là số hợp lệ';
+                if (!value || !isValidNumber(value) || Number(value) <= 0) {
+                    next.productPrice = 'Giá bán phải là số hợp lệ và lớn hơn 0';
                 } else {
                     delete next.productPrice;
                 }
