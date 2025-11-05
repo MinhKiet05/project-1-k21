@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { toast } from 'react-toastify'
 import './EditRoleModal.css'
 import { useUserRole } from '../../contexts/UserRoleContext'
 
@@ -24,9 +25,10 @@ export default function EditRoleModal({ user, isOpen, onClose, onUpdateRole }) {
     const result = await onUpdateRole(user.id, selectedRole)
     
     if (result.success) {
+      toast.success('Cập nhật vai trò thành công!')
       onClose()
     } else {
-      alert('Lỗi khi cập nhật role: ' + result.error)
+      toast.error('Lỗi khi cập nhật role: ' + result.error)
     }
     
     setIsUpdating(false)

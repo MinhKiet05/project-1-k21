@@ -1,5 +1,6 @@
 import './UploadPost.css';
 import { useState, useRef } from 'react';
+import { toast } from 'react-toastify';
 import { useCategories } from '../../hooks/useCategories';
 import { useLocations } from '../../hooks/useLocations';
 import { useCreatePost } from '../../hooks/useCreatePost';
@@ -27,6 +28,7 @@ export default function UploadPost() {
         // Kiểm tra số lượng file (tối đa 10 ảnh)
         if (files.length > 10) {
             setError('Chỉ được chọn tối đa 10 ảnh');
+            toast.error('Chỉ được chọn tối đa 10 ảnh');
             return;
         }
 
@@ -38,6 +40,7 @@ export default function UploadPost() {
             // Kiểm tra định dạng file (chỉ hỗ trợ hình ảnh)
             if (!file.type.startsWith('image/')) {
                 setError('Chỉ hỗ trợ các file hình ảnh (JPG, PNG, GIF, etc.)');
+                toast.error('Chỉ hỗ trợ các file hình ảnh (JPG, PNG, GIF, etc.)');
                 return;
             }
 
@@ -48,6 +51,7 @@ export default function UploadPost() {
         // Kiểm tra tổng kích thước (tối đa 10MB = 10 * 1024 * 1024 bytes)
         if (totalSize > 10 * 1024 * 1024) {
             setError('Tổng kích thước ảnh không được vượt quá 10MB');
+            toast.error('Tổng kích thước ảnh không được vượt quá 10MB');
             return;
         }
 
@@ -131,6 +135,7 @@ export default function UploadPost() {
         // Kiểm tra user đăng nhập
         if (!user) {
             setError('Vui lòng đăng nhập để đăng bài');
+            toast.error('Vui lòng đăng nhập để đăng bài');
             return;
         }
 
@@ -198,6 +203,7 @@ export default function UploadPost() {
             
             if (!uploadResult.success) {
                 setError('Lỗi khi tải ảnh lên: ' + uploadResult.error);
+                toast.error('Lỗi khi tải ảnh lên: ' + uploadResult.error);
                 return;
             }
 
@@ -216,11 +222,12 @@ export default function UploadPost() {
             
             if (!createResult.success) {
                 setError('Lỗi khi tạo bài đăng: ' + createResult.error);
+                toast.error('Lỗi khi tạo bài đăng: ' + createResult.error);
                 return;
             }
 
             // 3. Thành công - reset form
-            alert('Đã tạo bài đăng thành công! Bài đăng đang chờ duyệt.');
+            toast.success('Đã tạo bài đăng thành công! Bài đăng đang chờ duyệt.');
             e.target.reset();
             setImages([]);
             if (fileInputRef.current) {
@@ -229,6 +236,7 @@ export default function UploadPost() {
 
         } catch (err) {
             setError('Có lỗi xảy ra: ' + err.message);
+            toast.error('Có lỗi xảy ra: ' + err.message);
         } finally {
             setIsSubmitting(false);
         }

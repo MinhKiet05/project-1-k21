@@ -3,7 +3,17 @@ import { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
-export default function PostDetailModal({ post, isOpen, onClose, onApprove, onReject, isUpdating }) {
+export default function PostDetailModal({ 
+  post, 
+  isOpen, 
+  onClose, 
+  onApprove, 
+  onReject, 
+  onMarkAsSold, 
+  onExtendPost, 
+  isUpdating,
+  showUserActions = false 
+}) {
   if (!isOpen || !post) return null
 
   const imageUrls = post.image_urls || post.imageUrls || []
@@ -30,6 +40,7 @@ export default function PostDetailModal({ post, isOpen, onClose, onApprove, onRe
       case 'approved': return { text: 'Đã duyệt', class: 'status-approved' }  
       case 'rejected': return { text: 'Không duyệt', class: 'status-rejected' }
       case 'expired': return { text: 'Hết hạn', class: 'status-expired' }
+      case 'sold': return { text: 'Đã bán', class: 'status-sold' }
       default: return { text: 'Không xác định', class: 'status-unknown' }
     }
   }
@@ -135,20 +146,54 @@ export default function PostDetailModal({ post, isOpen, onClose, onApprove, onRe
 
         {/* Actions */}
         <div className="modal-actions">
-          <button 
-            className="reject-btn" 
-            onClick={() => onReject(post.id)}
-            disabled={isUpdating || post.status === 'rejected'}
-          >
-            {isUpdating ? 'Đang xử lý...' : 'Không duyệt'}
-          </button>
-          <button 
-            className="approve-btn"
-            onClick={() => onApprove(post.id)}
-            disabled={isUpdating || post.status === 'approved'}
-          >
-            {isUpdating ? 'Đang xử lý...' : 'Duyệt'}
-          </button>
+          {showUserActions ? (
+            // User actions (Management page)
+            <>
+              {post.status === 'approved' && (
+                <button 
+                  className="sold-btn"
+                  onClick={() => onMarkAsSold(post.id)}
+                  disabled={isUpdating}
+                >
+                  {isUpdating ? 'Đang xử lý...' : 'Đã bán'}
+                </button>
+              )}
+              {post.status === 'expired' && (
+                <button 
+                  className="extend-btn"
+                  onClick={() => onExtendPost(post.id)}
+                  disabled={isUpdating}
+                >
+                  {isUpdating ? 'Đang xử lý...' : 'Chưa bán được'}
+                </button>
+              )}
+              {(post.status === 'pending' || post.status === 'rejected' || post.status === 'sold') && (
+                <div className="no-actions">
+                  {post.status === 'pending' && 'Bài đăng đang chờ duyệt'}
+                  {post.status === 'rejected' && 'Bài đăng không được duyệt'}
+                  {post.status === 'sold' && 'Bài đăng đã bán'}
+                </div>
+              )}
+            </>
+          ) : (
+            // Admin actions (Dashboard page)
+            <>
+              <button 
+                className="reject-btn" 
+                onClick={() => onReject(post.id)}
+                disabled={isUpdating || post.status === 'rejected'}
+              >
+                {isUpdating ? 'Đang xử lý...' : 'Không duyệt'}
+              </button>
+              <button 
+                className="approve-btn"
+                onClick={() => onApprove(post.id)}
+                disabled={isUpdating || post.status === 'approved'}
+              >
+                {isUpdating ? 'Đang xử lý...' : 'Duyệt'}
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>

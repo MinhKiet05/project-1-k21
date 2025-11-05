@@ -27,12 +27,11 @@
 .manager-select {
   -webkit-appearance: none;
   -moz-appearance: none;
+  appearance: none;
   position: relative;
-  background-color: #ffefe0; /* Màu nền be */
-  border: 1px solid #f2cfa6;
   border-radius: 12px;
   padding: 6px 26px 6px 14px; /* chừa khoảng cho mũi tên */
-  color: #6b5f58;
+  color: #E59462;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
@@ -46,7 +45,7 @@
 .manager-select::after {
   content: "v";
   font-size: 10px;
-  color: #6b5f58;
+  color: #E59462;
   position: absolute;
   right: 10px;
   top: 50%;
@@ -54,10 +53,6 @@
   pointer-events: none;
 }
 
-/* Tạo hiệu ứng hover nhẹ */
-.manager-select:hover {
-  background-color: #ffe7d1;
-}
 
 
 
@@ -70,10 +65,10 @@
 }
 
 .manager-table th {
-  background-color: #8b5e3b;
-  color: white;
-  font-weight: 400;
-  font-size: 20px;
+  background-color: #E59462;
+  color: black;
+  font-weight: 600;
+  font-size: 14px;
   font-style: Regular;
   padding: 10px 0;
   text-align: center;
@@ -81,10 +76,11 @@
 }
 
 .manager-table td {
-  text-align: center;
+  text-align: left;
   padding: 15px 10px;
   border-bottom: 1px solid #ececec;
   font-family: "Be Vietnam Pro", sans-serif;
+  font-size: 16px;
 }
 
 .manager-img {
@@ -145,4 +141,110 @@
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
+}
+
+/* Search & Filters Section */
+.manager-search-section {
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.manager-search-box-admin {
+  position: relative;
+  margin-bottom: 15px;
+}
+
+.manager-search-box-admin input {
+  width: 100%;
+  padding: 12px 45px 12px 20px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  font-family: "Be Vietnam Pro", sans-serif;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.manager-search-box-admin input:focus {
+  border-color: #c62828;
+}
+
+.manager-search-icon {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #999;
+  font-size: 18px;
+}
+
+.manager-filters-row {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+}
+
+.manager-filters-row select {
+  padding: 10px 15px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  background-color: white;
+  font-size: 14px;
+  font-family: "Be Vietnam Pro", sans-serif;
+  color: #333;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+  min-width: 150px;
+}
+
+.manager-filters-row select:focus {
+  outline: none;
+  border-color: #c62828;
+}
+
+.manager-filters-row select:disabled {
+  background-color: #f5f5f5;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.manager-search-result {
+  font-size: 14px;
+  color: #666;
+  font-family: "Be Vietnam Pro", sans-serif;
+}
+
+.manager-field-error {
+  color: #e74c3c;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+/* Additional status classes */
+.status-approved {
+  color: #27ae60;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.status-expired {
+  color: #f39c12;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.status-unknown {
+  color: #7f8c8d;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.status-sold {
+  color: #9b59b6;
+  font-size: 14px;
+  font-weight: 500;
 }

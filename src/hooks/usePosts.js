@@ -7,10 +7,11 @@ import { supabase } from '../lib/supabase'
  * @param {string|null} params.status - 'pending'|'approved'|'rejected' hoặc null để lấy tất cả
  * @param {string|null} params.categoryId
  * @param {string|null} params.locationId
+ * @param {string|null} params.userId - filter theo user ID
  * @param {'newest'|'oldest'} params.sort
  * @param {string} params.search - client-side search (title or author full_name)
  */
-export function usePosts({ status = null, categoryId = null, locationId = null, sort = 'newest', search = '' } = {}) {
+export function usePosts({ status = null, categoryId = null, locationId = null, userId = null, sort = 'newest', search = '' } = {}) {
   const [posts, setPosts] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -35,6 +36,7 @@ export function usePosts({ status = null, categoryId = null, locationId = null, 
 
       if (categoryId) query = query.eq('category_id', categoryId)
       if (locationId) query = query.eq('location_id', locationId)
+      if (userId) query = query.eq('author_id', userId)
 
       const ascending = sort === 'oldest'
       query = query.order('created_at', { ascending })
@@ -94,7 +96,7 @@ export function usePosts({ status = null, categoryId = null, locationId = null, 
   useEffect(() => {
     fetchPosts()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status, categoryId, locationId, sort, search])
+  }, [status, categoryId, locationId, userId, sort, search])
 
   return {
     posts,

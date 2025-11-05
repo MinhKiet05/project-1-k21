@@ -53,10 +53,48 @@ export function useUpdatePostStatus() {
     return updatePostStatus(postId, 'rejected')
   }
 
+  const markAsSold = async (postId) => {
+    return updatePostStatus(postId, 'sold')
+  }
+
+  const extendPost = async (postId) => {
+    try {
+      setIsUpdating(true)
+      
+      // Gia hạn thêm 7 ngày từ hôm nay
+      const expiresAt = new Date()
+      expiresAt.setDate(expiresAt.getDate() + 7)
+      
+      const { data, error } = await supabase
+        .from('posts')
+        .update({ 
+          status: 'approved',
+          expires_at: expiresAt.toISOString()
+        })
+        .eq('id', postId)
+        .select(`
+          *,
+          author:profiles(id, full_name, avatar_url),
+          category:categories(id, name),
+          location:locations(id, name)
+        `)
+
+      if (error) throw error
+
+      return { success: true, data: data?.[0] }
+    } catch (err) {
+      return { success: false, error: err.message }
+    } finally {
+      setIsUpdating(false)
+    }
+  }
+
   return {
     isUpdating,
     updatePostStatus,
     approvePost,
-    rejectPost
+    rejectPost,
+    markAsSold,
+    extendPost
   }
 }

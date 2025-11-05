@@ -2,6 +2,10 @@ import '../dashboard/DashboardLayout.css'
 import { useState } from 'react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faSearch } from "@fortawesome/free-solid-svg-icons"
+import { toast } from 'react-toastify'
+import { confirmAlert } from 'react-confirm-alert'
+import 'react-confirm-alert/src/react-confirm-alert.css'
+import '../../styles/confirm-alert.css'
 import { usePosts } from '../../hooks/usePosts'
 import { useCategories } from '../../hooks/useCategories'
 import { useLocations } from '../../hooks/useLocations'
@@ -53,25 +57,38 @@ export default function DashboardPosts() {
   const handleApprove = async (postId) => {
     const result = await approvePost(postId)
     if (result.success) {
-      alert('Đã duyệt bài đăng thành công!')
+      toast.success('Đã duyệt bài đăng thành công!')
       handleCloseModal()
       refetch() // Refresh danh sách
     } else {
-      alert('Lỗi khi duyệt bài đăng: ' + result.error)
+      toast.error('Lỗi khi duyệt bài đăng: ' + result.error)
     }
   }
 
   const handleReject = async (postId) => {
-    if (confirm('Bạn có chắc chắn muốn từ chối bài đăng này?')) {
-      const result = await rejectPost(postId)
-      if (result.success) {
-        alert('Đã từ chối bài đăng!')
-        handleCloseModal()
-        refetch() // Refresh danh sách
-      } else {
-        alert('Lỗi khi từ chối bài đăng: ' + result.error)
-      }
-    }
+    confirmAlert({
+      title: 'Xác nhận từ chối',
+      message: 'Bạn có chắc chắn muốn từ chối bài đăng này?',
+      buttons: [
+        {
+          label: 'Hủy',
+          onClick: () => {}
+        },
+        {
+          label: 'Từ chối',
+          onClick: async () => {
+            const result = await rejectPost(postId)
+            if (result.success) {
+              toast.success('Đã từ chối bài đăng!')
+              handleCloseModal()
+              refetch() // Refresh danh sách
+            } else {
+              toast.error('Lỗi khi từ chối bài đăng: ' + result.error)
+            }
+          }
+        }
+      ]
+    })
   }
 
   return (
@@ -84,7 +101,7 @@ export default function DashboardPosts() {
           <FontAwesomeIcon icon={faSearch} className="search-icon" />
           <input
             type="text"
-            placeholder="Tìm kiếm theo tên người đăng hoặc tiêu đề"
+            placeholder="Tìm kiếm theo tên người đăng hoặc tên sản phẩm"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -101,6 +118,7 @@ export default function DashboardPosts() {
             <option value="approved">Đã duyệt</option>
             <option value="rejected">Không duyệt</option>
             <option value="expired">Hết hạn</option>
+            <option value="sold">Đã bán</option>
           </select>
 
           <select value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)} disabled={categoriesLoading}>
@@ -137,11 +155,12 @@ export default function DashboardPosts() {
             <thead>
               <tr>
                 <th>Tên người dùng</th>
-                <th>Tiêu đề</th>
+                <th>Tên sản phẩm</th>
                 <th>Hình ảnh</th>
                 <th>Giá</th>
                 <th>Danh mục</th>
                 <th>Khu vực</th>
+                <th>Trạng thái</th>
                 <th>Thời gian tạo</th>
                 <th>Thao tác</th>
               </tr>
@@ -149,7 +168,7 @@ export default function DashboardPosts() {
             <tbody>
               {posts.length === 0 ? (
                 <tr>
-                  <td colSpan="8" style={{textAlign: 'center', padding: '20px', color: '#666'}}>
+                  <td colSpan="9" style={{textAlign: 'center', padding: '20px', color: '#666'}}>
                     Chưa có bài đăng nào
                   </td>
                 </tr>
@@ -166,6 +185,36 @@ export default function DashboardPosts() {
                 const isExpired = post.status === 'expired' || 
                   (post.status === 'approved' && post.expires_at && new Date() > new Date(post.expires_at))
 
+                // Determine status display
+                let statusDisplay = '';
+                let statusClass = '';
+                
+                switch(post.status) {
+                  case 'pending':
+                    statusDisplay = 'Đang chờ';
+                    statusClass = 'status-pending';
+                    break;
+                  case 'approved':
+                    statusDisplay = 'Đã duyệt';
+                    statusClass = 'status-approved';
+                    break;
+                  case 'rejected':
+                    statusDisplay = 'Không duyệt';
+                    statusClass = 'status-rejected';
+                    break;
+                  case 'expired':
+                    statusDisplay = 'Hết hạn';
+                    statusClass = 'status-expired';
+                    break;
+                  case 'sold':
+                    statusDisplay = 'Đã bán';
+                    statusClass = 'status-sold';
+                    break;
+                  default:
+                    statusDisplay = 'Không xác định';
+                    statusClass = 'status-unknown';
+                }
+
                 return (
                   <tr key={post.id}>
                     <td className="name-cell">{authorName}</td>
@@ -176,6 +225,9 @@ export default function DashboardPosts() {
                     <td className="price-cell">{price}</td>
                     <td className="category-cell">{categoryName}</td>
                     <td className="location-cell">{locationName}</td>
+                    <td className="status-cell">
+                      <span className={statusClass}>{statusDisplay}</span>
+                    </td>
                     <td className="date-cell">{createdAt}</td>
                     <td className="action-cell">
                       {canModerateContent() ? (

@@ -287,6 +287,62 @@
   transform: none;
 }
 
+/* User Action Buttons */
+.sold-btn {
+  background-color: #9b59b6;
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 120px;
+}
+
+.sold-btn:hover:not(:disabled) {
+  background-color: #8e44ad;
+  transform: translateY(-1px);
+}
+
+.extend-btn {
+  background-color: #f39c12;
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 120px;
+}
+
+.extend-btn:hover:not(:disabled) {
+  background-color: #e67e22;
+  transform: translateY(-1px);
+}
+
+.sold-btn:disabled,
+.extend-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.no-actions {
+  color: #666;
+  font-style: italic;
+  padding: 10px 0;
+  text-align: center;
+  width: 100%;
+}
+
+.status-badge.status-sold {
+  background-color: #e1bee7;
+  color: #7b1fa2;
+  border: 1px solid #ce93d8;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .post-detail-modal {
