@@ -127,7 +127,7 @@ export default function DashboardPosts() {
       </div>
 
       {/* Table */}
-      <div className="table-container">
+      <div className="post-table-container">
         {postsLoading ? (
           <div className="loading-state"><p>Đang tải bài đăng...</p></div>
         ) : postsError ? (
