@@ -136,6 +136,11 @@ export default function PostDetailModal({
                 <span>{formatDate(post.created_at)}</span>
               </div>
 
+              <div className="detail-row">
+                <label>Ngày hết hạn:</label>
+                <span>{formatDate(post.expires_at)}</span>
+              </div>
+
               <div className="detail-row description-row">
                 <label>Mô tả:</label>
                 <div className="description">{post.description}</div>
