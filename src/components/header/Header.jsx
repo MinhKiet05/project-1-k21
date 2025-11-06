@@ -1,7 +1,7 @@
 import "./Header.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import logo from "../../assets/logo.webp";
 import {
   faBell,
@@ -19,11 +19,17 @@ import {
 } from "@clerk/clerk-react";
 import { useUserRole } from "../../contexts/UserRoleContext";
 
+// 👇 import component ChatPopup
+import ChatPopup from "../Chat/ChatPopup";
+
 export default function Header() {
   const location = useLocation();
   const navigate = useNavigate();
   const { isAdmin } = useUserRole();
   const searchInputRef = useRef(null);
+
+  // 👉 State điều khiển popup chat
+  const [showChat, setShowChat] = useState(false);
 
   // Function to check if current path is active
   const isActive = (path) => {
@@ -47,7 +53,6 @@ export default function Header() {
         {/* ==== NHÓM 1: LOGO ==== */}
         <div className="header-logo">
           <img src={logo} alt="Logo" />
-
         </div>
 
         {/* ==== NHÓM 2: NAV ==== */}
@@ -78,20 +83,21 @@ export default function Header() {
             </li>
           </ul>
         </nav>
+
         {/* ==== NHÓM 3: SEARCH BOX ==== */}
         <div className="search-box">
-          <FontAwesomeIcon 
-            icon={faSearch} 
-            className="search-icon-header" 
+          <FontAwesomeIcon
+            icon={faSearch}
+            className="search-icon-header"
             onClick={handleSearch}
-            style={{ cursor: 'pointer' }}
+            style={{ cursor: "pointer" }}
           />
-          <input 
+          <input
             ref={searchInputRef}
-            type="text" 
-            placeholder="Tìm kiếm..." 
+            type="text"
+            placeholder="Tìm kiếm..."
             onKeyPress={(e) => {
-              if (e.key === 'Enter') {
+              if (e.key === "Enter") {
                 handleSearch();
               }
             }}
@@ -111,25 +117,38 @@ export default function Header() {
               </div>
             </SignInButton>
           </SignedOut>
+
           <SignedIn>
-            <Link to="/chat" className="header-icon-btn">
+            {/* Nút chat: toggle popup */}
+            <button
+              className="header-icon-btn"
+              onClick={() => setShowChat(!showChat)}
+            >
               <FontAwesomeIcon icon={faComment} className="icon-btn-bell" />
-            </Link>
+            </button>
+
+            {/* Bell */}
             <button className="header-icon-btn">
               <FontAwesomeIcon icon={faBell} className="icon-btn-bell" />
             </button>
+
+            {/* Dashboard (admin) */}
             {isAdmin() && (
               <Link to="/dashboard" className="header-icon-btn">
                 <FontAwesomeIcon icon={faCrown} className="icon-btn-bell" />
               </Link>
             )}
 
+            {/* User Button */}
             <div className="header-user-display">
               <UserButton afterSignOutUrl="/" />
             </div>
           </SignedIn>
         </div>
       </div>
+
+      {/* ==== HIỂN THỊ POPUP CHAT ==== */}
+      {showChat && <ChatPopup />}
     </header>
   );
 }
