@@ -4,7 +4,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './styles/toastify-custom.css';
 
-import Header from "./components/header/header.jsx";
+import Header from "./components/header/Header.jsx";
 import Footer from "./components/footer/Footer.jsx";
 import HomePage from "./pages/homePage/HomePage.jsx";
 import UploadPost from "./pages/uploadPost/UploadPost.jsx";

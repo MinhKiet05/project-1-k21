@@ -109,7 +109,7 @@ export default function ChatPopup() {
         <div className="chat-search">
           <div className="search-input-container">
             <svg
-              className="search-icon"
+              className="search-icon-popup"
               width="16"
               height="16"
               viewBox="0 0 24 24"
