@@ -1,133 +1,27 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
+import { useUser } from '@clerk/clerk-react';
+import { useMessages } from "../../hooks/useMessages";
 import "./ChatWindow.css";
 
-export default function ChatWindow({ user, onClose }) {
-  const [messages, setMessages] = useState([
-    {
-      id: 1,
-      from: "user",
-      text: "câm ơi c An nha",
-      time: "15:14 28 Tháng 10, 2025",
-      status: "seen",
-    },
-    {
-      id: 2,
-      from: "me",
-      text: "ức",
-      time: "20:48",
-      status: "delivered",
-    },
-    {
-      id: 3,
-      from: "user",
-      text: "Cuộc gọi thoại",
-      time: "20:48",
-      isCall: true,
-      callType: "incoming",
-      callDuration: "2 phút",
-    },
-    {
-      id: 4,
-      from: "user",
-      text: "Gọi lại",
-      time: "20:49",
-      isCallAction: true,
-    },
-  ]);
+const ChatWindow = React.memo(({ user, conversationId, onClose }) => {
+  const { user: currentUser } = useUser();
+  const { messages, loading, sendMessage: sendMessageToSupabase } = useMessages(conversationId);
   const [newMsg, setNewMsg] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const emojiPickerRef = useRef(null);
   const messagesRef = useRef(null);
 
-  const emojis = [
-    "😀",
-    "😃",
-    "😄",
-    "😁",
-    "😆",
-    "😅",
-    "😂",
-    "🤣",
-    "😊",
-    "😇",
-    "🙂",
-    "🙃",
-    "😉",
-    "😌",
-    "😍",
-    "🥰",
-    "😘",
-    "😗",
-    "😙",
-    "😚",
-    "😋",
-    "😛",
-    "😝",
-    "😜",
-    "🤪",
-    "🤨",
-    "🧐",
-    "🤓",
-    "😎",
-    "🤩",
-    "🥳",
-    "😏",
-    "😒",
-    "😞",
-    "😔",
-    "😟",
-    "😕",
-    "🙁",
-    "☹️",
-    "😣",
-    "😖",
-    "😫",
-    "😩",
-    "🥺",
-    "😢",
-    "😭",
-    "😤",
-    "😠",
-    "😡",
-    "🤬",
-    "👍",
-    "👎",
-    "👌",
-    "✌️",
-    "🤞",
-    "🤟",
-    "🤘",
-    "🤙",
-    "👈",
-    "👉",
-    "👆",
-    "🖕",
-    "👇",
-    "☝️",
-    "👋",
-    "🤚",
-    "🖐",
-    "✋",
-    "🖖",
-    "👏",
-    "🙌",
-    "🤲",
-    "🤝",
-    "🙏",
-    "❤️",
-    "🧡",
-    "💛",
-    "💚",
-    "💙",
-    "💜",
-  ];
+  // Auto scroll to bottom when new messages arrive
+  useEffect(() => {
+    if (messagesRef.current) {
+      messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+    }
+  }, [messages]);
 
+  // Handle click outside emoji picker
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (
-        emojiPickerRef.current &&
-        !emojiPickerRef.current.contains(event.target)
-      ) {
+      if (emojiPickerRef.current && !emojiPickerRef.current.contains(event.target)) {
         setShowEmojiPicker(false);
       }
     };
@@ -141,37 +35,37 @@ export default function ChatWindow({ user, onClose }) {
     };
   }, [showEmojiPicker]);
 
-  const sendMessage = () => {
+  const sendMessage = useCallback(async () => {
     if (!newMsg.trim()) return;
-    const newMessage = {
-      id: messages.length + 1,
-      from: "me",
-      text: newMsg,
-      time: new Date().toLocaleTimeString("vi-VN", {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-      status: "sending",
-    };
-    setMessages([...messages, newMessage]);
-    setNewMsg("");
+    
+    try {
+      await sendMessageToSupabase(newMsg);
+      setNewMsg("");
+    } catch (error) {
+      console.error('Error sending message:', error);
+    }
+  }, [newMsg, sendMessageToSupabase]);
 
-    // Scroll to bottom without smooth animation
-    setTimeout(() => {
-      if (messagesRef.current) {
-        messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
-      }
-    }, 0);
-  };
-
-  const addEmoji = (emoji) => {
+  const addEmoji = useCallback((emoji) => {
     setNewMsg((prev) => prev + emoji);
     setShowEmojiPicker(false);
-  };
+  }, []);
 
-  const toggleEmojiPicker = () => {
+  const toggleEmojiPicker = useCallback(() => {
     setShowEmojiPicker(!showEmojiPicker);
-  };
+  }, [showEmojiPicker]);
+
+  // Memoize emojis array to prevent recreation
+  const emojiList = useMemo(() => [
+    "😀", "😃", "😄", "😁", "😆", "😅", "😂", "🤣", "😊", "😇", 
+    "🙂", "🙃", "😉", "😌", "😍", "🥰", "😘", "😗", "😙", "😚", 
+    "😋", "😛", "😝", "😜", "🤪", "🤨", "🧐", "🤓", "😎", "🤩", 
+    "🥳", "😏", "😒", "😞", "😔", "😟", "😕", "🙁", "☹️", "😣", 
+    "😖", "😫", "😩", "🥺", "😢", "😭", "😤", "😠", "😡", "🤬", 
+    "👍", "👎", "👌", "✌️", "🤞", "🤟", "🤘", "🤙", "👈", "👉", 
+    "👆", "🖕", "👇", "☝️", "👋", "🤚", "🖐", "✋", "🖖", "👏", 
+    "🙌", "🤲", "🤝", "🙏", "❤️", "🧡", "💛", "💚", "💙", "💜"
+  ], []);
 
   return (
     <div className="chat-window">
@@ -194,84 +88,74 @@ export default function ChatWindow({ user, onClose }) {
       </div>
 
       <div className="chat-messages" ref={messagesRef}>
-        <div className="message-date">Hôm nay</div>
-
-        {messages.map((msg) => (
-          <div
-            key={msg.id}
-            className={`message-container ${
-              msg.from === "me" ? "message-me" : "message-user"
-            }`}
-          >
-            {msg.from === "user" && (
-              <div className="message-avatar">
-                <img src={user.avatar} alt={user.name} />
-              </div>
-            )}
-
-            <div className="message-content">
-              {msg.isCall ? (
-                <div className={`call-message ${msg.callType}`}>
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                  >
-                    <path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                  </svg>
-                  <span>{msg.text}</span>
-                  {msg.callDuration && (
-                    <span className="call-duration">{msg.callDuration}</span>
-                  )}
-                </div>
-              ) : msg.isCallAction ? (
-                <div className="call-action">
-                  <button className="call-back-btn">
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
-                      <path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                    </svg>
-                    {msg.text}
-                  </button>
-                </div>
-              ) : (
-                <div className="chat-bubble">
-                  <span className="message-text">{msg.text}</span>
-                </div>
-              )}
-
-              <div className="message-meta">
-                <span className="message-time">{msg.time}</span>
-                {msg.from === "me" && msg.status && (
-                  <div className={`message-status ${msg.status}`}>
-                    {msg.status === "delivered" && (
-                      <svg
-                        width="12"
-                        height="12"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                      >
-                        <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z" />
-                      </svg>
-                    )}
-                    {msg.status === "seen" && (
-                      <img
-                        src={user.avatar}
-                        alt="Seen"
-                        className="seen-avatar"
-                      />
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
+        {loading ? (
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: 'center', 
+            alignItems: 'center', 
+            height: '100%',
+            flexDirection: 'column',
+            gap: '16px'
+          }}>
+            <div style={{
+              width: '32px',
+              height: '32px',
+              border: '3px solid rgba(255,255,255,0.2)',
+              borderTop: '3px solid #4fc3f7',
+              borderRadius: '50%',
+              animation: 'spin 1s linear infinite'
+            }}></div>
+            <p style={{ color: '#b0b3b8', margin: 0 }}>Đang tải tin nhắn...</p>
           </div>
-        ))}
+        ) : (
+          <>
+            <div className="message-date">Hôm nay</div>
+
+            {messages.length === 0 ? (
+              <div style={{ 
+                textAlign: 'center', 
+                padding: '40px 20px', 
+                color: '#b0b3b8' 
+              }}>
+                <div style={{ fontSize: '32px', marginBottom: '16px' }}>💬</div>
+                <p>Chưa có tin nhắn nào. Hãy bắt đầu cuộc trò chuyện!</p>
+              </div>
+            ) : (
+              messages.map((msg) => (
+                <div
+                  key={msg.id}
+                  className={`message-container ${
+                    msg.sender_id === currentUser?.id ? "message-me" : "message-user"
+                  }`}
+                >
+                  {msg.sender_id !== currentUser?.id && (
+                    <div className="message-avatar">
+                      <img 
+                        src={msg.profiles?.avatar_url || user.avatar} 
+                        alt={msg.profiles?.full_name || user.name} 
+                      />
+                    </div>
+                  )}
+
+                  <div className="message-content">
+                    <div className="chat-bubble">
+                      <span className="message-text">{msg.content}</span>
+                    </div>
+
+                    <div className="message-meta">
+                      <span className="message-time">
+                        {new Date(msg.created_at).toLocaleTimeString('vi-VN', {
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
+          </>
+        )}
       </div>
 
       <div className="chat-input-container">
@@ -282,7 +166,7 @@ export default function ChatWindow({ user, onClose }) {
         {showEmojiPicker && (
           <div className="emoji-picker" ref={emojiPickerRef}>
             <div className="emoji-grid">
-              {emojis.map((emoji, index) => (
+              {emojiList.map((emoji, index) => (
                 <button
                   key={index}
                   className="emoji-btn"
@@ -313,4 +197,8 @@ export default function ChatWindow({ user, onClose }) {
       </div>
     </div>
   );
-}
+});
+
+ChatWindow.displayName = 'ChatWindow';
+
+export default ChatWindow;

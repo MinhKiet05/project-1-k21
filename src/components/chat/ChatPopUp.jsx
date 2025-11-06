@@ -1,109 +1,149 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
+import { useUser } from '@clerk/clerk-react';
+import { useConversations } from "../../hooks/useConversations";
+import { useChatContext } from "../../contexts/ChatContext";
 import UserChatItem from "./UserChatItem";
-import ChatWindow from "./ChatWindow";
+import ChatWindow from "./ChatWindow.jsx";
 import "./ChatPopUp.css";
 
-export default function ChatPopup() {
+const ChatPopup = React.memo(() => {
+  const { user } = useUser();
+  const { conversations, loading } = useConversations();
+  const { pendingConversationId, setPendingConversationId } = useChatContext();
   const [selectedUser, setSelectedUser] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const users = [
-    {
-      id: 1,
-      name: "Dương Lễ",
-      avatar:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=50&h=50&fit=crop&crop=face",
-      lastMessage: "Ban đã gửi một ảnh",
-      time: "1 phút",
-      unread: false,
-      isOnline: true,
-    },
-    {
-      id: 2,
-      name: "Minh Kiệt",
-      avatar:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=50&h=50&fit=crop&crop=face",
-      lastMessage: "ok",
-      time: "9 phút",
-      unread: true,
-      isOnline: false,
-    },
-    {
-      id: 3,
-      name: "Chuột Gia Huy 🥺",
-      avatar:
-        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=50&h=50&fit=crop&crop=face",
-      lastMessage: "Cuộc gọi thoại đã kết thúc",
-      time: "11 phút",
-      unread: true,
-      isOnline: true,
-    },
-    {
-      id: 4,
-      name: "Pưng Huỳnh",
-      avatar:
-        "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=50&h=50&fit=crop&crop=face",
-      lastMessage: "Ban: gì á",
-      time: "15 phút",
-      unread: false,
-      isOnline: false,
-    },
-    {
-      id: 5,
-      name: "Sinh Viên Nghèo",
-      avatar:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop&crop=face",
-      lastMessage: "Ban: ok",
-      time: "47 phút",
-      unread: false,
-      isOnline: false,
-    },
-    {
-      id: 6,
-      name: "Stve Jobs",
-      avatar:
-        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=50&h=50&fit=crop&crop=face",
-      lastMessage: "ok  e oek",
-      time: "1 giờ",
-      unread: false,
-      isOnline: false,
-    },
-    {
-      id: 7,
-      name: "Mai Quang Huy",
-      avatar:
-        "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=50&h=50&fit=crop&crop=face",
-      lastMessage: "Ban đã gửi một ảnh",
-      time: "1 giờ",
-      unread: false,
-      isOnline: false,
-    },
-    {
-      id: 8,
-      name: "Hiền",
-      avatar:
-        "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=50&h=50&fit=crop&crop=face",
-      lastMessage: "đi hàng đợi điên bên đó á",
-      time: "2 giờ",
-      unread: false,
-      isOnline: false,
-    },
-  ];
+  const formatTime = useCallback((dateString) => {
+    if (!dateString) return '';
+    
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffInMinutes = (now - date) / (1000 * 60);
+    const diffInHours = diffInMinutes / 60;
+    const diffInDays = diffInHours / 24;
 
-  // Filter users based on search query
-  const filteredUsers = users.filter((user) =>
-    user.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+    if (diffInMinutes < 1) {
+      return 'Vừa xong';
+    } else if (diffInMinutes < 60) {
+      return `${Math.floor(diffInMinutes)} phút`;
+    } else if (diffInHours < 24) {
+      return `${Math.floor(diffInHours)} giờ`;
+    } else if (diffInDays < 7) {
+      return `${Math.floor(diffInDays)} ngày`;
+    } else {
+      return date.toLocaleDateString('vi-VN', { 
+        day: '2-digit', 
+        month: '2-digit' 
+      });
+    }
+  }, []);
 
-  const handleSearchChange = (e) => {
+  // Auto-open conversation if pendingConversationId is set
+  useEffect(() => {
+    if (pendingConversationId && conversations.length > 0) {
+      const targetConversation = conversations.find(conv => conv.id === pendingConversationId);
+      if (targetConversation) {
+        const isPostAuthor = targetConversation.posts?.author_id === user?.id;
+        const displayName = isPostAuthor 
+          ? targetConversation.otherParticipant?.full_name || 'Người dùng'
+          : targetConversation.otherParticipant?.full_name || 'Người bán';
+
+        const userItem = {
+          id: targetConversation.id,
+          name: displayName,
+          avatar: targetConversation.otherParticipant?.avatar_url || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=50&h=50&fit=crop&crop=face',
+          lastMessage: targetConversation.last_message_content || 'Chưa có tin nhắn',
+          time: formatTime(targetConversation.last_message_at),
+          unread: false,
+          isOnline: false,
+          conversationId: targetConversation.id,
+          otherParticipant: targetConversation.otherParticipant,
+          postInfo: targetConversation.posts
+        };
+
+        setSelectedUser(userItem);
+        setPendingConversationId(null);
+      }
+    }
+  }, [pendingConversationId, conversations.length, formatTime, setPendingConversationId, user?.id]);
+
+  // Convert conversations to user format for UserChatItem - Memoized
+  const users = useMemo(() => {
+    return conversations.map(conversation => {
+      const isPostAuthor = conversation.posts?.author_id === user?.id;
+      const displayName = isPostAuthor 
+        ? conversation.otherParticipant?.full_name || 'Người dùng'
+        : conversation.otherParticipant?.full_name || 'Người bán';
+
+      return {
+        id: conversation.id,
+        name: displayName,
+        avatar: conversation.otherParticipant?.avatar_url || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=50&h=50&fit=crop&crop=face',
+        lastMessage: conversation.last_message_content || 'Chưa có tin nhắn',
+        time: formatTime(conversation.last_message_at),
+        unread: false,
+        isOnline: false,
+        conversationId: conversation.id,
+        otherParticipant: conversation.otherParticipant,
+        postInfo: conversation.posts
+      };
+    });
+  }, [conversations, user?.id, formatTime]);
+
+  // Filter users based on search query - Memoized
+  const filteredUsers = useMemo(() => {
+    return users.filter((user) =>
+      user.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [users, searchQuery]);
+
+  const handleSearchChange = useCallback((e) => {
     setSearchQuery(e.target.value);
-  };
+  }, []);
+
+  const handleUserClick = useCallback((userItem) => {
+    setSelectedUser(userItem);
+  }, []);
+
+  const handleCloseChat = useCallback(() => {
+    setSelectedUser(null);
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="chat-popup">
+        <div className="chat-popup-header">
+          <h3 className="chat-popup-title">Đoạn chat</h3>
+        </div>
+        <div className="chat-popup-list">
+          <div style={{ 
+            display: 'flex', 
+            flexDirection: 'column', 
+            alignItems: 'center', 
+            justifyContent: 'center',
+            padding: '40px 20px',
+            gap: '16px'
+          }}>
+            <div style={{
+              width: '32px',
+              height: '32px',
+              border: '3px solid #3a3b3c',
+              borderTop: '3px solid #4fc3f7',
+              borderRadius: '50%',
+              animation: 'spin 1s linear infinite'
+            }}></div>
+            <p style={{ color: '#b0b3b8', margin: 0 }}>Đang tải cuộc trò chuyện...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
       <div className="chat-popup">
         <div className="chat-popup-header">
-          <h3 className="chat-popup-title">Đoạn chat</h3>
+          <h3 className="chat-popup-title">Đoạn chat ({filteredUsers.length})</h3>
         </div>
 
         <div className="chat-search">
@@ -136,24 +176,50 @@ export default function ChatPopup() {
         </div>
 
         <div className="chat-popup-list">
-          {filteredUsers.map((user) => (
-            <UserChatItem
-              key={user.id}
-              user={user}
-              onClick={(u) => setSelectedUser(u)}
-            />
-          ))}
-          {filteredUsers.length === 0 && searchQuery && (
+          {filteredUsers.length === 0 ? (
             <div className="no-results">
-              <p>Không tìm thấy kết quả cho "{searchQuery}"</p>
+              {searchQuery ? (
+                <p>Không tìm thấy kết quả cho "{searchQuery}"</p>
+              ) : (
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '40px 20px',
+                  textAlign: 'center'
+                }}>
+                  <div style={{ fontSize: '48px', marginBottom: '16px' }}>💬</div>
+                  <h3 style={{ color: '#e4e6ea', margin: '0 0 8px 0' }}>Chưa có cuộc trò chuyện</h3>
+                  <p style={{ color: '#b0b3b8', margin: 0, fontSize: '14px' }}>
+                    Bắt đầu chat với người khác về sản phẩm để thấy cuộc trò chuyện ở đây.
+                  </p>
+                </div>
+              )}
             </div>
+          ) : (
+            filteredUsers.map((user) => (
+              <UserChatItem
+                key={user.id}
+                user={user}
+                onClick={handleUserClick}
+              />
+            ))
           )}
         </div>
       </div>
 
       {selectedUser && (
-        <ChatWindow user={selectedUser} onClose={() => setSelectedUser(null)} />
+        <ChatWindow 
+          user={selectedUser} 
+          conversationId={selectedUser.conversationId}
+          onClose={handleCloseChat} 
+        />
       )}
     </>
   );
-}
+});
+
+ChatPopup.displayName = 'ChatPopup';
+
+export default ChatPopup;

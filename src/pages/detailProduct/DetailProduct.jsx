@@ -2,16 +2,23 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment } from '@fortawesome/free-solid-svg-icons';
+import { useUser } from '@clerk/clerk-react';
 import { supabase } from '../../lib/supabase';
+import { useConversations } from '../../hooks/useConversations';
+import { useChatContext } from '../../contexts/ChatContext';
 import './DetailProduct.css';
 
 export default function DetailProduct() {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { user } = useUser();
+    const { createOrFindConversation } = useConversations();
+    const { openChatWithConversation } = useChatContext();
     const [post, setPost] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [chatLoading, setChatLoading] = useState(false);
 
     useEffect(() => {
         if (id) {
@@ -82,14 +89,32 @@ export default function DetailProduct() {
         setCurrentImageIndex(index);
     };
 
-    const handleContactSeller = () => {
-        // Có thể mở chat hoặc hiển thị thông tin liên hệ
-        const sellerEmail = post?.profiles?.email || 'Chưa có thông tin';
-        const sellerName = post?.profiles?.full_name || 
-                          post?.profiles?.name || 
-                          post?.profiles?.username || 
-                          'Người bán';
-        alert(`Liên hệ ${sellerName}: ${sellerEmail}`);
+    const handleContactSeller = async () => {
+        if (!user) {
+            alert('Bạn cần đăng nhập để liên hệ với người bán');
+            return;
+        }
+
+        if (post?.author_id === user.id) {
+            alert('Bạn không thể nhắn tin với chính mình');
+            return;
+        }
+
+        try {
+            setChatLoading(true);
+            
+            // Tạo hoặc tìm conversation
+            const conversationId = await createOrFindConversation(post.id, post.author_id);
+            
+            // Mở ChatPopup từ header với conversation cụ thể
+            openChatWithConversation(conversationId);
+            
+        } catch (error) {
+            console.error('Error creating conversation:', error);
+            alert('Có lỗi xảy ra khi tạo cuộc trò chuyện');
+        } finally {
+            setChatLoading(false);
+        }
     };
 
     if (loading) {
@@ -236,13 +261,15 @@ export default function DetailProduct() {
                         <button 
                                 className="detail-contact-btn"
                                 onClick={handleContactSeller}
+                                disabled={chatLoading || !user}
                             >
                                 <FontAwesomeIcon icon={faComment} />
-                                Liên hệ ngay
+                                {chatLoading ? 'Đang tạo cuộc trò chuyện...' : 'Liên hệ ngay'}
                             </button>
                     </div>
                 </div>
             </div>
+
         </div>
     );
 }

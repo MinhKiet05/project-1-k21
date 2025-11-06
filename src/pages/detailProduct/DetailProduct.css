@@ -9,6 +9,7 @@
     display: flex;
     justify-content: center;
     font-family: 'BeVietNamPro', sans-serif;
+    position: relative;
 }
 
 .detail-wrapper {
@@ -328,4 +329,52 @@
         width: 100%;
         justify-content: center;
     }
+}
+
+/* Chat Popup Overlay for Detail Page */
+.detail-container .chat-popup {
+    position: fixed !important;
+    bottom: 20px !important;
+    right: 20px !important;
+    top: auto !important;
+    left: auto !important;
+    width: 320px !important;
+    height: 500px !important;
+    z-index: 1000;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    border: 1px solid #e1e5e9;
+}
+
+/* Chat Window when opened from ChatPopup */
+.detail-container .chat-window {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 600px;
+    z-index: 1001;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border: 1px solid #e1e5e9;
+}
+
+.detail-container .chat-window::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: -1;
+}
+
+.detail-contact-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: #ccc;
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import "./UserChatItem.css";
 
-export default function UserChatItem({ user, onClick }) {
+const UserChatItem = React.memo(({ user, onClick }) => {
   return (
     <div className="user-chat-item" onClick={() => onClick(user)}>
       <div className="user-avatar-container">
@@ -20,4 +20,8 @@ export default function UserChatItem({ user, onClick }) {
       </div>
     </div>
   );
-}
+});
+
+UserChatItem.displayName = 'UserChatItem';
+
+export default UserChatItem;

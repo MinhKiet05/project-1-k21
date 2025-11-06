@@ -18,6 +18,7 @@ import DashboardPosts from "./pages/dashboard/DashboardPosts.jsx";
 import ProtectedAdminRoute from "./components/ProtectedAdminRoute/ProtectedAdminRoute.jsx";
 import { useUserSync } from "./hooks/useUserSync";
 import { UserRoleProvider } from "./contexts/UserRoleContext";
+import { ChatProvider } from "./contexts/ChatContext";
 
 export default function App() {
   // 🔄 JIT Provisioning: Tự động tạo profile khi user đăng nhập
@@ -25,7 +26,8 @@ export default function App() {
 
   return (
     <UserRoleProvider>
-      <Router>
+      <ChatProvider>
+        <Router>
         <div
           style={{
             minHeight: "100vh",
@@ -76,6 +78,7 @@ export default function App() {
           theme="light"
         />
       </Router>
+      </ChatProvider>
     </UserRoleProvider>
   );
 }

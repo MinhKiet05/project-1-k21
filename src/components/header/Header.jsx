@@ -18,6 +18,7 @@ import {
   UserButton,
 } from "@clerk/clerk-react";
 import { useUserRole } from "../../contexts/UserRoleContext";
+import { useChatContext } from "../../contexts/ChatContext";
 
 // 👇 import component ChatPopup
 import ChatPopup from "../chat/ChatPopUp";
@@ -26,10 +27,8 @@ export default function Header() {
   const location = useLocation();
   const navigate = useNavigate();
   const { isAdmin } = useUserRole();
+  const { showChatPopup, openChatPopup, closeChatPopup } = useChatContext();
   const searchInputRef = useRef(null);
-
-  // 👉 State điều khiển popup chat
-  const [showChat, setShowChat] = useState(false);
 
   // Function to check if current path is active
   const isActive = (path) => {
@@ -122,7 +121,7 @@ export default function Header() {
             {/* Nút chat: toggle popup */}
             <button
               className="header-icon-btn"
-              onClick={() => setShowChat(!showChat)}
+              onClick={() => showChatPopup ? closeChatPopup() : openChatPopup()}
             >
               <FontAwesomeIcon icon={faComment} className="icon-btn-bell" />
             </button>
@@ -148,7 +147,7 @@ export default function Header() {
       </div>
 
       {/* ==== HIỂN THỊ POPUP CHAT ==== */}
-      {showChat && <ChatPopup />}
+      {showChatPopup && <ChatPopup />}
     </header>
   );
 }
