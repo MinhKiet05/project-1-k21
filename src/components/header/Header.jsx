@@ -20,7 +20,7 @@ import {
 import { useUserRole } from "../../contexts/UserRoleContext";
 
 // 👇 import component ChatPopup
-import ChatPopup from "../Chat/ChatPopup";
+import ChatPopup from "../chat/ChatPopUp";
 
 export default function Header() {
   const location = useLocation();
