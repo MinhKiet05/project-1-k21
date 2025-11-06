@@ -249,7 +249,7 @@ export default function HomePage() {
                   key={`hot-loading-${index}`}
                   product={{
                     name: "Đang tải...",
-                    price: 0,
+                    price: 1,
                     image: logoImg,
                   }}
                 />

@@ -1,6 +1,7 @@
 import "./Header.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useRef } from "react";
 import logo from "../../assets/logo.webp";
 import {
   faBell,
@@ -20,7 +21,9 @@ import { useUserRole } from "../../contexts/UserRoleContext";
 
 export default function Header() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { isAdmin } = useUserRole();
+  const searchInputRef = useRef(null);
 
   // Function to check if current path is active
   const isActive = (path) => {
@@ -28,6 +31,14 @@ export default function Header() {
       return location.pathname === "/" || location.pathname === "/home";
     }
     return location.pathname === path;
+  };
+
+  // Handle search function
+  const handleSearch = () => {
+    const query = searchInputRef.current?.value.trim();
+    if (query) {
+      navigate(`/search?q=${encodeURIComponent(query)}`);
+    }
   };
 
   return (
@@ -69,8 +80,22 @@ export default function Header() {
         </nav>
         {/* ==== NHÓM 3: SEARCH BOX ==== */}
         <div className="search-box">
-          <FontAwesomeIcon icon={faSearch} className="search-icon" />
-          <input type="text" placeholder="Tìm kiếm..." />
+          <FontAwesomeIcon 
+            icon={faSearch} 
+            className="search-icon-header" 
+            onClick={handleSearch}
+            style={{ cursor: 'pointer' }}
+          />
+          <input 
+            ref={searchInputRef}
+            type="text" 
+            placeholder="Tìm kiếm..." 
+            onKeyPress={(e) => {
+              if (e.key === 'Enter') {
+                handleSearch();
+              }
+            }}
+          />
         </div>
 
         {/* ==== NHÓM 4: USER ACTIONS & ICONS ==== */}

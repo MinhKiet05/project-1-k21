@@ -98,7 +98,9 @@ export default function DashboardPosts() {
       {/* Search & Filters */}
       <div className="search-section">
         <div className="search-box-admin">
-          <FontAwesomeIcon icon={faSearch} className="search-icon" />
+          <div>
+            <FontAwesomeIcon icon={faSearch} className="search-icon" />
+          </div>
           <input
             type="text"
             placeholder="Tìm kiếm theo tên người đăng hoặc tên sản phẩm"

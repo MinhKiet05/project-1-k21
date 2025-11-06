@@ -10,7 +10,7 @@ import HomePage from "./pages/homePage/HomePage.jsx";
 import UploadPost from "./pages/uploadPost/UploadPost.jsx";
 import Management from "./pages/management/Management.jsx";
 import AboutUs from "./pages/aboutUs/AboutUs.jsx";
-import ChatPage from "./pages/chatPage/ChatPage.jsx";
+import SearchPage from "./pages/searchPage/SearchPage.jsx";
 import DetailProduct from "./pages/detailProduct/DetailProduct.jsx";
 import DashboardLayout from "./pages/dashboard/DashboardLayout.jsx";
 import DashboardUsers from "./pages/dashboard/DashboardUsers.jsx";
@@ -42,7 +42,7 @@ export default function App() {
               <Route path="/post" element={<UploadPost />} />
               <Route path="/management" element={<Management />} />
               <Route path="/about" element={<AboutUs />} />
-              <Route path="/chat" element={<ChatPage />} />
+              <Route path="/search" element={<SearchPage />} />
               <Route path="/product/:id" element={<DetailProduct />} />
               <Route
                 path="/dashboard"
