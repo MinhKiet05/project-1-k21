@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import UserChatItem from "./UserChatItem";
 import ChatWindow from "./ChatWindow";
-import "./ChatPopup.css";
+import "./ChatPopUp.css";
 
 export default function ChatPopup() {
   const [selectedUser, setSelectedUser] = useState(null);
