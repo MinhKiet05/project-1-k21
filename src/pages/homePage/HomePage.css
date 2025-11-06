@@ -233,7 +233,7 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-.section-title {
+.homepage-section-title {
   color: #4b0e0e;
   font-family: "Be Vietnam Pro", sans-serif;
   font-size: 28px;
@@ -246,7 +246,7 @@
   width: 100%;
 }
 
-.section-title::after {
+.homepage-section-title::after {
   content: "";
   position: absolute;
   bottom: 0;
@@ -257,7 +257,7 @@
   border-radius: 2px;
 }
 
-.products-grid {
+.homepage-products-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 25px;
@@ -265,7 +265,7 @@
 
 /* Responsive Grid */
 @media (max-width: 968px) {
-  .products-grid {
+  .homepage-products-grid {
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
   }
@@ -281,12 +281,12 @@
     margin-bottom: 40px;
   }
 
-  .products-grid {
+  .homepage-products-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 18px;
   }
 
-  .section-title {
+  .homepage-section-title {
     font-size: 24px;
   }
 }
@@ -301,16 +301,16 @@
     margin-bottom: 30px;
   }
 
-  .products-grid {
+  .homepage-products-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 15px;
   }
 
-  .section-title {
+  .homepage-section-title {
     font-size: 20px;
   }
 
-  .section-title::after {
+  .homepage-section-title::after {
     width: 60px;
     height: 3px;
   }

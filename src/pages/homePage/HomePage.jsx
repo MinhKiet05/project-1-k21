@@ -5,6 +5,7 @@ import {
   categoryService,
   postService,
 } from "../../lib/database.js";
+import { supabase } from "../../lib/supabase.js";
 import CardProduct from "../../components/cardProduct/CardProduct.jsx";
 import "./HomePage.css";
 import banner1 from '../../assets/banner1.webp';
@@ -17,6 +18,12 @@ export default function HomePage() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const leftBanners = [banner1, banner2]; // Carousel bên trái
   const rightBanners = [banner3, banner4]; // Banner tĩnh bên phải
+  
+  // States for data
+  const [hotCategories, setHotCategories] = useState([]);
+  const [latestPosts, setLatestPosts] = useState([]);
+  const [recommendedPosts, setRecommendedPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   // Auto slide every 5 seconds cho carousel bên trái
   useEffect(() => {
@@ -26,6 +33,121 @@ export default function HomePage() {
 
     return () => clearInterval(timer);
   }, [leftBanners.length]);
+
+  // Fetch data for homepage
+  useEffect(() => {
+    const fetchHomePageData = async () => {
+      try {
+        setLoading(true);
+
+        // 1. Fetch random 4 posts từ danh mục "Giáo trình" cho "Danh mục hot"
+        const { data: categories } = await supabase
+          .from('categories')
+          .select('id')
+          .ilike('name', '%giáo trình%')
+          .limit(1);
+
+        if (categories && categories.length > 0) {
+          const { data: categoryPosts } = await supabase
+            .from('posts')
+            .select(`
+              *,
+              category:categories(id, name),
+              location:locations(id, name)
+            `)
+            .eq('category_id', categories[0].id)
+            .eq('status', 'approved')
+            .limit(20); // Lấy nhiều hơn để random
+          
+          if (categoryPosts && categoryPosts.length > 0) {
+            // Shuffle và lấy 4 bài ngẫu nhiên
+            const shuffled = [...categoryPosts].sort(() => Math.random() - 0.5);
+            setHotCategories(shuffled.slice(0, 4));
+          } else {
+            setHotCategories([]);
+          }
+        }
+
+        // 2. Fetch 4 bài đăng được duyệt gần đây nhất
+        // Thử multiple approaches để đảm bảo có dữ liệu
+        let latest = null;
+
+        // Cách 1: Sử dụng expires_at (khi approve, expires_at được set)
+        const { data: latestByExpires } = await supabase
+          .from('posts')
+          .select(`
+            *,
+            category:categories(id, name),
+            location:locations(id, name)
+          `)
+          .eq('status', 'approved')
+          .not('expires_at', 'is', null)
+          .order('expires_at', { ascending: false })
+          .limit(4);
+
+        if (latestByExpires && latestByExpires.length > 0) {
+          latest = latestByExpires;
+        } else {
+          // Cách 2: Fallback - sử dụng updated_at
+          const { data: latestByUpdated } = await supabase
+            .from('posts')
+            .select(`
+              *,
+              category:categories(id, name),
+              location:locations(id, name)
+            `)
+            .eq('status', 'approved')
+            .order('updated_at', { ascending: false })
+            .limit(4);
+          
+          if (latestByUpdated && latestByUpdated.length > 0) {
+            latest = latestByUpdated;
+          } else {
+            // Cách 3: Fallback cuối - sử dụng created_at  
+            const { data: latestByCreated } = await supabase
+              .from('posts')
+              .select(`
+                *,
+                category:categories(id, name),
+                location:locations(id, name)
+              `)
+              .eq('status', 'approved')
+              .order('created_at', { ascending: false })
+              .limit(4);
+            
+            latest = latestByCreated;
+          }
+        }
+
+        console.log('Latest approved posts:', latest); // Debug log
+        setLatestPosts(latest || []);
+
+        // 3. Fetch 4 bài đăng ngẫu nhiên để gợi ý
+        const { data: random } = await supabase
+          .from('posts')
+          .select(`
+            *,
+            category:categories(id, name),
+            location:locations(id, name)
+          `)
+          .eq('status', 'approved')
+          .limit(20); // Lấy nhiều hơn để chọn ngẫu nhiên
+
+        if (random && random.length > 0) {
+          // Shuffle và lấy 4 bài ngẫu nhiên
+          const shuffled = [...random].sort(() => Math.random() - 0.5);
+          setRecommendedPosts(shuffled.slice(0, 4));
+        }
+
+      } catch (error) {
+        console.error('Error fetching homepage data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchHomePageData();
+  }, []);
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % leftBanners.length);
@@ -39,6 +161,22 @@ export default function HomePage() {
 
   const goToSlide = (index) => {
     setCurrentSlide(index);
+  };
+
+  // Convert post data to CardProduct format
+  const convertPostToProduct = (post) => {
+    const imageUrl = (post.image_urls && post.image_urls[0]) || 
+                    (post.imageUrls && post.imageUrls[0]) || 
+                    post.image_url || 
+                    post.images?.[0] || 
+                    logoImg;
+    
+    return {
+      id: post.id,
+      name: post.title || 'Không có tiêu đề',
+      price: post.price || 0,
+      image: imageUrl
+    };
   };
 
   return (
@@ -102,106 +240,118 @@ export default function HomePage() {
       <div className="homepage-container">
         {/* Danh mục hot */}
         <div className="homepage-section">
-          <h2 className="section-title">Danh mục hot</h2>
-          <div className="products-grid">
-            <CardProduct
-              product={{
-                name: "Sách quốc phòng quốc phòng quốc phòng quốc phòng",
-                price: 15000,
-                image: logoImg,
-              }}
-            />
-            <CardProduct
-              product={{
-                name: "Sách quốc phòng quốc phòng quốc phòng quốc phòng",
-                price: 15000,
-                image: logoImg,
-              }}
-            />
-            <CardProduct
-              product={{
-                name: "Sách quốc phòng quốc phòng quốc phòng quốc phòng",
-                price: 15000,
-                image: logoImg,
-              }}
-            />
-            <CardProduct
-              product={{
-                name: "Sách quốc phòng quốc phòng quốc phòng quốc phòng",
-                price: 15000,
-                image: logoImg,
-              }}
-            />
+          <h2 className="homepage-section-title">Danh mục hot - Giáo trình</h2>
+          <div className="homepage-products-grid">
+            {loading ? (
+              // Loading placeholder
+              Array.from({ length: 4 }).map((_, index) => (
+                <CardProduct
+                  key={`hot-loading-${index}`}
+                  product={{
+                    name: "Đang tải...",
+                    price: 0,
+                    image: logoImg,
+                  }}
+                />
+              ))
+            ) : hotCategories.length > 0 ? (
+              hotCategories.map((post, index) => (
+                <CardProduct
+                  key={`hot-${post.id || index}`}
+                  product={convertPostToProduct(post)}
+                />
+              ))
+            ) : (
+              // Fallback khi không có dữ liệu
+              Array.from({ length: 4 }).map((_, index) => (
+                <CardProduct
+                  key={`hot-fallback-${index}`}
+                  product={{
+                    name: "Chưa có sản phẩm",
+                    price: 0,
+                    image: logoImg,
+                  }}
+                />
+              ))
+            )}
           </div>
         </div>
 
         {/* Bài đăng mới nhất */}
         <div className="homepage-section">
-          <h2 className="section-title">Bài đăng mới nhất</h2>
-          <div className="products-grid">
-            <CardProduct
-              product={{
-                name: "Sách quốc phòng quốc phòng quốc phòng quốc phòng",
-                price: 15000,
-                image: logoImg,
-              }}
-            />
-            <CardProduct
-              product={{
-                name: "Sách quốc phòng quốc phòng quốc phòng quốc phòng",
-                price: 15000,
-                image: logoImg,
-              }}
-            />
-            <CardProduct
-              product={{
-                name: "Sách quốc phòng quốc phòng quốc phòng quốc phòng",
-                price: 15000,
-                image: logoImg,
-              }}
-            />
-            <CardProduct
-              product={{
-                name: "Sách quốc phòng quốc phòng quốc phòng quốc phòng",
-                price: 15000,
-                image: logoImg,
-              }}
-            />
+          <h2 className="homepage-section-title">Bài đăng mới nhất</h2>
+          <div className="homepage-products-grid">
+            {loading ? (
+              // Loading placeholder
+              Array.from({ length: 4 }).map((_, index) => (
+                <CardProduct
+                  key={`latest-loading-${index}`}
+                  product={{
+                    name: "Đang tải...",
+                    price: 0,
+                    image: logoImg,
+                  }}
+                />
+              ))
+            ) : latestPosts.length > 0 ? (
+              latestPosts.map((post, index) => (
+                <CardProduct
+                  key={`latest-${post.id || index}`}
+                  product={convertPostToProduct(post)}
+                />
+              ))
+            ) : (
+              // Fallback khi không có dữ liệu
+              Array.from({ length: 4 }).map((_, index) => (
+                <CardProduct
+                  key={`latest-fallback-${index}`}
+                  product={{
+                    name: "Chưa có bài đăng mới",
+                    price: 0,
+                    image: logoImg,
+                  }}
+                />
+              ))
+            )}
           </div>
         </div>
 
         {/* Gợi ý cho bạn */}
         <div className="homepage-section">
-          <h2 className="section-title">Gợi ý cho bạn</h2>
-          <div className="products-grid">
-            <CardProduct
-              product={{
-                name: "Sách quốc phòng quốc phòng quốc phòng quốc phòng",
-                price: 15000,
-                image: logoImg,
-              }}
-            />
-            <CardProduct
-              product={{
-                name: "Sách quốc phòng quốc phòng quốc phòng quốc phòng",
-                price: 15000,
-                image: logoImg,
-              }}
-            />
-            <CardProduct
-              product={{
-                name: "Sách quốc phòng quốc phòng quốc phòng quốc phòng",
-                price: 15000,
-                image: logoImg,
-              }}
-            />
-            <CardProduct
-              product={{
-                name: "Sách quốc phòng quốc phòng quốc phòng quốc phòng",
-                price: 15000,
-                image: logoImg,
-              }}
-            />
+          <h2 className="homepage-section-title">Gợi ý cho bạn</h2>
+          <div className="homepage-products-grid">
+            {loading ? (
+              // Loading placeholder
+              Array.from({ length: 4 }).map((_, index) => (
+                <CardProduct
+                  key={`recommended-loading-${index}`}
+                  product={{
+                    name: "Đang tải...",
+                    price: 0,
+                    image: logoImg,
+                  }}
+                />
+              ))
+            ) : recommendedPosts.length > 0 ? (
+              recommendedPosts.map((post, index) => (
+                <CardProduct
+                  key={`recommended-${post.id || index}`}
+                  product={convertPostToProduct(post)}
+                />
+              ))
+            ) : (
+              // Fallback khi không có dữ liệu
+              Array.from({ length: 4 }).map((_, index) => (
+                <CardProduct
+                  key={`recommended-fallback-${index}`}
+                  product={{
+                    name: "Chưa có gợi ý",
+                    price: 0,
+                    image: logoImg,
+                  }}
+                />
+              ))
+            )}
           </div>
         </div>
       </div>
