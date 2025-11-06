@@ -16,6 +16,7 @@ import DashboardLayout from "./pages/dashboard/DashboardLayout.jsx";
 import DashboardUsers from "./pages/dashboard/DashboardUsers.jsx";
 import DashboardPosts from "./pages/dashboard/DashboardPosts.jsx";
 import ProtectedAdminRoute from "./components/ProtectedAdminRoute/ProtectedAdminRoute.jsx";
+import ScrollToTop from "./components/ScrollToTop/ScrollToTop.jsx";
 import { useUserSync } from "./hooks/useUserSync";
 import { UserRoleProvider } from "./contexts/UserRoleContext";
 import { ChatProvider } from "./contexts/ChatContext";
@@ -28,14 +29,15 @@ export default function App() {
     <UserRoleProvider>
       <ChatProvider>
         <Router>
-        <div
-          style={{
-            minHeight: "100vh",
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          <Header />
+          <ScrollToTop />
+          <div
+            style={{
+              minHeight: "100vh",
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <Header />
 
           <div style={{ flex: 1 }}>
             <Routes>

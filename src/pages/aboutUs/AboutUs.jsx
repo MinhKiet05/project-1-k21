@@ -61,11 +61,12 @@ const AboutUs = () => {
             <div className="value-text">
               <h3 className="value-heading">Chất lượng sản phẩm</h3>
               <p>
-                Chúng tôi đặt tiêu chí minh bạch thông tin lên hàng đầu để người
-                mua tự đánh giá chất lượng. Nổ Tung Phố Cổ yêu cầu người bán cam
-                kết cung cấp mô tả chi tiết, hình ảnh chân thực và lịch sử giao
-                dịch rõ ràng, nhằm giúp bạn đưa ra quyết định mua bán sáng suốt
-                nhất.
+                Chúng tôi đặt chất lượng sản phẩm làm ưu tiên hàng đầu.
+                Mọi bài đăng trên Nổ Tung Phố Cổ đều được đội ngũ quản trị viên
+                kiểm duyệt kỹ lưỡng trước khi hiển thị, nhằm đảm bảo thông tin mô
+                tả rõ ràng, hình ảnh chân thực và giá cả hợp lý. Nhờ đó, người mua
+                có thể yên tâm lựa chọn sản phẩm và trải nghiệm giao dịch minh bạch,
+                đáng tin cậy.
               </p>
             </div>
             <img src={gtri2IMG} alt="Chất lượng sản phẩm" className="value-image" />
