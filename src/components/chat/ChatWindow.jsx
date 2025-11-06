@@ -1,22 +1,39 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { useUser } from '@clerk/clerk-react';
 import { useMessages } from "../../hooks/useMessages";
+import { toast } from 'react-toastify';
 import "./ChatWindow.css";
 
 const ChatWindow = React.memo(({ user, conversationId, onClose }) => {
   const { user: currentUser } = useUser();
-  const { messages, loading, sendMessage: sendMessageToSupabase } = useMessages(conversationId);
+  const { messages, loading, loadingMore, hasMore, sendMessage: sendMessageToSupabase, loadMore } = useMessages(conversationId);
   const [newMsg, setNewMsg] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [isSending, setIsSending] = useState(false);
   const emojiPickerRef = useRef(null);
   const messagesRef = useRef(null);
+  const lastSendTimeRef = useRef(0);
 
-  // Auto scroll to bottom when new messages arrive
+  // Auto scroll to bottom only for new messages or initial load
+  const [shouldAutoScroll, setShouldAutoScroll] = useState(true);
+  const [initialLoadComplete, setInitialLoadComplete] = useState(false);
+
   useEffect(() => {
-    if (messagesRef.current) {
-      messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+    if (!loading && !initialLoadComplete) {
+      // Initial load completed - scroll to bottom
+      if (messagesRef.current) {
+        messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+      }
+      setInitialLoadComplete(true);
+    } else if (initialLoadComplete && shouldAutoScroll && messagesRef.current) {
+      // Auto scroll only if user is at bottom
+      const container = messagesRef.current;
+      const isAtBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 50;
+      if (isAtBottom) {
+        container.scrollTop = container.scrollHeight;
+      }
     }
-  }, [messages]);
+  }, [messages, loading, initialLoadComplete, shouldAutoScroll]);
 
   // Handle click outside emoji picker
   useEffect(() => {
@@ -37,14 +54,33 @@ const ChatWindow = React.memo(({ user, conversationId, onClose }) => {
 
   const sendMessage = useCallback(async () => {
     if (!newMsg.trim()) return;
+    if (isSending) return;
+    
+    const now = Date.now();
+    const timeSinceLastSend = now - lastSendTimeRef.current;
+    
+    // Check if less than 2 seconds since last send
+    if (timeSinceLastSend < 2000) {
+      const remainingTime = Math.ceil((2000 - timeSinceLastSend) / 1000);
+      toast.warning(`Vui lòng đợi ${remainingTime} giây trước khi gửi tin nhắn tiếp theo`, {
+        position: "top-center",
+        autoClose: 1500,
+        hideProgressBar: true,
+      });
+      return;
+    }
     
     try {
+      setIsSending(true);
       await sendMessageToSupabase(newMsg);
       setNewMsg("");
+      lastSendTimeRef.current = now;
     } catch (error) {
-      console.error('Error sending message:', error);
+      // Error sending message
+    } finally {
+      setIsSending(false);
     }
-  }, [newMsg, sendMessageToSupabase]);
+  }, [newMsg, sendMessageToSupabase, isSending]);
 
   const addEmoji = useCallback((emoji) => {
     setNewMsg((prev) => prev + emoji);
@@ -77,7 +113,6 @@ const ChatWindow = React.memo(({ user, conversationId, onClose }) => {
           </div>
           <div className="user-details">
             <span className="user-name">{user.name}</span>
-            <span className="user-status">Đang hoạt động</span>
           </div>
         </div>
         <div className="header-actions">
@@ -87,7 +122,30 @@ const ChatWindow = React.memo(({ user, conversationId, onClose }) => {
         </div>
       </div>
 
-      <div className="chat-messages" ref={messagesRef}>
+      <div 
+        className="chat-messages" 
+        ref={messagesRef}
+        onScroll={(e) => {
+          const { scrollTop, scrollHeight, clientHeight } = e.target;
+          
+          // Load more when scrolled to top
+          if (scrollTop <= 50 && hasMore && !loadingMore && initialLoadComplete) {
+            const prevScrollHeight = scrollHeight;
+            loadMore();
+            // Maintain scroll position after loading more messages
+            setTimeout(() => {
+              if (messagesRef.current) {
+                const newScrollHeight = messagesRef.current.scrollHeight;
+                messagesRef.current.scrollTop = newScrollHeight - prevScrollHeight;
+              }
+            }, 200);
+          }
+          
+          // Check if user is at bottom for auto-scroll behavior
+          const isAtBottom = scrollHeight - scrollTop <= clientHeight + 50;
+          setShouldAutoScroll(isAtBottom);
+        }}
+      >
         {loading ? (
           <div style={{ 
             display: 'flex', 
@@ -109,6 +167,26 @@ const ChatWindow = React.memo(({ user, conversationId, onClose }) => {
           </div>
         ) : (
           <>
+            {loadingMore && (
+              <div style={{ 
+                display: 'flex', 
+                justifyContent: 'center', 
+                padding: '12px',
+                gap: '8px',
+                alignItems: 'center'
+              }}>
+                <div style={{
+                  width: '16px',
+                  height: '16px',
+                  border: '2px solid rgba(255,255,255,0.2)',
+                  borderTop: '2px solid #4fc3f7',
+                  borderRadius: '50%',
+                  animation: 'spin 1s linear infinite'
+                }}></div>
+                <span style={{ color: '#b0b3b8', fontSize: '12px' }}>Đang tải tin nhắn cũ...</span>
+              </div>
+            )}
+            
             <div className="message-date">Hôm nay</div>
 
             {messages.length === 0 ? (
@@ -189,10 +267,26 @@ const ChatWindow = React.memo(({ user, conversationId, onClose }) => {
           />
         </div>
 
-        <button className="send-btn" onClick={sendMessage}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
-          </svg>
+        <button 
+          className="send-btn" 
+          onClick={sendMessage}
+          disabled={isSending}
+          style={{ opacity: isSending ? 0.6 : 1 }}
+        >
+          {isSending ? (
+            <div style={{
+              width: '16px',
+              height: '16px',
+              border: '2px solid rgba(255,255,255,0.3)',
+              borderTop: '2px solid #ffffff',
+              borderRadius: '50%',
+              animation: 'spin 1s linear infinite'
+            }}></div>
+          ) : (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+            </svg>
+          )}
         </button>
       </div>
     </div>

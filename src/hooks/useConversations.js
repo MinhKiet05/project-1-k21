@@ -7,7 +7,11 @@ export const useConversations = () => {
     const { user } = useUser();
     const [conversations, setConversations] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loadingMore, setLoadingMore] = useState(false);
+    const [hasMore, setHasMore] = useState(true);
+    const [offset, setOffset] = useState(0);
     const fetchingRef = useRef(false);
+    const LIMIT = 10;
 
     useEffect(() => {
         if (user?.id) {
@@ -34,13 +38,42 @@ export const useConversations = () => {
         }
     }, [user?.id]);
 
-    const fetchConversations = useCallback(async () => {
+    const fetchConversations = useCallback(async (isLoadingMore = false) => {
         if (fetchingRef.current || !user?.id) return;
         
         try {
             fetchingRef.current = true;
-            setLoading(true);
+            if (isLoadingMore) {
+                setLoadingMore(true);
+            } else {
+                setLoading(true);
+                setOffset(0);
+            }
             
+            const currentOffset = isLoadingMore ? offset : 0;
+            
+            // First get conversation IDs with pagination
+            const { data: conversationIds, error: idsError } = await supabase
+                .from('conversation_participants')
+                .select('conversation_id, conversations!inner(last_message_at)')
+                .eq('user_id', user.id)
+                .order('conversations(last_message_at)', { ascending: false })
+                .range(currentOffset, currentOffset + LIMIT - 1);
+
+            if (idsError) throw idsError;
+
+            if (!conversationIds || conversationIds.length === 0) {
+                setHasMore(false);
+                if (!isLoadingMore) {
+                    setConversations([]);
+                }
+                return;
+            }
+
+            // Check if we have more conversations
+            setHasMore(conversationIds.length === LIMIT);
+
+            // Get full conversation data
             const { data, error } = await supabase
                 .from('conversation_participants')
                 .select(`
@@ -58,7 +91,8 @@ export const useConversations = () => {
                         )
                     )
                 `)
-                .eq('user_id', user.id);
+                .eq('user_id', user.id)
+                .in('conversation_id', conversationIds.map(c => c.conversation_id));
 
             if (error) throw error;
 
@@ -95,18 +129,23 @@ export const useConversations = () => {
                 return timeB - timeA;
             });
 
-            setConversations(conversationsWithParticipants);
+            if (isLoadingMore) {
+                setConversations(prev => [...prev, ...conversationsWithParticipants]);
+                setOffset(currentOffset + LIMIT);
+            } else {
+                setConversations(conversationsWithParticipants);
+                setOffset(LIMIT);
+            }
         } catch (error) {
-            console.error('Error fetching conversations:', error);
+            // Error fetching conversations
         } finally {
             setLoading(false);
+            setLoadingMore(false);
             fetchingRef.current = false;
         }
-    }, [user?.id]);
+    }, [user?.id, offset]);
 
     const handleConversationChange = useCallback((payload) => {
-        console.log('Conversation changed:', payload);
-        
         // Chỉ refetch khi có conversation mới được tạo
         if (payload.eventType === 'INSERT') {
             // Delay 1s để đảm bảo participants đã được insert
@@ -120,8 +159,6 @@ export const useConversations = () => {
     }, [fetchConversations]);
 
     const handleMessageChange = useCallback((payload) => {
-        console.log('Message changed:', payload);
-        
         if (payload.eventType === 'INSERT') {
             const { conversation_id, content, created_at, sender_id } = payload.new;
             
@@ -190,15 +227,23 @@ export const useConversations = () => {
             await fetchConversations();
             return newConversation.id;
         } catch (error) {
-            console.error('Error creating/finding conversation:', error);
             throw error;
         }
     };
 
+    const loadMoreConversations = useCallback(() => {
+        if (!loadingMore && hasMore) {
+            fetchConversations(true);
+        }
+    }, [fetchConversations, loadingMore, hasMore]);
+
     return {
         conversations,
         loading,
+        loadingMore,
+        hasMore,
         createOrFindConversation,
-        refetch: fetchConversations
+        refetch: fetchConversations,
+        loadMore: loadMoreConversations
     };
 };

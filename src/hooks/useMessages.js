@@ -7,9 +7,17 @@ export const useMessages = (conversationId) => {
     const { user } = useUser();
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loadingMore, setLoadingMore] = useState(false);
+    const [hasMore, setHasMore] = useState(true);
+    const [offset, setOffset] = useState(0);
+    const LIMIT = 20;
 
     useEffect(() => {
         if (conversationId && user?.id) {
+            // Reset state when conversation changes
+            setMessages([]);
+            setOffset(0);
+            setHasMore(true);
             fetchMessages();
             
             // Subscribe to real-time messages for this conversation
@@ -29,10 +37,18 @@ export const useMessages = (conversationId) => {
         }
     }, [conversationId, user?.id]);
 
-    const fetchMessages = async () => {
+    const fetchMessages = async (isLoadingMore = false) => {
         try {
-            setLoading(true);
+            if (isLoadingMore) {
+                setLoadingMore(true);
+            } else {
+                setLoading(true);
+                setOffset(0);
+            }
             
+            const currentOffset = isLoadingMore ? offset : 0;
+            
+            // Get messages with pagination, ordered DESC to get latest first
             const { data, error } = await supabase
                 .from('messages')
                 .select(`
@@ -47,21 +63,34 @@ export const useMessages = (conversationId) => {
                     )
                 `)
                 .eq('conversation_id', conversationId)
-                .order('created_at', { ascending: true });
+                .order('created_at', { ascending: false })
+                .range(currentOffset, currentOffset + LIMIT - 1);
 
             if (error) throw error;
 
-            setMessages(data || []);
+            const newMessages = data || [];
+            
+            // Check if we have more messages
+            setHasMore(newMessages.length === LIMIT);
+
+            if (isLoadingMore) {
+                // For loading more (scroll up), prepend older messages
+                setMessages(prev => [...newMessages.reverse(), ...prev]);
+                setOffset(currentOffset + LIMIT);
+            } else {
+                // For initial load, reverse to show oldest first
+                setMessages(newMessages.reverse());
+                setOffset(LIMIT);
+            }
         } catch (error) {
-            console.error('Error fetching messages:', error);
+            // Error fetching messages
         } finally {
             setLoading(false);
+            setLoadingMore(false);
         }
     };
 
     const handleNewMessage = async (payload) => {
-        console.log('New message:', payload);
-        
         // Thêm tin nhắn mới vào local state thay vì refetch tất cả
         const newMessage = payload.new;
         
@@ -126,15 +155,23 @@ export const useMessages = (conversationId) => {
 
             return data;
         } catch (error) {
-            console.error('Error sending message:', error);
             throw error;
         }
     }, [conversationId, user?.id]);
 
+    const loadMoreMessages = useCallback(() => {
+        if (!loadingMore && hasMore) {
+            fetchMessages(true);
+        }
+    }, [loadingMore, hasMore, offset]);
+
     return {
         messages,
         loading,
+        loadingMore,
+        hasMore,
         sendMessage,
-        refetch: fetchMessages
+        refetch: fetchMessages,
+        loadMore: loadMoreMessages
     };
 };

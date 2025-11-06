@@ -119,7 +119,7 @@ export default function HomePage() {
           }
         }
 
-        console.log('Latest approved posts:', latest); // Debug log
+
         setLatestPosts(latest || []);
 
         // 3. Fetch 4 bài đăng ngẫu nhiên để gợi ý
@@ -140,7 +140,7 @@ export default function HomePage() {
         }
 
       } catch (error) {
-        console.error('Error fetching homepage data:', error);
+        // Error fetching homepage data
       } finally {
         setLoading(false);
       }

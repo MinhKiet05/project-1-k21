@@ -6,6 +6,7 @@ import { useUser } from '@clerk/clerk-react';
 import { supabase } from '../../lib/supabase';
 import { useConversations } from '../../hooks/useConversations';
 import { useChatContext } from '../../contexts/ChatContext';
+import { toast } from 'react-toastify';
 import './DetailProduct.css';
 
 export default function DetailProduct() {
@@ -51,14 +52,8 @@ export default function DetailProduct() {
                 return;
             }
 
-            console.log('Post data:', data);
-            console.log('Post images:', data.images);
-            console.log('Post image_urls:', data.image_urls);
-            console.log('Post profiles:', data.profiles);
-            console.log('Post locations:', data.locations);
             setPost(data);
         } catch (error) {
-            console.error('Error fetching post detail:', error);
             setError('Có lỗi xảy ra khi tải thông tin sản phẩm');
         } finally {
             setLoading(false);
@@ -91,12 +86,12 @@ export default function DetailProduct() {
 
     const handleContactSeller = async () => {
         if (!user) {
-            alert('Bạn cần đăng nhập để liên hệ với người bán');
+            toast.warning('Bạn cần đăng nhập để liên hệ với người bán');
             return;
         }
 
         if (post?.author_id === user.id) {
-            alert('Bạn không thể nhắn tin với chính mình');
+            toast.warning('Bạn không thể nhắn tin với chính mình');
             return;
         }
 
@@ -110,8 +105,7 @@ export default function DetailProduct() {
             openChatWithConversation(conversationId);
             
         } catch (error) {
-            console.error('Error creating conversation:', error);
-            alert('Có lỗi xảy ra khi tạo cuộc trò chuyện');
+            toast.error('Có lỗi xảy ra khi tạo cuộc trò chuyện');
         } finally {
             setChatLoading(false);
         }

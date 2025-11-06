@@ -6,7 +6,7 @@
   border-radius: 12px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
   position: fixed;
-  bottom: 80px;
+  bottom: 2px;
   right: 360px;
   display: flex;
   flex-direction: column;
@@ -106,10 +106,6 @@
   margin-bottom: 2px;
 }
 
-.user-status {
-  font-size: 12px;
-  color: #42b883;
-}
 
 .header-actions {
   display: flex;
@@ -156,24 +152,13 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  background: #1e3c72;
   position: relative;
   scroll-behavior: auto;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: none;
   -ms-overflow-style: none;
   scrollbar-gutter: stable;
-}
-
-.chat-messages::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.3);
-  pointer-events: none;
 }
 
 .message-date {
@@ -527,4 +512,10 @@
 
 .chat-messages::-webkit-scrollbar-corner {
   background: transparent;
+}
+
+/* Spinner animation */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }

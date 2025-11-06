@@ -140,6 +140,7 @@
 .icon-btn-bell {
   width: 20px; /* Giữ kích thước riêng cho icon chuông */
   height: 20px;
+  cursor: pointer;
 }
 .header-icon-btn:hover {
   background-color: rgba(255, 255, 255, 0.6);

@@ -195,7 +195,7 @@ export default function UploadPost() {
             setIsSubmitting(true);
 
             // Debug: Kiểm tra user authentication
-            console.log('User info:', { id: user?.id, email: user?.emailAddresses?.[0]?.emailAddress });
+
 
             // 1. Upload ảnh lên Supabase Storage
             const imageFiles = images.map(img => img.file);

@@ -46,7 +46,7 @@ export default function SearchPage() {
                 .order('name');
             setCategories(data || []);
         } catch (error) {
-            console.error('Error fetching categories:', error);
+            // Error fetching categories
         }
     };
 
@@ -58,7 +58,7 @@ export default function SearchPage() {
                 .order('name');
             setLocations(data || []);
         } catch (error) {
-            console.error('Error fetching locations:', error);
+            // Error fetching locations
         }
     };
 
@@ -125,7 +125,6 @@ export default function SearchPage() {
             setPosts(data || []);
             setTotalCount(count || 0);
         } catch (error) {
-            console.error('Error fetching posts:', error);
             setPosts([]);
             setTotalCount(0);
         } finally {

@@ -70,7 +70,7 @@ export function usePosts({ status = null, categoryId = null, locationId = null, 
             .update({ status: 'expired' })
             .in('id', expiredPosts)
         } catch (err) {
-          console.warn('Failed to update expired posts:', err)
+          // Failed to update expired posts
         }
       }
 

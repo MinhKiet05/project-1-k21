@@ -8,8 +8,8 @@ import "./ChatPopUp.css";
 
 const ChatPopup = React.memo(() => {
   const { user } = useUser();
-  const { conversations, loading } = useConversations();
-  const { pendingConversationId, setPendingConversationId } = useChatContext();
+  const { conversations, loading, loadingMore, hasMore, loadMore } = useConversations();
+  const { pendingConversationId, setPendingConversationId, closeChatPopup } = useChatContext();
   const [selectedUser, setSelectedUser] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -144,6 +144,13 @@ const ChatPopup = React.memo(() => {
       <div className="chat-popup">
         <div className="chat-popup-header">
           <h3 className="chat-popup-title">Đoạn chat ({filteredUsers.length})</h3>
+          <button 
+            className="chat-close-btn" 
+            onClick={closeChatPopup}
+            aria-label="Đóng chat"
+          >
+            ×
+          </button>
         </div>
 
         <div className="chat-search">
@@ -175,7 +182,16 @@ const ChatPopup = React.memo(() => {
           </div>
         </div>
 
-        <div className="chat-popup-list">
+        <div 
+          className="chat-popup-list"
+          onScroll={(e) => {
+            const { scrollTop, scrollHeight, clientHeight } = e.target;
+            // Load more when scrolled to bottom
+            if (scrollHeight - scrollTop <= clientHeight + 100 && hasMore && !loadingMore) {
+              loadMore();
+            }
+          }}
+        >
           {filteredUsers.length === 0 ? (
             <div className="no-results">
               {searchQuery ? (
@@ -198,13 +214,34 @@ const ChatPopup = React.memo(() => {
               )}
             </div>
           ) : (
-            filteredUsers.map((user) => (
-              <UserChatItem
-                key={user.id}
-                user={user}
-                onClick={handleUserClick}
-              />
-            ))
+            <>
+              {filteredUsers.map((user) => (
+                <UserChatItem
+                  key={user.id}
+                  user={user}
+                  onClick={handleUserClick}
+                />
+              ))}
+              {loadingMore && (
+                <div style={{ 
+                  display: 'flex', 
+                  justifyContent: 'center', 
+                  padding: '16px',
+                  gap: '8px',
+                  alignItems: 'center'
+                }}>
+                  <div style={{
+                    width: '16px',
+                    height: '16px',
+                    border: '2px solid #3a3b3c',
+                    borderTop: '2px solid #4fc3f7',
+                    borderRadius: '50%',
+                    animation: 'spin 1s linear infinite'
+                  }}></div>
+                  <span style={{ color: '#b0b3b8', fontSize: '14px' }}>Đang tải thêm...</span>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>
