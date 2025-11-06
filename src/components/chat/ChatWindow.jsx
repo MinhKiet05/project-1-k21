@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { useUser } from '@clerk/clerk-react';
 import { useMessages } from "../../hooks/useMessages";
+import { useChatContext } from "../../contexts/ChatContext";
 import { toast } from 'react-toastify';
 import "./ChatWindow.css";
 
 const ChatWindow = React.memo(({ user, conversationId, onClose }) => {
   const { user: currentUser } = useUser();
   const { messages, loading, loadingMore, hasMore, sendMessage: sendMessageToSupabase, loadMore } = useMessages(conversationId);
+  const { markConversationAsSeen, setOpenConversationId } = useChatContext();
   const [newMsg, setNewMsg] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [isSending, setIsSending] = useState(false);
@@ -17,23 +19,71 @@ const ChatWindow = React.memo(({ user, conversationId, onClose }) => {
   // Auto scroll to bottom only for new messages or initial load
   const [shouldAutoScroll, setShouldAutoScroll] = useState(true);
   const [initialLoadComplete, setInitialLoadComplete] = useState(false);
+  const [justSentMessage, setJustSentMessage] = useState(false);
+
+  // Mark conversation as seen when ChatWindow opens
+  useEffect(() => {
+    if (conversationId) {
+      setOpenConversationId(conversationId);
+      markConversationAsSeen(conversationId);
+      
+      return () => {
+        setOpenConversationId(null);
+      };
+    }
+  }, [conversationId, markConversationAsSeen, setOpenConversationId]);
+
+  // Auto scroll function
+  const scrollToBottom = useCallback(() => {
+    if (messagesRef.current) {
+      const container = messagesRef.current;
+      // Use smooth scrolling for better UX
+      container.scrollTo({
+        top: container.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
+  }, []);
+
+  // Force scroll to bottom
+  const forceScrollToBottom = useCallback(() => {
+    if (messagesRef.current) {
+      const container = messagesRef.current;
+      // Force immediate scroll without animation
+      container.scrollTop = container.scrollHeight;
+    }
+  }, []);
 
   useEffect(() => {
     if (!loading && !initialLoadComplete) {
       // Initial load completed - scroll to bottom
-      if (messagesRef.current) {
-        messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
-      }
-      setInitialLoadComplete(true);
-    } else if (initialLoadComplete && shouldAutoScroll && messagesRef.current) {
-      // Auto scroll only if user is at bottom
+      setTimeout(() => {
+        forceScrollToBottom();
+        setInitialLoadComplete(true);
+      }, 100);
+    } else if (initialLoadComplete && messagesRef.current) {
       const container = messagesRef.current;
-      const isAtBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 50;
-      if (isAtBottom) {
-        container.scrollTop = container.scrollHeight;
+      
+      if (justSentMessage) {
+        // Always scroll when just sent a message
+        setTimeout(() => {
+          forceScrollToBottom();
+          setJustSentMessage(false);
+        }, 50);
+      } else {
+        // Check if user is at bottom before auto scrolling for incoming messages
+        setTimeout(() => {
+          if (messagesRef.current) {
+            const container = messagesRef.current;
+            const isAtBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 100;
+            if (isAtBottom) {
+              forceScrollToBottom();
+            }
+          }
+        }, 100);
       }
     }
-  }, [messages, loading, initialLoadComplete, shouldAutoScroll]);
+  }, [messages, loading, initialLoadComplete, justSentMessage, forceScrollToBottom]);
 
   // Handle click outside emoji picker
   useEffect(() => {
@@ -74,9 +124,12 @@ const ChatWindow = React.memo(({ user, conversationId, onClose }) => {
       setIsSending(true);
       await sendMessageToSupabase(newMsg);
       setNewMsg("");
+      setJustSentMessage(true); // Flag để auto scroll sau khi gửi
       lastSendTimeRef.current = now;
     } catch (error) {
-      // Error sending message
+      console.error("Error sending message:", error);
+      // Even on error, try to scroll if message was added to UI
+      setJustSentMessage(true);
     } finally {
       setIsSending(false);
     }

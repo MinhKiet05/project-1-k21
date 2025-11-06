@@ -27,8 +27,12 @@ export default function Header() {
   const location = useLocation();
   const navigate = useNavigate();
   const { isAdmin } = useUserRole();
-  const { showChatPopup, openChatPopup, closeChatPopup } = useChatContext();
+  const { showChatPopup, openChatPopup, closeChatPopup, conversations } = useChatContext();
   const searchInputRef = useRef(null);
+  
+  // Check if there are unread messages
+  const hasUnreadMessages = conversations.some(conv => conv.is_seen === false);
+
 
   // Function to check if current path is active
   const isActive = (path) => {
@@ -120,10 +124,11 @@ export default function Header() {
           <SignedIn>
             {/* Nút chat: toggle popup */}
             <button
-              className="header-icon-btn"
+              className={`header-icon-btn ${hasUnreadMessages ? 'has-unread' : ''}`}
               onClick={() => showChatPopup ? closeChatPopup() : openChatPopup()}
             >
               <FontAwesomeIcon icon={faComment} className="icon-btn-bell" />
+              {hasUnreadMessages && <div className="unread-indicator"></div>}
             </button>
 
             {/* Bell */}

@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment } from '@fortawesome/free-solid-svg-icons';
 import { useUser } from '@clerk/clerk-react';
 import { supabase } from '../../lib/supabase';
-import { useConversations } from '../../hooks/useConversations';
 import { useChatContext } from '../../contexts/ChatContext';
 import { toast } from 'react-toastify';
 import './DetailProduct.css';
@@ -13,8 +12,7 @@ export default function DetailProduct() {
     const { id } = useParams();
     const navigate = useNavigate();
     const { user } = useUser();
-    const { createOrFindConversation } = useConversations();
-    const { openChatWithConversation } = useChatContext();
+    const { createOrFindConversation, openChatWithConversation } = useChatContext();
     const [post, setPost] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);

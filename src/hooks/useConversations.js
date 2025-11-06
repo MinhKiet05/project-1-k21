@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useUser } from '@clerk/clerk-react';
 import { supabase } from '../lib/supabase';
 
-export const useConversations = () => {
+export const useConversations = (openConversationId = null) => {
     const { user } = useUser();
     const [conversations, setConversations] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -78,6 +78,7 @@ export const useConversations = () => {
                 .from('conversation_participants')
                 .select(`
                     conversation_id,
+                    is_seen,
                     conversations (
                         id,
                         post_id,
@@ -117,7 +118,8 @@ export const useConversations = () => {
 
                     return {
                         ...conversation,
-                        otherParticipant: participants?.[0]?.profiles || null
+                        otherParticipant: participants?.[0]?.profiles || null,
+                        is_seen: item.is_seen // Get is_seen from conversation_participants
                     };
                 })
             );
@@ -158,31 +160,52 @@ export const useConversations = () => {
         // Không cần refetch cho UPDATE hoặc DELETE
     }, [fetchConversations]);
 
-    const handleMessageChange = useCallback((payload) => {
+    const handleMessageChange = useCallback(async (payload) => {
         if (payload.eventType === 'INSERT') {
             const { conversation_id, content, created_at, sender_id } = payload.new;
+            const isFromOtherUser = sender_id !== user?.id;
             
+            // Check if user is currently viewing this conversation
+            const isViewingThisConversation = openConversationId === conversation_id;
+            const shouldMarkAsUnseen = isFromOtherUser && !isViewingThisConversation;
+            
+            // Update local state first for immediate UI response
             setConversations(prevConversations => {
-                // Update conversation với tin nhắn mới
-                const updatedConversations = prevConversations.map(conv => 
-                    conv.id === conversation_id 
-                        ? { 
+                const updatedConversations = prevConversations.map(conv => {
+                    if (conv.id === conversation_id) {
+                        return { 
                             ...conv, 
                             last_message_content: content,
-                            last_message_at: created_at || new Date().toISOString()
-                          }
-                        : conv
-                );
+                            last_message_at: created_at || new Date().toISOString(),
+                            is_seen: !shouldMarkAsUnseen // Keep as seen if user is viewing, or if from current user
+                        };
+                    }
+                    return conv;
+                });
                 
-                // Sắp xếp lại theo thứ tự thời gian (conversation mới nhất lên đầu)
+                // Sort by last message time (newest first)
                 return updatedConversations.sort((a, b) => {
                     const timeA = a.last_message_at ? new Date(a.last_message_at) : new Date(0);
                     const timeB = b.last_message_at ? new Date(b.last_message_at) : new Date(0);
                     return timeB - timeA;
                 });
             });
+            
+            // Then update database asynchronously (only for messages from others when not viewing)
+            if (shouldMarkAsUnseen) {
+                try {
+                    await supabase
+                        .from('conversation_participants')
+                        .update({ is_seen: false })
+                        .eq('conversation_id', conversation_id)
+                        .eq('user_id', user?.id);
+                } catch (error) {
+                    // Error updating is_seen - could refresh data here if needed
+                    console.error('Error updating is_seen:', error);
+                }
+            }
         }
-    }, []);
+    }, [user?.id, openConversationId]);
 
     const createOrFindConversation = async (postId, otherUserId) => {
         try {
@@ -237,6 +260,63 @@ export const useConversations = () => {
         }
     }, [fetchConversations, loadingMore, hasMore]);
 
+    const markConversationAsSeen = useCallback(async (conversationId) => {
+        try {
+            // Update local state FIRST for immediate UI response
+            setConversations(prev => {
+                const updated = prev.map(conv => 
+                    conv.id === conversationId 
+                        ? { ...conv, is_seen: true }
+                        : conv
+                );
+                return updated;
+            });
+
+            // Then update database
+            const { error } = await supabase
+                .from('conversation_participants')
+                .update({ is_seen: true })
+                .eq('conversation_id', conversationId)
+                .eq('user_id', user?.id);
+
+            if (error) {
+                console.error('Error updating is_seen in database:', error);
+                // Revert local state if database update failed
+                setConversations(prev => 
+                    prev.map(conv => 
+                        conv.id === conversationId 
+                            ? { ...conv, is_seen: false }
+                            : conv
+                    )
+                );
+            }
+        } catch (error) {
+            // Error marking as seen
+        }
+    }, [user?.id]);
+
+    const markConversationAsUnseen = useCallback(async (conversationId) => {
+        try {
+            // Update database - conversation_participants table
+            await supabase
+                .from('conversation_participants')
+                .update({ is_seen: false })
+                .eq('conversation_id', conversationId)
+                .eq('user_id', user?.id);
+
+            // Update local state
+            setConversations(prev => 
+                prev.map(conv => 
+                    conv.id === conversationId 
+                        ? { ...conv, is_seen: false }
+                        : conv
+                )
+            );
+        } catch (error) {
+            // Error marking as unseen
+        }
+    }, [user?.id]);
+
     return {
         conversations,
         loading,
@@ -244,6 +324,8 @@ export const useConversations = () => {
         hasMore,
         createOrFindConversation,
         refetch: fetchConversations,
-        loadMore: loadMoreConversations
+        loadMore: loadMoreConversations,
+        markConversationAsSeen,
+        markConversationAsUnseen
     };
 };

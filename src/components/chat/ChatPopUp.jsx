@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useUser } from '@clerk/clerk-react';
-import { useConversations } from "../../hooks/useConversations";
 import { useChatContext } from "../../contexts/ChatContext";
 import UserChatItem from "./UserChatItem";
 import ChatWindow from "./ChatWindow.jsx";
@@ -8,8 +7,17 @@ import "./ChatPopUp.css";
 
 const ChatPopup = React.memo(() => {
   const { user } = useUser();
-  const { conversations, loading, loadingMore, hasMore, loadMore } = useConversations();
-  const { pendingConversationId, setPendingConversationId, closeChatPopup } = useChatContext();
+  const { 
+    conversations, 
+    loading, 
+    loadingMore, 
+    hasMore, 
+    loadMore, 
+    markConversationAsSeen,
+    pendingConversationId, 
+    setPendingConversationId, 
+    closeChatPopup 
+  } = useChatContext();
   const [selectedUser, setSelectedUser] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -54,7 +62,7 @@ const ChatPopup = React.memo(() => {
           avatar: targetConversation.otherParticipant?.avatar_url || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=50&h=50&fit=crop&crop=face',
           lastMessage: targetConversation.last_message_content || 'Chưa có tin nhắn',
           time: formatTime(targetConversation.last_message_at),
-          unread: false,
+          unread: targetConversation.is_seen === false,
           isOnline: false,
           conversationId: targetConversation.id,
           otherParticipant: targetConversation.otherParticipant,
@@ -81,7 +89,7 @@ const ChatPopup = React.memo(() => {
         avatar: conversation.otherParticipant?.avatar_url || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=50&h=50&fit=crop&crop=face',
         lastMessage: conversation.last_message_content || 'Chưa có tin nhắn',
         time: formatTime(conversation.last_message_at),
-        unread: false,
+        unread: conversation.is_seen === false, // Unread if is_seen is false
         isOnline: false,
         conversationId: conversation.id,
         otherParticipant: conversation.otherParticipant,
@@ -102,8 +110,12 @@ const ChatPopup = React.memo(() => {
   }, []);
 
   const handleUserClick = useCallback((userItem) => {
+    // Mark conversation as seen when user clicks on it
+    if (userItem.conversationId && userItem.unread) {
+      markConversationAsSeen(userItem.conversationId);
+    }
     setSelectedUser(userItem);
-  }, []);
+  }, [markConversationAsSeen]);
 
   const handleCloseChat = useCallback(() => {
     setSelectedUser(null);

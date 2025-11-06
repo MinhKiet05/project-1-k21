@@ -92,6 +92,16 @@
   margin-right: 8px;
 }
 
+/* Unread message styles */
+.user-chat-item:has(.unread-dot) .user-last-message {
+  font-weight: 600;
+  color: #e4e6ea;
+}
+
+.user-chat-item:has(.unread-dot) .user-name {
+  font-weight: 600;
+}
+
 .unread-dot {
   width: 12px;
   height: 12px;

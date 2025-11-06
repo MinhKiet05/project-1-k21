@@ -64,6 +64,7 @@ CREATE TABLE IF NOT EXISTS public.conversation_participants (
   conversation_id uuid NOT NULL REFERENCES public.conversations(id) ON DELETE CASCADE,
   user_id text NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
   joined_at timestamptz DEFAULT now(),
+  is_seen boolean DEFAULT true,
   PRIMARY KEY (conversation_id, user_id)
 );
 
