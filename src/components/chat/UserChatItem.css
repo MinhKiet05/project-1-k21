@@ -1,0 +1,101 @@
+/* Facebook Messenger User Chat Item */
+.user-chat-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  position: relative;
+  margin: 2px 4px;
+  background: transparent;
+  border: none;
+  outline: none;
+}
+
+.user-chat-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border: none;
+  outline: none;
+}
+
+.user-avatar-container {
+  position: relative;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.user-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.online-status {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 14px;
+  height: 14px;
+  background: #42b883;
+  border: 2px solid #242526;
+  border-radius: 50%;
+}
+
+.user-info-chat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: transparent;
+}
+
+.user-name-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2px;
+}
+
+.user-name {
+  font-weight: 500;
+  font-size: 15px;
+  color: #e4e6ea;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
+  text-align: left;
+}
+
+.user-time {
+  font-size: 13px;
+  color: #b0b3b8;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.user-message-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.user-last-message {
+  font-size: 13px;
+  color: #b0b3b8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+  margin-right: 8px;
+}
+
+.unread-dot {
+  width: 12px;
+  height: 12px;
+  background: #0084ff;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
