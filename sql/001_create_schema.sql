@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS public.posts (
   description text,
   price numeric NOT NULL CHECK (price >= 0),
   image_urls text[] DEFAULT ARRAY[]::text[],
-  status text NOT NULL DEFAULT 'pending' CHECK (status IN ('pending','approved','sold','expired')),
+  status text NOT NULL DEFAULT 'pending' CHECK (status IN ('pending','approved','rejected','sold','expired')),
   author_id text NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
   category_id uuid NOT NULL REFERENCES public.categories(id) ON DELETE RESTRICT,
   location_id uuid NOT NULL REFERENCES public.locations(id) ON DELETE RESTRICT,
