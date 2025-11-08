@@ -13,6 +13,7 @@
   flex-direction: column;
   color: #e4e6ea;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  animation: slideInFromRight 0.3s ease-out;
 }
 
 .chat-popup-header {
@@ -292,5 +293,17 @@
     right: 20px;
     left: 20px;
     max-width: 360px;
+  }
+}
+
+/* Animation */
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
 }

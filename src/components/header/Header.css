@@ -130,36 +130,59 @@
   color: #5a4635;
   background-color: rgba(255, 255, 255, 0.3);
   border-radius: 50%;
-  transition: background-color 0.2s;
   border: none;
   position: relative;
+  cursor: pointer;
 }
 .icon-btn {
   width: 18px; /* Tăng kích thước icon bên trong */
   height: 18px;
 }
-.icon-btn-bell {
+.icon-btn-bell, .icon-btn-chat {
   width: 20px; /* Giữ kích thước riêng cho icon chuông */
   height: 20px;
   cursor: pointer;
 }
+/* Hover effect - CHUNG cho tất cả icon buttons */
 .header-icon-btn:hover {
   background-color: rgba(255, 255, 255, 0.6);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
-.header-icon-btn:hover .icon-btn {
+.header-icon-btn:hover .icon-btn,
+.header-icon-btn:hover .icon-btn-bell,
+.header-icon-btn:hover .icon-btn-chat {
   color: #5a4635;
 }
 
-/* Unread message indicator */
-.unread-indicator {
+/* Active state cho popup đang mở - CHUNG cho chat và notifications */
+.header-icon-btn.active {
+  background-color: rgba(255, 255, 255, 0.6);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+.header-icon-btn.active .icon-btn,
+.header-icon-btn.active .icon-btn-bell,
+.header-icon-btn.active .icon-btn-chat {
+  color: #5a4635;
+}
+
+/* Transition cho smooth effect */
+.header-icon-btn {
+  transition: all 0.2s ease;
+}
+
+/* Unread indicator - CHUNG cho cả chat và notifications */
+.header-icon-btn .unread-indicator {
   position: absolute;
   top: -2px;
   right: -2px;
   width: 12px;
   height: 12px;
-  background: #ff4757;
+  background: #e41e3f;
   border: 2px solid #fff;
   border-radius: 50%;
+  z-index: 10;
   animation: pulse-red 2s infinite;
 }
 
@@ -193,6 +216,7 @@
   width: 40px !important;
   height: 40px !important;
 }
+
 /* ==== NÚT ĐĂNG NHẬP (SignedOut) ==== */
 .login-button {
   display: flex !important;
@@ -209,7 +233,6 @@
   transition: all 0.2s ease;
   text-decoration: none;
   font-family: "Be Vietnam Pro", sans-serif;
-  
 }
 
 .login-button:hover {
@@ -222,6 +245,7 @@
   height: 16px;
   color: #000000;
 }
+
 
 /* Tăng kích thước cho icon (SignedOut) */
 .icon-btn-user {

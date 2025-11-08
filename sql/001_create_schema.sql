@@ -85,7 +85,7 @@ CREATE INDEX IF NOT EXISTS messages_conversation_created_at_idx ON public.messag
 CREATE TABLE IF NOT EXISTS public.notifications (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id text NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
-  type text NOT NULL CHECK (type IN ('post_approved', 'post_rejected', 'message', 'system')),
+  type text NOT NULL CHECK (type IN ('post_approved', 'post_rejected', 'post_expired', 'message', 'system')),
   title text NOT NULL,
   content text,
   link text, -- URL hoặc slug để người dùng bấm vào

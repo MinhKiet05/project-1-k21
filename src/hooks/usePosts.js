@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
+import { createPostNotification } from '../utils/notificationUtils'
 
 /**
  * Hook để lấy posts với filter và sort
@@ -55,20 +56,33 @@ export function usePosts({ status = null, categoryId = null, locationId = null, 
         if (post.status === 'approved' && post.expires_at) {
           const expiresAt = new Date(post.expires_at)
           if (now > expiresAt) {
-            expiredPosts.push(post.id)
+            expiredPosts.push({ id: post.id, author_id: post.author_id, title: post.title, image_urls: post.image_urls })
             return { ...post, status: 'expired' }
           }
         }
         return post
       })
 
-      // Update expired posts in database
+      // Update expired posts in database and create notifications
       if (expiredPosts.length > 0) {
         try {
           await supabase
             .from('posts')
             .update({ status: 'expired' })
-            .in('id', expiredPosts)
+            .in('id', expiredPosts.map(p => p.id))
+
+          // Tạo thông báo cho từng bài hết hạn
+          for (const post of expiredPosts) {
+            await createPostNotification(
+              post.author_id,
+              'post_expired',
+              post.id,
+              {
+                title: post.title,
+                image_urls: post.image_urls
+              }
+            )
+          }
         } catch (err) {
           // Failed to update expired posts
         }

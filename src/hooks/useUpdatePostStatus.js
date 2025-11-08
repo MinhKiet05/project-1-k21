@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { supabase } from '../lib/supabase'
+import { createPostNotification } from '../utils/notificationUtils'
 
 /**
  * Hook để cập nhật trạng thái bài đăng (duyệt/không duyệt)
@@ -37,7 +38,23 @@ export function useUpdatePostStatus() {
 
       if (error) throw error
 
-      return { success: true, data: data?.[0] }
+      const updatedPost = data?.[0]
+      
+      // Tạo thông báo cho tác giả bài viết khi admin duyệt/không duyệt
+      if (updatedPost && (status === 'approved' || status === 'rejected')) {
+        const notificationType = status === 'approved' ? 'post_approved' : 'post_rejected'
+        await createPostNotification(
+          updatedPost.author_id,
+          notificationType,
+          postId,
+          {
+            title: updatedPost.title,
+            image_urls: updatedPost.image_urls
+          }
+        )
+      }
+
+      return { success: true, data: updatedPost }
     } catch (err) {
       return { success: false, error: err.message }
     } finally {

@@ -10,7 +10,7 @@
   right: 2px;
   display: flex;
   flex-direction: column;
-  animation: slideIn 0.3s ease;
+  animation: slideInFromRight 0.3s ease-out;
   color: #e4e6ea;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   overflow: hidden;
@@ -46,14 +46,14 @@
   -webkit-overflow-scrolling: touch !important;
 }
 
-@keyframes slideIn {
+@keyframes slideInFromRight {
   from {
-    transform: translateY(50px);
     opacity: 0;
+    transform: translateX(100%);
   }
   to {
-    transform: translateY(0);
     opacity: 1;
+    transform: translateX(0);
   }
 }
 
