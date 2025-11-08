@@ -1,38 +1,39 @@
-import './DashboardLayout.css'
-import { useState } from 'react'
-import { Outlet, useNavigate, useLocation } from 'react-router-dom'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faUsers, faFileAlt } from "@fortawesome/free-solid-svg-icons"
+import "./DashboardLayout.css";
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUsers, faFileAlt } from "@fortawesome/free-solid-svg-icons";
+import { useTranslation } from "react-i18next";
 
 export default function DashboardLayout() {
-  const navigate = useNavigate()
-  const location = useLocation()
-  
-  const isUsersActive = location.pathname === '/dashboard/users'
-  const isPostsActive = location.pathname === '/dashboard/posts'
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const isUsersActive = location.pathname === "/dashboard/users";
+  const isPostsActive = location.pathname === "/dashboard/posts";
 
   return (
     <div className="admin-container">
       {/* Sidebar */}
       <div className="admin-sidebar">
         <div className="admin-title">
-          <h2>Dashboard</h2>
+          <h2>{t("dashboard.title")}</h2>
         </div>
-        
+
         <div className="sidebar-menu">
-          <div 
-            className={`menu-item ${isUsersActive ? 'active' : ''}`}
-            onClick={() => navigate('/dashboard/users')}
+          <div
+            className={`menu-item ${isUsersActive ? "active" : ""}`}
+            onClick={() => navigate("/dashboard/users")}
           >
             <FontAwesomeIcon icon={faUsers} />
-            <span>Người dùng</span>
+            <span>{t("dashboard.users")}</span>
           </div>
-          <div 
-            className={`menu-item ${isPostsActive ? 'active' : ''}`}
-            onClick={() => navigate('/dashboard/posts')}
+          <div
+            className={`menu-item ${isPostsActive ? "active" : ""}`}
+            onClick={() => navigate("/dashboard/posts")}
           >
             <FontAwesomeIcon icon={faFileAlt} />
-            <span>Bài đăng</span>
+            <span>{t("dashboard.posts")}</span>
           </div>
         </div>
       </div>
@@ -42,5 +43,5 @@ export default function DashboardLayout() {
         <Outlet />
       </div>
     </div>
-  )
+  );
 }

@@ -1,0 +1,132 @@
+/* Language Switcher Styles */
+
+/* Flag buttons variant */
+.language-switcher {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 10px;
+}
+
+.flag-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 22px;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+  padding: 4px;
+  opacity: 0.7;
+}
+
+.flag-btn:hover {
+  transform: scale(1.2);
+  opacity: 1;
+}
+
+.flag-btn.active {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+/* Dropdown variant */
+.language-dropdown {
+  margin-left: 10px;
+}
+
+.language-select {
+  background: rgba(255, 255, 255, 0.3);
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  color: #2d2d2d;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.language-select:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.language-select:focus {
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+}
+
+/* Text buttons variant */
+.language-text-switcher {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 10px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  padding: 4px 8px;
+}
+
+.lang-text-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  color: #2d2d2d;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  opacity: 0.7;
+}
+
+.lang-text-btn:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.lang-text-btn.active {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.4);
+  color: #000;
+}
+
+.lang-separator {
+  color: #2d2d2d;
+  opacity: 0.5;
+  font-weight: 300;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .flag-btn {
+    font-size: 20px;
+  }
+
+  .language-switcher {
+    gap: 6px;
+    margin-left: 8px;
+  }
+
+  .language-select {
+    font-size: 13px;
+    padding: 5px 10px;
+  }
+
+  .lang-text-btn {
+    font-size: 13px;
+    padding: 3px 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .language-switcher {
+    margin-left: 5px;
+  }
+
+  .flag-btn {
+    font-size: 18px;
+    padding: 2px;
+  }
+}

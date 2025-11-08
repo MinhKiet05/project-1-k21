@@ -1,5 +1,5 @@
 ﻿/* Import Google Font Cherry Bomb One */
-@import url('https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&display=swap");
 
 /* ==== HEADER CHUNG ==== */
 .header {
@@ -26,7 +26,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-family: 'Cherry Bomb One', cursive;
+  font-family: "Cherry Bomb One", cursive;
   font-size: clamp(20px, 2.2vw, 28px);
   color: #2d2d2d;
   font-weight: 400;
@@ -38,7 +38,7 @@
 .header-logo img {
   height: 50px;
   width: 50px;
-}/* ==== NHÓM 2: NAV ==== */
+} /* ==== NHÓM 2: NAV ==== */
 .nav {
   /* Cho nav co giãn một chút nếu cần */
   flex-grow: 1;
@@ -101,20 +101,19 @@
   width: 100%;
   height: 20px;
   padding: 10px 2px;
-
 }
 .search-icon-header {
   color: #5a4635;
   cursor: pointer;
   width: 20px;
   height: 20px;
-  padding:  10px;
+  padding: 10px;
   border-radius: 10px 0 0 10px;
-
 }
 
 /* ==== NHÓM 4: USER ACTIONS ==== */
-.header-user-actions { /* (Trước đây là .header-right) */
+.header-user-actions {
+  /* (Trước đây là .header-right) */
   display: flex;
   align-items: center;
   justify-content: flex-end; /* Dồn các icon về bên phải */
@@ -209,7 +208,6 @@
   transition: all 0.2s ease;
   text-decoration: none;
   font-family: "Be Vietnam Pro", sans-serif;
-  
 }
 
 .login-button:hover {
@@ -270,4 +268,22 @@
   .logo {
     order: 1; /* Logo luôn ở trên cùng */
   }
+}
+.lang-switch {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 10px;
+}
+
+.flag-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 22px;
+  transition: transform 0.2s ease;
+}
+
+.flag-btn:hover {
+  transform: scale(1.2);
 }

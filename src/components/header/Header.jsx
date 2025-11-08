@@ -23,16 +23,24 @@ import { useChatContext } from "../../contexts/ChatContext";
 // 👇 import component ChatPopup
 import ChatPopup from "../chat/ChatPopUp";
 
+// 👇 import i18n để đổi ngôn ngữ
+import { useTranslation } from "react-i18next";
+import "../../i18n";
+
 export default function Header() {
   const location = useLocation();
   const navigate = useNavigate();
   const { isAdmin } = useUserRole();
-  const { showChatPopup, openChatPopup, closeChatPopup, conversations } = useChatContext();
+  const { showChatPopup, openChatPopup, closeChatPopup, conversations } =
+    useChatContext();
   const searchInputRef = useRef(null);
-  
-  // Check if there are unread messages
-  const hasUnreadMessages = conversations.some(conv => conv.is_seen === false);
 
+  const { t, i18n } = useTranslation();
+
+  // Check if there are unread messages
+  const hasUnreadMessages = conversations.some(
+    (conv) => conv.is_seen === false
+  );
 
   // Function to check if current path is active
   const isActive = (path) => {
@@ -63,12 +71,12 @@ export default function Header() {
           <ul>
             <li>
               <Link to="/home" className={isActive("/home") ? "active" : ""}>
-                Trang chủ
+                {t("header.home")}
               </Link>
             </li>
             <li>
               <Link to="/post" className={isActive("/post") ? "active" : ""}>
-                Đăng bài
+                {t("header.post")}
               </Link>
             </li>
             <li>
@@ -76,12 +84,12 @@ export default function Header() {
                 to="/management"
                 className={isActive("/management") ? "active" : ""}
               >
-                Quản lý
+                {t("header.management")}
               </Link>
             </li>
             <li>
               <Link to="/about" className={isActive("/about") ? "active" : ""}>
-                Về chúng tôi
+                {t("header.about")}
               </Link>
             </li>
           </ul>
@@ -98,7 +106,7 @@ export default function Header() {
           <input
             ref={searchInputRef}
             type="text"
-            placeholder="Tìm kiếm..."
+            placeholder={t("header.search_placeholder")}
             onKeyPress={(e) => {
               if (e.key === "Enter") {
                 handleSearch();
@@ -116,7 +124,7 @@ export default function Header() {
                   icon={faRightToBracket}
                   className="login-icon"
                 />
-                Đăng nhập
+                {t("header.login")}
               </div>
             </SignInButton>
           </SignedOut>
@@ -124,8 +132,12 @@ export default function Header() {
           <SignedIn>
             {/* Nút chat: toggle popup */}
             <button
-              className={`header-icon-btn ${hasUnreadMessages ? 'has-unread' : ''}`}
-              onClick={() => showChatPopup ? closeChatPopup() : openChatPopup()}
+              className={`header-icon-btn ${
+                hasUnreadMessages ? "has-unread" : ""
+              }`}
+              onClick={() =>
+                showChatPopup ? closeChatPopup() : openChatPopup()
+              }
             >
               <FontAwesomeIcon icon={faComment} className="icon-btn-bell" />
               {hasUnreadMessages && <div className="unread-indicator"></div>}
@@ -146,6 +158,30 @@ export default function Header() {
             {/* User Button */}
             <div className="header-user-display">
               <UserButton afterSignOutUrl="/" />
+            </div>
+
+            {/* ==== NÚT CHUYỂN NGÔN NGỮ ==== */}
+            <div className="lang-switch">
+              <button
+                onClick={() => {
+                  i18n.changeLanguage("vi");
+                  localStorage.setItem("preferred-language", "vi");
+                }}
+                className={`flag-btn ${i18n.language === "vi" ? "active" : ""}`}
+                title="Tiếng Việt"
+              >
+                🇻🇳
+              </button>
+              <button
+                onClick={() => {
+                  i18n.changeLanguage("en");
+                  localStorage.setItem("preferred-language", "en");
+                }}
+                className={`flag-btn ${i18n.language === "en" ? "active" : ""}`}
+                title="English"
+              >
+                🇺🇸
+              </button>
             </div>
           </SignedIn>
         </div>

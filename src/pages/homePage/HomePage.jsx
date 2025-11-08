@@ -13,8 +13,10 @@ import banner2 from '../../assets/banner2.webp';
 import banner3 from '../../assets/banner3.webp';
 import banner4 from '../../assets/banner4.webp';
 import logoImg from '../../assets/logo.webp';
+import { useTranslation } from "react-i18next";
 
 export default function HomePage() {
+  const { t } = useTranslation();
   const [currentSlide, setCurrentSlide] = useState(0);
   const leftBanners = [banner1, banner2]; // Carousel bên trái
   const rightBanners = [banner3, banner4]; // Banner tĩnh bên phải
@@ -173,7 +175,7 @@ export default function HomePage() {
     
     return {
       id: post.id,
-      name: post.title || 'Không có tiêu đề',
+      name: post.title || t('homepage.no_title'),
       price: post.price || 0,
       image: imageUrl
     };
@@ -240,7 +242,7 @@ export default function HomePage() {
       <div className="homepage-container">
         {/* Danh mục hot */}
         <div className="homepage-section">
-          <h2 className="homepage-section-title">Danh mục hot - Giáo trình</h2>
+          <h2 className="homepage-section-title">{t('homepage.hot_categories')}</h2>
           <div className="homepage-products-grid">
             {loading ? (
               // Loading placeholder
@@ -248,7 +250,7 @@ export default function HomePage() {
                 <CardProduct
                   key={`hot-loading-${index}`}
                   product={{
-                    name: "Đang tải...",
+                    name: t('common.loading'),
                     price: 1,
                     image: logoImg,
                   }}
@@ -267,7 +269,7 @@ export default function HomePage() {
                 <CardProduct
                   key={`hot-fallback-${index}`}
                   product={{
-                    name: "Chưa có sản phẩm",
+                    name: t('homepage.no_products'),
                     price: 0,
                     image: logoImg,
                   }}
@@ -279,7 +281,7 @@ export default function HomePage() {
 
         {/* Bài đăng mới nhất */}
         <div className="homepage-section">
-          <h2 className="homepage-section-title">Bài đăng mới nhất</h2>
+          <h2 className="homepage-section-title">{t('homepage.latest_posts')}</h2>
           <div className="homepage-products-grid">
             {loading ? (
               // Loading placeholder
@@ -287,7 +289,7 @@ export default function HomePage() {
                 <CardProduct
                   key={`latest-loading-${index}`}
                   product={{
-                    name: "Đang tải...",
+                    name: t('common.loading'),
                     price: 0,
                     image: logoImg,
                   }}
@@ -306,7 +308,7 @@ export default function HomePage() {
                 <CardProduct
                   key={`latest-fallback-${index}`}
                   product={{
-                    name: "Chưa có bài đăng mới",
+                    name: t('homepage.no_new_posts'),
                     price: 0,
                     image: logoImg,
                   }}
@@ -318,7 +320,7 @@ export default function HomePage() {
 
         {/* Gợi ý cho bạn */}
         <div className="homepage-section">
-          <h2 className="homepage-section-title">Gợi ý cho bạn</h2>
+          <h2 className="homepage-section-title">{t('homepage.suggestions')}</h2>
           <div className="homepage-products-grid">
             {loading ? (
               // Loading placeholder
@@ -326,7 +328,7 @@ export default function HomePage() {
                 <CardProduct
                   key={`recommended-loading-${index}`}
                   product={{
-                    name: "Đang tải...",
+                    name: t('common.loading'),
                     price: 0,
                     image: logoImg,
                   }}
@@ -345,7 +347,7 @@ export default function HomePage() {
                 <CardProduct
                   key={`recommended-fallback-${index}`}
                   product={{
-                    name: "Chưa có gợi ý",
+                    name: t('homepage.no_suggestions'),
                     price: 0,
                     image: logoImg,
                   }}

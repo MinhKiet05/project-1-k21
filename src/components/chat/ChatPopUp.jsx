@@ -4,8 +4,10 @@ import { useChatContext } from "../../contexts/ChatContext";
 import UserChatItem from "./UserChatItem";
 import ChatWindow from "./ChatWindow.jsx";
 import "./ChatPopUp.css";
+import { useTranslation } from "react-i18next";
 
 const ChatPopup = React.memo(() => {
+  const { t } = useTranslation();
   const { user } = useUser();
   const { 
     conversations, 
@@ -31,20 +33,20 @@ const ChatPopup = React.memo(() => {
     const diffInDays = diffInHours / 24;
 
     if (diffInMinutes < 1) {
-      return 'Vừa xong';
+      return t('time.just_now');
     } else if (diffInMinutes < 60) {
-      return `${Math.floor(diffInMinutes)} phút`;
+      return t('time.minutes_ago', { count: Math.floor(diffInMinutes) });
     } else if (diffInHours < 24) {
-      return `${Math.floor(diffInHours)} giờ`;
+      return t('time.hours_ago', { count: Math.floor(diffInHours) });
     } else if (diffInDays < 7) {
-      return `${Math.floor(diffInDays)} ngày`;
+      return t('time.days_ago', { count: Math.floor(diffInDays) });
     } else {
       return date.toLocaleDateString('vi-VN', { 
         day: '2-digit', 
         month: '2-digit' 
       });
     }
-  }, []);
+  }, [t]);
 
   // Auto-open conversation if pendingConversationId is set
   useEffect(() => {
@@ -53,14 +55,14 @@ const ChatPopup = React.memo(() => {
       if (targetConversation) {
         const isPostAuthor = targetConversation.posts?.author_id === user?.id;
         const displayName = isPostAuthor 
-          ? targetConversation.otherParticipant?.full_name || 'Người dùng'
-          : targetConversation.otherParticipant?.full_name || 'Người bán';
+          ? targetConversation.otherParticipant?.full_name || t('chat.user')
+          : targetConversation.otherParticipant?.full_name || t('chat.seller');
 
         const userItem = {
           id: targetConversation.id,
           name: displayName,
           avatar: targetConversation.otherParticipant?.avatar_url || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=50&h=50&fit=crop&crop=face',
-          lastMessage: targetConversation.last_message_content || 'Chưa có tin nhắn',
+          lastMessage: targetConversation.last_message_content || t('chat.no_messages'),
           time: formatTime(targetConversation.last_message_at),
           unread: targetConversation.is_seen === false,
           isOnline: false,
@@ -80,14 +82,14 @@ const ChatPopup = React.memo(() => {
     return conversations.map(conversation => {
       const isPostAuthor = conversation.posts?.author_id === user?.id;
       const displayName = isPostAuthor 
-        ? conversation.otherParticipant?.full_name || 'Người dùng'
-        : conversation.otherParticipant?.full_name || 'Người bán';
+        ? conversation.otherParticipant?.full_name || t('chat.user')
+        : conversation.otherParticipant?.full_name || t('chat.seller');
 
       return {
         id: conversation.id,
         name: displayName,
         avatar: conversation.otherParticipant?.avatar_url || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=50&h=50&fit=crop&crop=face',
-        lastMessage: conversation.last_message_content || 'Chưa có tin nhắn',
+        lastMessage: conversation.last_message_content || t('chat.no_messages'),
         time: formatTime(conversation.last_message_at),
         unread: conversation.is_seen === false, // Unread if is_seen is false
         isOnline: false,
@@ -144,7 +146,7 @@ const ChatPopup = React.memo(() => {
               borderRadius: '50%',
               animation: 'spin 1s linear infinite'
             }}></div>
-            <p style={{ color: '#b0b3b8', margin: 0 }}>Đang tải cuộc trò chuyện...</p>
+            <p style={{ color: '#b0b3b8', margin: 0 }}>{t('chat.loading_conversations')}</p>
           </div>
         </div>
       </div>
@@ -155,11 +157,11 @@ const ChatPopup = React.memo(() => {
     <>
       <div className="chat-popup">
         <div className="chat-popup-header">
-          <h3 className="chat-popup-title">Đoạn chat ({filteredUsers.length})</h3>
+          <h3 className="chat-popup-title">{t('chat.conversations')} ({filteredUsers.length})</h3>
           <button 
             className="chat-close-btn" 
             onClick={closeChatPopup}
-            aria-label="Đóng chat"
+            aria-label={t('common.close')}
           >
             ×
           </button>
@@ -178,7 +180,7 @@ const ChatPopup = React.memo(() => {
             </svg>
             <input
               type="text"
-              placeholder="Tìm kiếm trong..."
+              placeholder={t('chat.search_conversations')}
               className="chat-search-input"
               value={searchQuery}
               onChange={handleSearchChange}
@@ -207,7 +209,7 @@ const ChatPopup = React.memo(() => {
           {filteredUsers.length === 0 ? (
             <div className="no-results">
               {searchQuery ? (
-                <p>Không tìm thấy kết quả cho "{searchQuery}"</p>
+                <p>{t('search.no_results_for', { query: searchQuery })}</p>
               ) : (
                 <div style={{
                   display: 'flex',
@@ -218,9 +220,9 @@ const ChatPopup = React.memo(() => {
                   textAlign: 'center'
                 }}>
                   <div style={{ fontSize: '48px', marginBottom: '16px' }}>💬</div>
-                  <h3 style={{ color: '#e4e6ea', margin: '0 0 8px 0' }}>Chưa có cuộc trò chuyện</h3>
+                  <h3 style={{ color: '#e4e6ea', margin: '0 0 8px 0' }}>{t('chat.no_conversations')}</h3>
                   <p style={{ color: '#b0b3b8', margin: 0, fontSize: '14px' }}>
-                    Bắt đầu chat với người khác về sản phẩm để thấy cuộc trò chuyện ở đây.
+                    {t('chat.start_conversation_hint')}
                   </p>
                 </div>
               )}
@@ -250,7 +252,7 @@ const ChatPopup = React.memo(() => {
                     borderRadius: '50%',
                     animation: 'spin 1s linear infinite'
                   }}></div>
-                  <span style={{ color: '#b0b3b8', fontSize: '14px' }}>Đang tải thêm...</span>
+                  <span style={{ color: '#b0b3b8', fontSize: '14px' }}>{t('common.loading_more')}</span>
                 </div>
               )}
             </>

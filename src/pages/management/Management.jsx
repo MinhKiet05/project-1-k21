@@ -1,21 +1,23 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { toast } from 'react-toastify';
-import { useUser } from '@clerk/clerk-react';
+import { toast } from "react-toastify";
+import { useUser } from "@clerk/clerk-react";
 import { usePosts } from "../../hooks/usePosts";
 import { useCategories } from "../../hooks/useCategories";
 import { useLocations } from "../../hooks/useLocations";
 import { useUpdatePostStatus } from "../../hooks/useUpdatePostStatus";
 import PostDetailModal from "../../components/PostDetailModal/PostDetailModal";
 import "./Management.css";
+import { useTranslation } from "react-i18next";
 
 export default function Manager() {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
-  const [categoryFilter, setCategoryFilter] = useState('');
-  const [locationFilter, setLocationFilter] = useState('');
-  const [sortOrder, setSortOrder] = useState('newest');
+  const { t } = useTranslation();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [categoryFilter, setCategoryFilter] = useState("");
+  const [locationFilter, setLocationFilter] = useState("");
+  const [sortOrder, setSortOrder] = useState("newest");
   // Modal state
   const [selectedPost, setSelectedPost] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,22 +26,28 @@ export default function Manager() {
   const { user } = useUser();
 
   // Hooks to fetch posts with filters - chỉ lấy bài đăng của user hiện tại
-  const { posts, loading: postsLoading, error: postsError, refetch } = usePosts({
-    status: statusFilter === 'all' ? null : statusFilter,
+  const {
+    posts,
+    loading: postsLoading,
+    error: postsError,
+    refetch,
+  } = usePosts({
+    status: statusFilter === "all" ? null : statusFilter,
     categoryId: categoryFilter || null,
     locationId: locationFilter || null,
     userId: user?.id || null, // Filter theo user hiện tại
     sort: sortOrder,
-    search: searchTerm
+    search: searchTerm,
   });
 
   const { categories, loading: categoriesLoading } = useCategories();
   const { locations, loading: locationsLoading } = useLocations();
-  const { isUpdating, approvePost, rejectPost, markAsSold, extendPost } = useUpdatePostStatus();
+  const { isUpdating, approvePost, rejectPost, markAsSold, extendPost } =
+    useUpdatePostStatus();
 
   // Format date
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('vi-VN');
+    return new Date(dateString).toLocaleDateString("vi-VN");
   };
 
   // Handle modal actions
@@ -57,11 +65,11 @@ export default function Manager() {
   const handleMarkAsSold = async (postId) => {
     const result = await markAsSold(postId);
     if (result.success) {
-      toast.success('Đã đánh dấu bài đăng là đã bán!');
+      toast.success(t("management.mark_sold_success"));
       handleCloseModal();
       refetch(); // Refresh danh sách
     } else {
-      toast.error('Lỗi khi cập nhật trạng thái: ' + result.error);
+      toast.error(t("management.status_update_error") + ": " + result.error);
     }
   };
 
@@ -69,11 +77,11 @@ export default function Manager() {
   const handleExtendPost = async (postId) => {
     const result = await extendPost(postId);
     if (result.success) {
-      toast.success('Đã gia hạn bài đăng thêm 7 ngày!');
+      toast.success(t("management.extend_success"));
       handleCloseModal();
       refetch(); // Refresh danh sách
     } else {
-      toast.error('Lỗi khi gia hạn bài đăng: ' + result.error);
+      toast.error(t("management.extend_error") + ": " + result.error);
     }
   };
 
@@ -81,9 +89,9 @@ export default function Manager() {
   if (!user) {
     return (
       <div className="manager-container">
-        <h2 className="manager-title">Quản lý các bài đăng</h2>
-        <div style={{textAlign: 'center', padding: '50px', color: '#666'}}>
-          Vui lòng đăng nhập để quản lý bài đăng của bạn.
+        <h2 className="manager-title">{t("management.manage_posts")}</h2>
+        <div style={{ textAlign: "center", padding: "50px", color: "#666" }}>
+          {t("management.login_required")}
         </div>
       </div>
     );
@@ -91,159 +99,197 @@ export default function Manager() {
 
   return (
     <div className="manager-container">
-      <h2 className="manager-title">Quản lý bài đăng của tôi</h2>
-      
+      <h2 className="manager-title">{t("management.my_posts")}</h2>
+
       {/* Search & Filters */}
       <div className="manager-search-section">
-        
         <div className="search-box-admin">
           <FontAwesomeIcon icon={faSearch} className="search-icon" />
           <input
             type="text"
-            placeholder="Tìm kiếm theo tên bài đăng"
+            placeholder={t("management.search_posts")}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
 
         <div className="manager-filters-row">
-          <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
-            <option value="newest">Mới nhất</option>
-            <option value="oldest">Cũ nhất</option>
-          </select>
-          
-          <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
-            <option value="all">Tất cả trạng thái</option>
-            <option value="pending">Đang chờ</option>
-            <option value="approved">Đã duyệt</option>
-            <option value="rejected">Không duyệt</option>
-            <option value="expired">Hết hạn</option>
-            <option value="sold">Đã bán</option>
+          <select
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+          >
+            <option value="newest">{t("common.newest")}</option>
+            <option value="oldest">{t("common.oldest")}</option>
           </select>
 
-          <select value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)} disabled={categoriesLoading}>
-            <option value="">Tất cả danh mục</option>
-            {categories.map(c => (
-              <option key={c.id} value={c.id}>{c.name}</option>
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+          >
+            <option value="all">{t("management.all_status")}</option>
+            <option value="pending">{t("management.status_pending")}</option>
+            <option value="approved">{t("management.status_approved")}</option>
+            <option value="rejected">{t("management.status_rejected")}</option>
+            <option value="expired">{t("management.status_expired")}</option>
+            <option value="sold">{t("management.status_sold")}</option>
+          </select>
+
+          <select
+            value={categoryFilter}
+            onChange={(e) => setCategoryFilter(e.target.value)}
+            disabled={categoriesLoading}
+          >
+            <option value="">{t("management.all_categories")}</option>
+            {categories.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
             ))}
           </select>
 
-          <select value={locationFilter} onChange={(e) => setLocationFilter(e.target.value)} disabled={locationsLoading}>
-            <option value="">Tất cả khu vực</option>
-            {locations.map(l => (
-              <option key={l.id} value={l.id}>{l.name}</option>
+          <select
+            value={locationFilter}
+            onChange={(e) => setLocationFilter(e.target.value)}
+            disabled={locationsLoading}
+          >
+            <option value="">{t("management.all_locations")}</option>
+            {locations.map((l) => (
+              <option key={l.id} value={l.id}>
+                {l.name}
+              </option>
             ))}
           </select>
         </div>
 
         <div className="manager-search-result">
-          {postsLoading ? 'Đang tải...' : `Tìm thấy ${posts.length} bài đăng`}
-          {postsError && <div className="manager-field-error">Lỗi tải bài đăng: {postsError}</div>}
+          {postsLoading
+            ? t("common.loading")
+            : t("management.found_posts", { count: posts.length })}
+          {postsError && (
+            <div className="manager-field-error">
+              {t("management.load_posts_error")}: {postsError}
+            </div>
+          )}
         </div>
       </div>
-      
+
       <table className="manager-table">
         <thead>
           <tr>
-            <th>Tên sản phẩm</th>
-            <th>Ảnh</th>
-            <th>Giá</th>
-            <th>Danh mục</th>
-            <th>Khu vực</th>
-            <th>Trạng thái</th>
-            <th>Thời gian tạo</th>
-            <th>Thao tác</th>
+            <th>{t("management.product_name")}</th>
+            <th>{t("management.image")}</th>
+            <th>{t("management.price")}</th>
+            <th>{t("management.category")}</th>
+            <th>{t("management.location")}</th>
+            <th>{t("management.status")}</th>
+            <th>{t("management.created_time")}</th>
+            <th>{t("management.actions")}</th>
           </tr>
         </thead>
         <tbody>
           {postsLoading ? (
             <tr>
-              <td colSpan="8" style={{textAlign: 'center', padding: '20px'}}>
-                Đang tải bài đăng...
+              <td colSpan="8" style={{ textAlign: "center", padding: "20px" }}>
+                {t("management.loading_posts")}
               </td>
             </tr>
           ) : postsError ? (
             <tr>
-              <td colSpan="8" style={{textAlign: 'center', padding: '20px', color: '#e74c3c'}}>
-                Lỗi: {postsError}
+              <td
+                colSpan="8"
+                style={{
+                  textAlign: "center",
+                  padding: "20px",
+                  color: "#e74c3c",
+                }}
+              >
+                {t("common.error")}: {postsError}
               </td>
             </tr>
           ) : posts.length === 0 ? (
             <tr>
-              <td colSpan="8" style={{textAlign: 'center', padding: '20px', color: '#666'}}>
-                Chưa có bài đăng nào
+              <td
+                colSpan="8"
+                style={{ textAlign: "center", padding: "20px", color: "#666" }}
+              >
+                {t("management.no_posts")}
               </td>
             </tr>
-          ) : posts.map((post) => {
-            const title = post.title || 'Không có tiêu đề';
-            const imageUrl = (post.image_urls && post.image_urls[0]) || 
-                           (post.imageUrls && post.imageUrls[0]) || 
-                           post.image_url || 
-                           post.images?.[0] || 
-                           'https://via.placeholder.com/60';
-            const price = post.price ? (typeof post.price === 'number' ? post.price.toLocaleString('vi-VN') + ' VNĐ' : post.price) : 'Chưa có giá';
-            const categoryName = post.category?.name || '-';
-            const locationName = post.location?.name || '-';
-            const createdAt = post.created_at ? formatDate(post.created_at) : '-';
-            
-            // Determine status display
-            let statusDisplay = '';
-            let statusClass = '';
-            
-            switch(post.status) {
-              case 'pending':
-                statusDisplay = 'Chưa duyệt';
-                statusClass = 'status-pending';
-                break;
-              case 'approved':
-                statusDisplay = 'Đã duyệt';
-                statusClass = 'status-approved';
-                break;
-              case 'rejected':
-                statusDisplay = 'Không được duyệt';
-                statusClass = 'status-rejected';
-                break;
-              case 'expired':
-                statusDisplay = 'Hết hạn';
-                statusClass = 'status-expired';
-                break;
-              case 'sold':
-                statusDisplay = 'Đã bán';
-                statusClass = 'status-sold';
-                break;
-              default:
-                statusDisplay = 'Không xác định';
-                statusClass = 'status-unknown';
-            }
+          ) : (
+            posts.map((post) => {
+              const title = post.title || t("management.no_title");
+              const imageUrl =
+                (post.image_urls && post.image_urls[0]) ||
+                (post.imageUrls && post.imageUrls[0]) ||
+                post.image_url ||
+                post.images?.[0] ||
+                "https://via.placeholder.com/60";
+              const price = post.price
+                ? typeof post.price === "number"
+                  ? post.price.toLocaleString("vi-VN") + " VNĐ"
+                  : post.price
+                : t("management.no_price");
+              const categoryName = post.category?.name || "-";
+              const locationName = post.location?.name || "-";
+              const createdAt = post.created_at
+                ? formatDate(post.created_at)
+                : "-";
 
-            return (
-              <tr key={post.id}>
-                <td>{title}</td>
-                <td>
-                  <img
-                    src={imageUrl}
-                    alt={title}
-                    className="manager-img"
-                  />
-                </td>
-                <td>{price}</td>
-                <td>{categoryName}</td>
-                <td>{locationName}</td>
-                <td>
-                  <p className={statusClass}>{statusDisplay}</p>
-                </td>
-                <td>{createdAt}</td>
-                <td>
-                  <button 
-                    className="manager-btn"
-                    onClick={() => handleViewDetail(post)}
-                  >
-                    Xem chi tiết
-                  </button>
-                </td>
-              </tr>
-            );
-          })}
+              // Determine status display
+              let statusDisplay = "";
+              let statusClass = "";
+
+              switch (post.status) {
+                case "pending":
+                  statusDisplay = t("management.status_pending");
+                  statusClass = "status-pending";
+                  break;
+                case "approved":
+                  statusDisplay = t("management.status_approved");
+                  statusClass = "status-approved";
+                  break;
+                case "rejected":
+                  statusDisplay = t("management.status_rejected");
+                  statusClass = "status-rejected";
+                  break;
+                case "expired":
+                  statusDisplay = t("management.status_expired");
+                  statusClass = "status-expired";
+                  break;
+                case "sold":
+                  statusDisplay = t("management.status_sold");
+                  statusClass = "status-sold";
+                  break;
+                default:
+                  statusDisplay = t("management.status_unknown");
+                  statusClass = "status-unknown";
+              }
+
+              return (
+                <tr key={post.id}>
+                  <td>{title}</td>
+                  <td>
+                    <img src={imageUrl} alt={title} className="manager-img" />
+                  </td>
+                  <td>{price}</td>
+                  <td>{categoryName}</td>
+                  <td>{locationName}</td>
+                  <td>
+                    <p className={statusClass}>{statusDisplay}</p>
+                  </td>
+                  <td>{createdAt}</td>
+                  <td>
+                    <button
+                      className="manager-btn"
+                      onClick={() => handleViewDetail(post)}
+                    >
+                      {t("management.view_detail")}
+                    </button>
+                  </td>
+                </tr>
+              );
+            })
+          )}
         </tbody>
       </table>
 
