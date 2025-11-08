@@ -22,12 +22,13 @@ import { useChatContext } from "../../contexts/ChatContext";
 
 // 👇 import component ChatPopup
 import ChatPopup from "../chat/ChatPopUp";
+import ChatWindow from "../chat/ChatWindow";
 
 export default function Header() {
   const location = useLocation();
   const navigate = useNavigate();
   const { isAdmin } = useUserRole();
-  const { showChatPopup, openChatPopup, closeChatPopup, conversations } = useChatContext();
+  const { showChatPopup, openChatPopup, closeChatPopup, conversations, directChatUser, closeDirectChat } = useChatContext();
   const searchInputRef = useRef(null);
   
   // Check if there are unread messages
@@ -153,6 +154,15 @@ export default function Header() {
 
       {/* ==== HIỂN THỊ POPUP CHAT ==== */}
       {showChatPopup && <ChatPopup />}
+      
+      {/* ==== HIỂN THỊ DIRECT CHATWINDOW ==== */}
+      {directChatUser && (
+        <ChatWindow
+          user={directChatUser}
+          conversationId={directChatUser.conversationId}
+          onClose={closeDirectChat}
+        />
+      )}
     </header>
   );
 }

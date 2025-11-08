@@ -1,9 +1,7 @@
 /* Facebook Messenger Style Chat Popup */
 .chat-popup {
   width: 360px;
-  height: auto;
-  max-height: calc(100vh - 120px);
-  min-height: 400px;
+  height: calc(100vh - 60px);
   background: #242526;
   border-radius: 12px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);

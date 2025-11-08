@@ -3,6 +3,7 @@ import { useUser } from '@clerk/clerk-react';
 import { useMessages } from "../../hooks/useMessages";
 import { useChatContext } from "../../contexts/ChatContext";
 import { toast } from 'react-toastify';
+import CardProductsOfInterest from '../cardProductsOfInterest/CardProductsOfInterest';
 import "./ChatWindow.css";
 
 const ChatWindow = React.memo(({ user, conversationId, onClose }) => {
@@ -14,24 +15,13 @@ const ChatWindow = React.memo(({ user, conversationId, onClose }) => {
   const [isSending, setIsSending] = useState(false);
   const emojiPickerRef = useRef(null);
   const messagesRef = useRef(null);
+  const inputRef = useRef(null);
   const lastSendTimeRef = useRef(0);
 
   // Auto scroll to bottom only for new messages or initial load
   const [shouldAutoScroll, setShouldAutoScroll] = useState(true);
   const [initialLoadComplete, setInitialLoadComplete] = useState(false);
   const [justSentMessage, setJustSentMessage] = useState(false);
-
-  // Mark conversation as seen when ChatWindow opens
-  useEffect(() => {
-    if (conversationId) {
-      setOpenConversationId(conversationId);
-      markConversationAsSeen(conversationId);
-      
-      return () => {
-        setOpenConversationId(null);
-      };
-    }
-  }, [conversationId, markConversationAsSeen, setOpenConversationId]);
 
   // Auto scroll function
   const scrollToBottom = useCallback(() => {
@@ -53,6 +43,34 @@ const ChatWindow = React.memo(({ user, conversationId, onClose }) => {
       container.scrollTop = container.scrollHeight;
     }
   }, []);
+
+  // Mark conversation as seen when ChatWindow opens
+  useEffect(() => {
+    if (conversationId) {
+      setOpenConversationId(conversationId);
+      markConversationAsSeen(conversationId);
+      
+      return () => {
+        setOpenConversationId(null);
+      };
+    }
+  }, [conversationId, markConversationAsSeen, setOpenConversationId]);
+
+  // Focus input and scroll to bottom when ChatWindow opens
+  useEffect(() => {
+    // Small delay to ensure DOM is ready
+    const timer = setTimeout(() => {
+      // Focus on input for immediate typing
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+      
+      // Force scroll to bottom to show latest content (including product inquiry)
+      forceScrollToBottom();
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [conversationId, forceScrollToBottom]);
 
   useEffect(() => {
     if (!loading && !initialLoadComplete) {
@@ -84,6 +102,22 @@ const ChatWindow = React.memo(({ user, conversationId, onClose }) => {
       }
     }
   }, [messages, loading, initialLoadComplete, justSentMessage, forceScrollToBottom]);
+
+  // Scroll to bottom when product inquiry message is detected
+  useEffect(() => {
+    if (messages.length > 0) {
+      const hasProductInquiry = messages.some(msg => 
+        msg.content && msg.content.startsWith('PRODUCT_INQUIRY:')
+      );
+      
+      if (hasProductInquiry) {
+        // Longer delay to ensure CardProductsOfInterest is rendered
+        setTimeout(() => {
+          forceScrollToBottom();
+        }, 200);
+      }
+    }
+  }, [messages, forceScrollToBottom]);
 
   // Handle click outside emoji picker
   useEffect(() => {
@@ -252,38 +286,73 @@ const ChatWindow = React.memo(({ user, conversationId, onClose }) => {
                 <p>Chưa có tin nhắn nào. Hãy bắt đầu cuộc trò chuyện!</p>
               </div>
             ) : (
-              messages.map((msg) => (
-                <div
-                  key={msg.id}
-                  className={`message-container ${
-                    msg.sender_id === currentUser?.id ? "message-me" : "message-user"
-                  }`}
-                >
-                  {msg.sender_id !== currentUser?.id && (
-                    <div className="message-avatar">
-                      <img 
-                        src={msg.profiles?.avatar_url || user.avatar} 
-                        alt={msg.profiles?.full_name || user.name} 
-                      />
-                    </div>
-                  )}
-
-                  <div className="message-content">
-                    <div className="chat-bubble">
-                      <span className="message-text">{msg.content}</span>
-                    </div>
-
-                    <div className="message-meta">
-                      <span className="message-time">
+              messages.map((msg) => {
+                // Handle product inquiry message as centered card
+                if (msg.content && msg.content.startsWith('PRODUCT_INQUIRY:')) {
+                  const productDataStr = msg.content.substring('PRODUCT_INQUIRY:'.length);
+                  const productData = JSON.parse(productDataStr);
+                  return (
+                    <div key={msg.id} className="message-container product-inquiry-message">
+                      <div className="product-inquiry-content">
+                        <CardProductsOfInterest product={productData} />
+                      </div>
+                      <div className="message-time-center">
                         {new Date(msg.created_at).toLocaleTimeString('vi-VN', {
                           hour: '2-digit',
                           minute: '2-digit'
                         })}
-                      </span>
+                      </div>
+                    </div>
+                  );
+                }
+
+                // Handle regular messages
+                return (
+                  <div
+                    key={msg.id}
+                    className={`message-container ${
+                      msg.sender_id === currentUser?.id ? "message-me" : "message-user"
+                    }`}
+                  >
+                    {msg.sender_id !== currentUser?.id && (
+                      <div className="message-avatar">
+                        <img 
+                          src={msg.profiles?.avatar_url || user.avatar} 
+                          alt={msg.profiles?.full_name || user.name} 
+                        />
+                      </div>
+                    )}
+
+                    <div className="message-content">
+                      <div className={`chat-bubble ${msg.message_type === 'product' ? 'product-message' : ''}`}>
+                        {msg.message_type === 'product' ? (
+                          <div className="product-message-content">
+                            <div className="product-icon">🛍️</div>
+                            <div className="product-text">
+                              {msg.content.split('\n').map((line, index) => (
+                                <div key={index} className={`product-line ${index === 0 ? 'product-title' : ''}`}>
+                                  {line}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        ) : (
+                          <span className="message-text">{msg.content}</span>
+                        )}
+                      </div>
+
+                      <div className="message-meta">
+                        <span className="message-time">
+                          {new Date(msg.created_at).toLocaleTimeString('vi-VN', {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))
+                );
+              })
             )}
           </>
         )}
@@ -312,6 +381,7 @@ const ChatWindow = React.memo(({ user, conversationId, onClose }) => {
 
         <div className="chat-input">
           <input
+            ref={inputRef}
             type="text"
             value={newMsg}
             onChange={(e) => setNewMsg(e.target.value)}

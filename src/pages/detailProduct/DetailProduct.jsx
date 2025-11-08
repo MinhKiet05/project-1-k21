@@ -12,7 +12,7 @@ export default function DetailProduct() {
     const { id } = useParams();
     const navigate = useNavigate();
     const { user } = useUser();
-    const { createOrFindConversation, openChatWithConversation } = useChatContext();
+    const { createOrFindConversation, openDirectChat } = useChatContext();
     const [post, setPost] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -82,6 +82,34 @@ export default function DetailProduct() {
         setCurrentImageIndex(index);
     };
 
+    const sendProductInquiryMessage = async (conversationId, productData) => {
+        try {
+            const productInfo = {
+                id: productData.id,
+                title: productData.title,
+                price: productData.price,
+                original_price: productData.original_price,
+                image_urls: productData.image_urls,
+                images: productData.images,
+                image_url: productData.image_url
+            };
+
+            // Send product card as a special message with prefix
+            const { error } = await supabase
+                .from('messages')
+                .insert({
+                    conversation_id: conversationId,
+                    sender_id: user.id,
+                    content: `PRODUCT_INQUIRY:${JSON.stringify(productInfo)}`
+                });
+
+            if (error) throw error;
+        } catch (error) {
+            console.error('Error sending product inquiry message:', error);
+            throw error;
+        }
+    };
+
     const handleContactSeller = async () => {
         if (!user) {
             toast.warning('Bạn cần đăng nhập để liên hệ với người bán');
@@ -99,8 +127,17 @@ export default function DetailProduct() {
             // Tạo hoặc tìm conversation
             const conversationId = await createOrFindConversation(post.id, post.author_id);
             
-            // Mở ChatPopup từ header với conversation cụ thể
-            openChatWithConversation(conversationId);
+            // Gửi product card message
+            await sendProductInquiryMessage(conversationId, post);
+            
+            // Mở ChatWindow trực tiếp với thông tin người bán (không cần product info nữa)
+            const sellerInfo = {
+                id: post.author_id,
+                name: post.profiles?.full_name || post.profiles?.name || post.profiles?.username || 'Người bán',
+                avatar: post.profiles?.avatar_url || post.profiles?.image_url || post.profiles?.profile_image_url
+            };
+            
+            openDirectChat(conversationId, sellerInfo);
             
         } catch (error) {
             toast.error('Có lỗi xảy ra khi tạo cuộc trò chuyện');

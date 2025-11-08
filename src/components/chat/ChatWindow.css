@@ -7,7 +7,7 @@
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
   position: fixed;
   bottom: 2px;
-  right: 360px;
+  right: 2px;
   display: flex;
   flex-direction: column;
   animation: slideIn 0.3s ease;
@@ -64,6 +64,34 @@
   align-items: center;
   border-bottom: 1px solid #3a3b3c;
   background: #242526;
+}
+
+/* Product inquiry message (centered like a system message) */
+.product-inquiry-message {
+  justify-content: center !important;
+  margin: 16px 0 !important;
+  flex-direction: column;
+  align-items: center;
+}
+
+.product-inquiry-message .product-inquiry-content {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.product-inquiry-message .card-products-of-interest {
+  max-width: 300px;
+  background: #3a3b3c;
+  border: 1px solid #4a4b4c;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.message-time-center {
+  font-size: 11px;
+  color: #b0b3b8;
+  margin-top: 4px;
+  text-align: center;
 }
 
 .user-info-header {
@@ -518,4 +546,57 @@
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+/* Product Message Styles */
+.product-message {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  border: 1px solid #5a67d8;
+  box-shadow: 0 2px 8px rgba(90, 103, 216, 0.3);
+}
+
+.product-message-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 4px;
+}
+
+.product-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.product-text {
+  flex: 1;
+  line-height: 1.4;
+}
+
+.product-line {
+  margin-bottom: 4px;
+  color: #ffffff;
+}
+
+.product-line:last-child {
+  margin-bottom: 0;
+}
+
+.product-title {
+  font-weight: 600;
+  font-size: 15px;
+  color: #ffffff;
+  margin-bottom: 8px;
+}
+
+.product-line:not(.product-title) {
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+/* Ensure product messages stand out */
+.message-me .product-message {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%) !important;
+  border-color: #4facfe;
+  box-shadow: 0 2px 8px rgba(79, 172, 254, 0.3);
 }

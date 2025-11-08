@@ -1,0 +1,136 @@
+/* CardProductsOfInterest Component Styles */
+.card-products-of-interest {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 16px;
+    margin: 8px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    font-family: 'BeVietNamPro', sans-serif;
+}
+
+/* Dark theme for chat window */
+.chat-window .card-products-of-interest {
+    background: #3a3b3c;
+    border: 1px solid #4a4b4c;
+    color: #e4e6ea;
+}
+
+.chat-window .card-products-of-interest .interest-inquiry-text {
+    color: #b0b3b8;
+}
+
+.chat-window .card-products-of-interest .interest-product-name {
+    color: #e4e6ea;
+}
+
+.interest-card-header {
+    margin-bottom: 12px;
+}
+
+.interest-inquiry-text {
+    font-size: 14px;
+    color: #666;
+    font-weight: 500;
+}
+
+.interest-card-content {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.interest-product-image {
+    flex-shrink: 0;
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #f0f0f0;
+}
+
+.interest-product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.interest-product-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.interest-product-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    line-height: 1.4;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.interest-product-price {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.current-price {
+    font-size: 18px;
+    font-weight: 700;
+    color: #e74c3c;
+}
+
+.original-price {
+    font-size: 14px;
+    color: #999;
+    text-decoration: line-through;
+    font-weight: 400;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .card-products-of-interest {
+        max-width: 100%;
+        padding: 12px;
+    }
+    
+    .interest-product-image {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .interest-product-name {
+        font-size: 14px;
+    }
+    
+    .current-price {
+        font-size: 16px;
+    }
+}
+
+/* Animation */
+.card-products-of-interest {
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

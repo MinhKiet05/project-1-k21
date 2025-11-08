@@ -2,7 +2,6 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useUser } from '@clerk/clerk-react';
 import { useChatContext } from "../../contexts/ChatContext";
 import UserChatItem from "./UserChatItem";
-import ChatWindow from "./ChatWindow.jsx";
 import "./ChatPopUp.css";
 
 const ChatPopup = React.memo(() => {
@@ -16,9 +15,9 @@ const ChatPopup = React.memo(() => {
     markConversationAsSeen,
     pendingConversationId, 
     setPendingConversationId, 
-    closeChatPopup 
+    closeChatPopup,
+    openDirectChat
   } = useChatContext();
-  const [selectedUser, setSelectedUser] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
 
   const formatTime = useCallback((dateString) => {
@@ -114,12 +113,17 @@ const ChatPopup = React.memo(() => {
     if (userItem.conversationId && userItem.unread) {
       markConversationAsSeen(userItem.conversationId);
     }
-    setSelectedUser(userItem);
-  }, [markConversationAsSeen]);
-
-  const handleCloseChat = useCallback(() => {
-    setSelectedUser(null);
-  }, []);
+    
+    // Prepare user info for direct chat
+    const userInfo = {
+      id: userItem.id,
+      name: userItem.name,
+      avatar: userItem.avatar
+    };
+    
+    // Open direct chat and close popup
+    openDirectChat(userItem.conversationId, userInfo);
+  }, [markConversationAsSeen, openDirectChat]);
 
   if (loading) {
     return (
@@ -257,14 +261,6 @@ const ChatPopup = React.memo(() => {
           )}
         </div>
       </div>
-
-      {selectedUser && (
-        <ChatWindow 
-          user={selectedUser} 
-          conversationId={selectedUser.conversationId}
-          onClose={handleCloseChat} 
-        />
-      )}
     </>
   );
 });

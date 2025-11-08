@@ -8,6 +8,7 @@ import {
     faFilter,
     faSearch,
 } from "@fortawesome/free-solid-svg-icons";
+import { removeDiacritics } from '../../utils/searchUtils';
 
 export default function SearchPage() {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -37,6 +38,20 @@ export default function SearchPage() {
     useEffect(() => {
         fetchPosts();
     }, [filters, currentPage]);
+
+    // Listen to URL changes and update filters
+    useEffect(() => {
+        const newFilters = {
+            keyword: searchParams.get('q') || '',
+            category: searchParams.get('category') || 'all',
+            location: searchParams.get('location') || 'all',
+            priceMin: searchParams.get('priceMin') || '',
+            priceMax: searchParams.get('priceMax') || '',
+            sortBy: searchParams.get('sort') || 'newest'
+        };
+        setFilters(newFilters);
+        setCurrentPage(1); // Reset to first page when filters change
+    }, [searchParams]);
 
     const fetchCategories = async () => {
         try {
@@ -72,14 +87,10 @@ export default function SearchPage() {
                     *,
                     categories (name),
                     locations (name)
-                `, { count: 'exact' })
+                `)
                 .eq('status', 'approved');
 
-            // Apply filters
-            if (filters.keyword) {
-                query = query.or(`title.ilike.%${filters.keyword}%,description.ilike.%${filters.keyword}%`);
-            }
-
+            // Apply filters (except keyword - we'll handle that client-side)
             if (filters.category && filters.category !== 'all') {
                 query = query.eq('category_id', filters.category);
             }
@@ -113,17 +124,31 @@ export default function SearchPage() {
                     break;
             }
 
-            // Apply pagination
-            const from = (currentPage - 1) * postsPerPage;
-            const to = from + postsPerPage - 1;
-            query = query.range(from, to);
-
-            const { data, count, error } = await query;
+            const { data, error } = await query;
 
             if (error) throw error;
 
-            setPosts(data || []);
-            setTotalCount(count || 0);
+            let filteredData = data || [];
+
+            // Apply keyword filtering with diacritic support (client-side)
+            if (filters.keyword) {
+                const normalizedKeyword = removeDiacritics(filters.keyword.toLowerCase());
+                
+                filteredData = filteredData.filter(post => {
+                    const titleMatch = removeDiacritics((post.title || '').toLowerCase()).includes(normalizedKeyword);
+                    const descMatch = removeDiacritics((post.description || '').toLowerCase()).includes(normalizedKeyword);
+                    return titleMatch || descMatch;
+                });
+            }
+
+            // Apply pagination to filtered results
+            const totalCount = filteredData.length;
+            const from = (currentPage - 1) * postsPerPage;
+            const to = from + postsPerPage;
+            const paginatedData = filteredData.slice(from, to);
+
+            setPosts(paginatedData);
+            setTotalCount(totalCount);
         } catch (error) {
             setPosts([]);
             setTotalCount(0);
@@ -250,7 +275,7 @@ export default function SearchPage() {
                 <div className="search-main">
                     <div className="search-header">
                         <div className="search-results-count">
-                            Kết quả tìm kiếm cho từ khóa '<strong>{filters.keyword || 'Sách'}</strong>'
+                            Kết quả tìm kiếm cho từ khóa '<strong>{filters.keyword || 'Tất cả sản phẩm'}</strong>' ({totalCount} kết quả)
                         </div>
                     </div>
 

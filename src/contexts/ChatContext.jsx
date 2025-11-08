@@ -15,6 +15,7 @@ export const ChatProvider = ({ children }) => {
   const [showChatPopup, setShowChatPopup] = useState(false);
   const [pendingConversationId, setPendingConversationId] = useState(null);
   const [openConversationId, setOpenConversationId] = useState(null);
+  const [directChatUser, setDirectChatUser] = useState(null); // For direct ChatWindow
   
   // Centralized conversations state
   const conversationsHook = useConversations(openConversationId);
@@ -33,14 +34,31 @@ export const ChatProvider = ({ children }) => {
     setShowChatPopup(true);
   };
 
+  const openDirectChat = (conversationId, userInfo) => {
+    // Open ChatWindow directly without showing ChatPopup
+    const chatUser = {
+      conversationId: conversationId,
+      ...userInfo
+    };
+    setDirectChatUser(chatUser);
+    setShowChatPopup(false); // Ensure ChatPopup is closed
+  };
+
+  const closeDirectChat = () => {
+    setDirectChatUser(null);
+  };
+
   return (
     <ChatContext.Provider value={{
       showChatPopup,
       pendingConversationId,
       openConversationId,
+      directChatUser,
       openChatPopup,
       closeChatPopup,
       openChatWithConversation,
+      openDirectChat,
+      closeDirectChat,
       setShowChatPopup,
       setPendingConversationId,
       setOpenConversationId,

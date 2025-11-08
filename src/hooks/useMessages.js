@@ -159,6 +159,51 @@ export const useMessages = (conversationId) => {
         }
     }, [conversationId, user?.id]);
 
+    const sendProductMessage = useCallback(async (productInfo) => {
+        try {
+            const productContent = `🛍️ Sản phẩm: ${productInfo.title}\n💰 Giá: ${productInfo.price?.toLocaleString()} VND\n📍 Khu vực: ${productInfo.location}\n\n${productInfo.description || 'Tôi quan tâm đến sản phẩm này.'}`;
+            
+            const { data, error } = await supabase
+                .from('messages')
+                .insert({
+                    conversation_id: conversationId,
+                    sender_id: user.id,
+                    content: productContent,
+                    message_type: 'product',
+                    product_id: productInfo.id
+                })
+                .select(`
+                    id,
+                    content,
+                    sender_id,
+                    created_at,
+                    message_type,
+                    product_id,
+                    profiles (
+                        id,
+                        full_name,
+                        avatar_url
+                    )
+                `)
+                .single();
+
+            if (error) throw error;
+
+            // Update conversation's last message
+            await supabase
+                .from('conversations')
+                .update({
+                    last_message_content: `Sản phẩm: ${productInfo.title}`,
+                    last_message_at: new Date().toISOString()
+                })
+                .eq('id', conversationId);
+
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    }, [conversationId, user?.id]);
+
     const loadMoreMessages = useCallback(() => {
         if (!loadingMore && hasMore) {
             fetchMessages(true);
@@ -171,6 +216,7 @@ export const useMessages = (conversationId) => {
         loadingMore,
         hasMore,
         sendMessage,
+        sendProductMessage,
         refetch: fetchMessages,
         loadMore: loadMoreMessages
     };

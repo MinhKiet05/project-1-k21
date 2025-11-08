@@ -2,6 +2,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useUser } from '@clerk/clerk-react';
 import { supabase } from '../lib/supabase';
+import { cleanupDuplicateConversations } from '../utils/conversationUtils';
 
 export const useConversations = (openConversationId = null) => {
     const { user } = useUser();
@@ -15,7 +16,10 @@ export const useConversations = (openConversationId = null) => {
 
     useEffect(() => {
         if (user?.id) {
-            fetchConversations();
+            // Clean up duplicates first, then fetch conversations
+            cleanupDuplicateConversations(user.id).then(() => {
+                fetchConversations();
+            });
             
             // Subscribe to real-time updates
             const subscription = supabase
@@ -209,19 +213,20 @@ export const useConversations = (openConversationId = null) => {
 
     const createOrFindConversation = async (postId, otherUserId) => {
         try {
-            // Check if conversation already exists
+            // Check if conversation already exists between these 2 users (regardless of post)
             const { data: existingConversations } = await supabase
                 .from('conversations')
                 .select(`
                     id,
                     conversation_participants!inner (user_id)
-                `)
-                .eq('post_id', postId);
+                `);
 
             // Find conversation that includes both current user and other user
             for (const conv of existingConversations || []) {
                 const participants = conv.conversation_participants.map(p => p.user_id);
-                if (participants.includes(user.id) && participants.includes(otherUserId)) {
+                if (participants.length === 2 && 
+                    participants.includes(user.id) && 
+                    participants.includes(otherUserId)) {
                     return conv.id;
                 }
             }
@@ -249,6 +254,49 @@ export const useConversations = (openConversationId = null) => {
 
             await fetchConversations();
             return newConversation.id;
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    const createConversationWithProduct = async (postInfo, otherUserId) => {
+        try {
+            // First create or find the conversation
+            const conversationId = await createOrFindConversation(postInfo.id, otherUserId);
+            
+            // Check if product message already exists in this conversation
+            const { data: existingMessages } = await supabase
+                .from('messages')
+                .select('id')
+                .eq('conversation_id', conversationId)
+                .eq('product_id', postInfo.id)
+                .eq('message_type', 'product');
+            
+            // Only send product message if it doesn't exist yet
+            if (!existingMessages || existingMessages.length === 0) {
+                const productContent = `🛍️ Sản phẩm: ${postInfo.title}\n💰 Giá: ${postInfo.price?.toLocaleString()} VND\n📍 Khu vực: ${postInfo.location}\n\nTôi quan tâm đến sản phẩm này.`;
+                
+                await supabase
+                    .from('messages')
+                    .insert({
+                        conversation_id: conversationId,
+                        sender_id: user.id,
+                        content: productContent,
+                        message_type: 'product',
+                        product_id: postInfo.id
+                    });
+
+                // Update conversation's last message
+                await supabase
+                    .from('conversations')
+                    .update({
+                        last_message_content: `Sản phẩm: ${postInfo.title}`,
+                        last_message_at: new Date().toISOString()
+                    })
+                    .eq('id', conversationId);
+            }
+            
+            return conversationId;
         } catch (error) {
             throw error;
         }
@@ -323,6 +371,7 @@ export const useConversations = (openConversationId = null) => {
         loadingMore,
         hasMore,
         createOrFindConversation,
+        createConversationWithProduct,
         refetch: fetchConversations,
         loadMore: loadMoreConversations,
         markConversationAsSeen,
