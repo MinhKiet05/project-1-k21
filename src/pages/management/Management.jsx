@@ -168,8 +168,7 @@ export default function Manager() {
       <table className="manager-table">
         <thead>
           <tr>
-            <th>Tên người dùng</th>
-            <th>Tên sản phẩm</th>
+            <th style={{ width: "250px" }}>Tên Sản phẩm</th>
             <th>Hình ảnh</th>
             <th>Giá</th>
             <th>Danh mục</th>
@@ -258,8 +257,11 @@ export default function Manager() {
 
               return (
                 <tr key={post.id}>
-                  <td style={{ fontWeight: "600" }}>{username}</td>
-                  <td>{title}</td>
+                  <td>
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                      <span style={{ fontWeight: "300", color: "#000" }}>{title}</span>
+                    </div>
+                  </td>
                   <td>
                     <img src={imageUrl} alt={title} className="manager-img" />
                   </td>
@@ -279,6 +281,8 @@ export default function Manager() {
                     </button>
                   </td>
                 </tr>
+
+
               );
             })
           )}
