@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { SignedIn, useUser } from "@clerk/clerk-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { useTranslation } from 'react-i18next';
 import { supabase } from "../../lib/supabase.js";
 import CardProduct from "../../components/cardProduct/CardProduct.jsx";
 import LazyImage from "../../components/lazyImage/LazyImage.jsx";
@@ -15,6 +16,7 @@ import banner4 from '../../assets/banner4.webp';
 import logoImg from '../../assets/logo.webp';
 
 function HomePage() {
+  const { t } = useTranslation(['homepage', 'common']);
   const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = useState(0);
   const leftBanners = useMemo(() => [banner1, banner2], []);
@@ -129,7 +131,7 @@ function HomePage() {
     
     return {
       id: post.id,
-      name: post.title || 'Không có tiêu đề',
+      name: post.title || t('common.noTitle'),
       price: post.price || 0,
       image: imageUrl
     };
@@ -174,7 +176,7 @@ function HomePage() {
       <div className="homepage-container">
         {/* Hot Categories */}
         <div className="homepage-section">
-          <h2 className="homepage-section-title">Danh mục hot - Giáo trình</h2>
+          <h2 className="homepage-section-title">{t('hotCategories')}</h2>
           <div className="homepage-products-grid">
             {loading ? (
               Array.from({ length: 4 }).map((_, index) => (
@@ -188,7 +190,7 @@ function HomePage() {
               Array.from({ length: 4 }).map((_, index) => (
                 <CardProduct
                   key={`hot-fallback-${index}`}
-                  product={{ name: "Chưa có sản phẩm", price: 0, image: logoImg }}
+                  product={{ name: t('noProducts'), price: 0, image: logoImg }}
                 />
               ))
             )}
@@ -198,14 +200,14 @@ function HomePage() {
               className="see-all" 
               onClick={() => navigate('/search?q=&category=d1261632-4ade-4a65-ab34-d1804e31210a')}
             >
-              Xem tất cả <FontAwesomeIcon icon={faArrowRight} />
+              {t('seeAll')} <FontAwesomeIcon icon={faArrowRight} />
             </span>
           </div>
         </div>
 
         {/* Latest Posts */}
         <div className="homepage-section">
-          <h2 className="homepage-section-title">Bài đăng mới nhất</h2>
+          <h2 className="homepage-section-title">{t('latestPosts')}</h2>
           <div className="homepage-products-grid">
             {loading ? (
               Array.from({ length: 4 }).map((_, index) => (
@@ -219,7 +221,7 @@ function HomePage() {
               Array.from({ length: 4 }).map((_, index) => (
                 <CardProduct
                   key={`latest-fallback-${index}`}
-                  product={{ name: "Chưa có bài đăng mới", price: 0, image: logoImg }}
+                  product={{ name: t('noLatestPosts'), price: 0, image: logoImg }}
                 />
               ))
             )}
@@ -229,14 +231,14 @@ function HomePage() {
               className="see-all" 
               onClick={() => navigate('/search?sortBy=latest')}
             >
-              Xem tất cả <FontAwesomeIcon icon={faArrowRight} />
+              {t('seeAll')} <FontAwesomeIcon icon={faArrowRight} />
             </span>
           </div>
         </div>
 
         {/* Recommendations */}
         <div className="homepage-section">
-          <h2 className="homepage-section-title">Gợi ý cho bạn</h2>
+          <h2 className="homepage-section-title">{t('recommendations')}</h2>
           <div className="homepage-products-grid">
             {loading ? (
               Array.from({ length: 4 }).map((_, index) => (
@@ -250,7 +252,7 @@ function HomePage() {
               Array.from({ length: 4 }).map((_, index) => (
                 <CardProduct
                   key={`recommended-fallback-${index}`}
-                  product={{ name: "Chưa có gợi ý", price: 0, image: logoImg }}
+                  product={{ name: t('noRecommendations'), price: 0, image: logoImg }}
                 />
               ))
             )}

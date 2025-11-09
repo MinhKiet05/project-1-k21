@@ -1,0 +1,15 @@
+{
+  "title": "Thông báo",
+  "markAllRead": "Đánh dấu tất cả đã đọc",
+  "loading": "Đang tải thông báo...",
+  "noNotifications": "Chưa có thông báo nào",
+  "postTitle": "Tên bài viết",
+  "justNow": "Vừa xong",
+  "minutes": "phút",
+  "hours": "giờ", 
+  "days": "ngày",
+  "postApproved": "Bài viết đã được duyệt",
+  "postRejected": "Bài viết không được duyệt", 
+  "postExpired": "Bài viết đã hết hạn",
+  "notification": "Thông báo"
+}

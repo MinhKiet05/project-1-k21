@@ -1,0 +1,53 @@
+{
+  "title": "Basic Information",
+  "fields": {
+    "images": "Add Images",
+    "productName": "Product Name",
+    "price": "Price",
+    "category": "Category",
+    "location": "Location",
+    "description": "Description"
+  },
+  "placeholders": {
+    "productName": "Enter product name",
+    "price": "Enter product price",
+    "category": "Select category",
+    "location": "Select location",
+    "description": "Enter detailed product description..."
+  },
+  "imageInfo": "Image files only • Max 10 images • Total size ≤ 10MB",
+  "imagesSelected": "Selected {{count}}/10 images",
+  "removeImage": "Remove this image",
+  "validation": {
+    "images": "Please add at least one image",
+    "productName": "Product name must contain at least one letter",
+    "productPrice": "Price must be a valid number greater than 0",
+    "productPriceValid": "Price must be a valid number",
+    "description": "Description must contain at least one letter",
+    "category": "Please select a category",
+    "location": "Please select a location"
+  },
+  "errors": {
+    "maxImages": "Maximum 10 images allowed",
+    "imageFormat": "Only image files are supported (JPG, PNG, GIF, etc.)",
+    "maxSize": "Total image size must not exceed 10MB",
+    "loginRequired": "Please login to create a post",
+    "uploadImages": "Error uploading images",
+    "createPost": "Error creating post",
+    "general": "An error occurred",
+    "loadData": "Error loading data",
+    "loadCategories": "Cannot load categories",
+    "loadLocations": "Cannot load locations"
+  },
+  "success": {
+    "postCreated": "Post created successfully! Your post is pending approval."
+  },
+  "rules": {
+    "title": "Posting Guidelines",
+    "appropriate": "Do not use inappropriate or offensive words or images.",
+    "expiry": "Your post will expire 7 days after approval.",
+    "extend": "If the product hasn't been sold, please extend it after 7 days."
+  },
+  "submitting": "Submitting...",
+  "submit": "Complete"
+}

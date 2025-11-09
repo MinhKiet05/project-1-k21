@@ -27,8 +27,8 @@ export function usePosts({ status = null, categoryId = null, locationId = null, 
         .select(`
           *,
           author:profiles(id, full_name, avatar_url),
-          category:categories(id, name),
-          location:locations(id, name)
+          category:categories(id, name, name_en),
+          location:locations(id, name, name_en)
         `)
 
       if (status) {

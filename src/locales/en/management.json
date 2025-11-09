@@ -1,0 +1,49 @@
+{
+  "title": "Post Management",
+  "search": "Search posts...",
+  "pleaseLogin": "Please login to manage your posts.",
+  "noPosts": "No posts yet",
+  "filters": {
+    "allStatus": "All Status",
+    "allCategories": "All Categories",
+    "allLocations": "All Locations",
+    "newest": "Newest",
+    "oldest": "Oldest"
+  },
+  "status": {
+    "pending": "Pending",
+    "approved": "Approved",
+    "rejected": "Rejected",
+    "expired": "Expired",
+    "sold": "Sold",
+    "unknown": "Unknown"
+  },
+  "table": {
+    "productName": "Product Name",
+    "image": "Image",
+    "price": "Price",
+    "category": "Category",
+    "location": "Location",
+    "status": "Status",
+    "createdAt": "Created At",
+    "actions": "Actions"
+  },
+  "results": {
+    "found": "Found {{count}} posts"
+  },
+  "errors": {
+    "loadPosts": "Error loading posts"
+  },
+  "loading": {
+    "posts": "Loading posts..."
+  },
+  "actions": {
+    "viewDetail": "View Details"
+  },
+  "messages": {
+    "markAsSoldSuccess": "Post marked as sold successfully!",
+    "updateStatusError": "Error updating status",
+    "extendSuccess": "Post extended for 7 more days!",
+    "extendError": "Error extending post"
+  }
+}

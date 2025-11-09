@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { supabase } from '../../lib/supabase';
 import CardProduct from '../../components/cardProduct/CardProduct';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,12 +10,15 @@ import {
     faSearch,
 } from "@fortawesome/free-solid-svg-icons";
 import { removeDiacritics } from '../../utils/searchUtils';
+import { useCategories } from '../../hooks/useCategories';
+import { useLocations } from '../../hooks/useLocations';
 
 export default function SearchPage() {
+    const { t } = useTranslation(['search', 'common']);
     const [searchParams, setSearchParams] = useSearchParams();
     const [posts, setPosts] = useState([]);
-    const [categories, setCategories] = useState([]);
-    const [locations, setLocations] = useState([]);
+    const { categories } = useCategories();
+    const { locations } = useLocations();
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalCount, setTotalCount] = useState(0);
@@ -29,11 +33,6 @@ export default function SearchPage() {
         priceMax: searchParams.get('priceMax') || '',
         sortBy: searchParams.get('sort') || 'newest'
     });
-
-    useEffect(() => {
-        fetchCategories();
-        fetchLocations();
-    }, []);
 
     useEffect(() => {
         fetchPosts();
@@ -53,29 +52,7 @@ export default function SearchPage() {
         setCurrentPage(1); // Reset to first page when filters change
     }, [searchParams]);
 
-    const fetchCategories = async () => {
-        try {
-            const { data } = await supabase
-                .from('categories')
-                .select('id, name')
-                .order('name');
-            setCategories(data || []);
-        } catch (error) {
-            // Error fetching categories
-        }
-    };
 
-    const fetchLocations = async () => {
-        try {
-            const { data } = await supabase
-                .from('locations')
-                .select('id, name')
-                .order('name');
-            setLocations(data || []);
-        } catch (error) {
-            // Error fetching locations
-        }
-    };
 
     const fetchPosts = async () => {
         try {
@@ -85,8 +62,8 @@ export default function SearchPage() {
                 .from('posts')
                 .select(`
                     *,
-                    categories (name),
-                    locations (name)
+                    categories (name, name_en),
+                    locations (name, name_en)
                 `)
                 .eq('status', 'approved');
 
@@ -193,86 +170,88 @@ export default function SearchPage() {
                 {/* Sidebar Filters */}
                 <div className="search-sidebar">
                     <div className="filter-section">
-                        <div className="filter-title"><FontAwesomeIcon icon={faFilter} /> BỘ LỌC TÌM KIẾM</div>
+                        <div className="filter-title"><FontAwesomeIcon icon={faFilter} /> {t('filters')}</div>
 
                         <div className="filter-group">
-                            <label className="filter-label">Khu vực:</label>
+                            <label className="filter-label">{t('location')}</label>
                             <select
                                 className="filter-select"
                                 value={filters.location}
                                 onChange={(e) => handleFilterChange('location', e.target.value)}
                             >
-                                <option value="all">Tất cả</option>
+                                <option value="all">{t('all')}</option>
                                 {locations.map(location => (
                                     <option key={location.id} value={location.id}>
-                                        {location.name}
+                                        {location.displayName}
                                     </option>
                                 ))}
                             </select>
                         </div>
 
                         <div className="filter-group">
-                            <label className="filter-label">Theo Danh Mục:</label>
+                            <label className="filter-label">{t('category')}</label>
                             <select
                                 className="filter-select"
                                 value={filters.category}
                                 onChange={(e) => handleFilterChange('category', e.target.value)}
                             >
-                                <option value="all">Tất cả</option>
+                                <option value="all">{t('all')}</option>
                                 {categories
                                     .sort((a, b) => {
                                         // "Khác" luôn ở cuối
-                                        if (a.name.toLowerCase().includes('khác')) return 1;
-                                        if (b.name.toLowerCase().includes('khác')) return -1;
+                                        if (a.name?.toLowerCase().includes('khác')) return 1;
+                                        if (b.name?.toLowerCase().includes('khác')) return -1;
                                         // Các danh mục khác sắp xếp theo tên
-                                        return a.name.localeCompare(b.name, 'vi', { sensitivity: 'base' });
+                                        const aName = a.displayName || a.name || '';
+                                        const bName = b.displayName || b.name || '';
+                                        return aName.localeCompare(bName, 'vi', { sensitivity: 'base' });
                                     })
                                     .map(category => (
                                         <option key={category.id} value={category.id}>
-                                            {category.name}
+                                            {category.displayName}
                                         </option>
                                     ))}
                             </select>
                         </div>
 
                         <div className="filter-group">
-                            <label className="filter-label">Giá:</label>
+                            <label className="filter-label">{t('price')}</label>
                             <select
                                 className="filter-select"
                                 value={filters.sortBy}
                                 onChange={(e) => handleFilterChange('sortBy', e.target.value)}
                             >
-                                <option value="price-asc">Giá tăng dần</option>
-                                <option value="price-desc">Giá giảm dần</option>
+                                <option value="price-asc">{t('priceAsc')}</option>
+                                <option value="price-desc">{t('priceDesc')}</option>
                             </select>
-                            <span>Giá từ:</span>
+                            <span>{t('priceFrom')}:</span>
                             <div className="price-range">
                                 <input
                                     type="number"
                                     className="price-input"
-                                    placeholder="Giá từ"
+                                    placeholder={t('priceFrom')}
                                     value={filters.priceMin}
                                     onChange={(e) => handleFilterChange('priceMin', e.target.value)}
                                 />
-                                <span>Đến giá:</span>
+                                <span>{t('priceTo')}:</span>
                                 <input
                                     type="number"
                                     className="price-input"
-                                    placeholder="Giá đến"
+                                    placeholder={t('priceTo')}
                                     value={filters.priceMax}
                                     onChange={(e) => handleFilterChange('priceMax', e.target.value)}
                                 />
                             </div>
                         </div>
                         <div className="filter-group">
-                            <label className="filter-label">Thời gian</label>
+                            <label className="filter-label">{t('time')}</label>
                             <select
                                 className="filter-select"
                                 value={filters.sortBy}
                                 onChange={(e) => handleFilterChange('sortBy', e.target.value)}
                             >
-                                <option value="newest">Mới nhất</option>
-                                <option value="oldest">Cũ nhất</option>
+                                <option value="newest">{t('newest')}</option>
+                                <option value="oldest">{t('oldest')}</option>
                             </select>
                         </div>
 
@@ -283,13 +262,13 @@ export default function SearchPage() {
                 <div className="search-main">
                     <div className="search-header">
                         <div className="search-results-count">
-                            Kết quả tìm kiếm cho từ khóa '<strong>{filters.keyword || 'Tất cả sản phẩm'}</strong>' ({totalCount} kết quả)
+                            {t('resultsFor')} '<strong>{filters.keyword || t('allProducts')}</strong>' ({totalCount} {t('results')})
                         </div>
                     </div>
 
                     {loading ? (
                         <div className="search-loading">
-                            Đang tải kết quả...
+                            {t('loading')}
                         </div>
                     ) : posts.length > 0 ? (
                         <>
@@ -330,9 +309,9 @@ export default function SearchPage() {
                     ) : (
                         <div className="search-empty">
                             <div className="search-empty-icon"><FontAwesomeIcon icon={faSearch} className="search-icon" /></div>
-                            <div className="search-empty-title">Không tìm thấy kết quả</div>
+                            <div className="search-empty-title">{t('noResults')}</div>
                             <div className="search-empty-message">
-                                Thử thay đổi từ khóa tìm kiếm hoặc bộ lọc
+                                {t('noResultsMessage')}
                             </div>
                         </div>
                     )}

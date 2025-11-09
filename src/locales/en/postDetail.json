@@ -1,0 +1,18 @@
+{
+  "status": "Status",
+  "active": "Active",
+  "inactive": "Inactive",
+  "pending": "Pending", 
+  "category": "Category",
+  "location": "Location",
+  "images": "Images",
+  "description": "Description",
+  "contact": "Contact",
+  "details": "Post Details",
+  "processing": "Processing...",
+  "sold": "Sold",
+  "notSoldYet": "Not sold yet",
+  "pendingApproval": "Post is pending approval",
+  "rejected": "Post has been rejected",
+  "soldAlready": "Post has been sold"
+}

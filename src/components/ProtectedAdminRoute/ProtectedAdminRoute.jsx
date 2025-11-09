@@ -1,7 +1,9 @@
 import { useUserRole } from '../../contexts/UserRoleContext'
 import { useUser } from '@clerk/clerk-react'
+import { useTranslation } from 'react-i18next'
 
 export default function ProtectedAdminRoute({ children }) {
+  const { t } = useTranslation(['common']);
   const { user, isLoaded } = useUser()
   const { isAdmin, isLoadingRole } = useUserRole()
 
@@ -15,7 +17,7 @@ export default function ProtectedAdminRoute({ children }) {
         fontSize: '18px',
         color: '#666'
       }}>
-        Đang tải...
+        {t('loading')}
       </div>
     )
   }
@@ -30,7 +32,7 @@ export default function ProtectedAdminRoute({ children }) {
         fontSize: '18px',
         color: '#dc3545'
       }}>
-        Vui lòng đăng nhập để truy cập trang này
+        {t('loginRequired')}
       </div>
     )
   }
@@ -47,9 +49,9 @@ export default function ProtectedAdminRoute({ children }) {
         color: '#dc3545',
         textAlign: 'center'
       }}>
-        <h2>⛔ Truy cập bị từ chối</h2>
-        <p>Bạn không có quyền truy cập trang quản trị này.</p>
-        <p>Chỉ Admin và Super Admin mới có thể truy cập.</p>
+        <h2>⛔ {t('accessDenied')}</h2>
+        <p>{t('noPermission')}</p>
+        <p>{t('adminOnly')}</p>
       </div>
     )
   }

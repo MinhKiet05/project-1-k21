@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { useUser } from '@clerk/clerk-react';
+import { useTranslation } from 'react-i18next';
 import { useMessages } from "../../hooks/useMessages";
 import { useChatContext } from "../../contexts/ChatContext";
 import { toast } from 'react-toastify';
@@ -8,6 +9,7 @@ import "./ChatWindow.css";
 
 const ChatWindow = React.memo(({ user, conversationId, onClose }) => {
   const { user: currentUser } = useUser();
+  const { t, i18n } = useTranslation(['chat', 'common']);
   const { messages, loading, loadingMore, hasMore, sendMessage: sendMessageToSupabase, loadMore } = useMessages(conversationId);
   const { markConversationAsSeen, setOpenConversationId } = useChatContext();
   const [newMsg, setNewMsg] = useState("");
@@ -146,7 +148,7 @@ const ChatWindow = React.memo(({ user, conversationId, onClose }) => {
     // Check if less than 2 seconds since last send
     if (timeSinceLastSend < 2000) {
       const remainingTime = Math.ceil((2000 - timeSinceLastSend) / 1000);
-      toast.warning(`Vui lòng đợi ${remainingTime} giây trước khi gửi tin nhắn tiếp theo`, {
+      toast.warning(t('chat:waitMessage', { seconds: remainingTime }), {
         position: "top-center",
         autoClose: 1500,
         hideProgressBar: true,
@@ -250,7 +252,7 @@ const ChatWindow = React.memo(({ user, conversationId, onClose }) => {
               borderRadius: '50%',
               animation: 'spin 1s linear infinite'
             }}></div>
-            <p style={{ color: '#b0b3b8', margin: 0 }}>Đang tải tin nhắn...</p>
+            <p style={{ color: '#b0b3b8', margin: 0 }}>{t('chat:loadingMessages')}</p>
           </div>
         ) : (
           <>
@@ -270,11 +272,11 @@ const ChatWindow = React.memo(({ user, conversationId, onClose }) => {
                   borderRadius: '50%',
                   animation: 'spin 1s linear infinite'
                 }}></div>
-                <span style={{ color: '#b0b3b8', fontSize: '12px' }}>Đang tải tin nhắn cũ...</span>
+                <span style={{ color: '#b0b3b8', fontSize: '12px' }}>{t('chat:loadingOldMessages')}</span>
               </div>
             )}
             
-            <div className="message-date">Hôm nay</div>
+            <div className="message-date">{t('chat:today')}</div>
 
             {messages.length === 0 ? (
               <div style={{ 
@@ -283,7 +285,7 @@ const ChatWindow = React.memo(({ user, conversationId, onClose }) => {
                 color: '#b0b3b8' 
               }}>
                 <div style={{ fontSize: '32px', marginBottom: '16px' }}>💬</div>
-                <p>Chưa có tin nhắn nào. Hãy bắt đầu cuộc trò chuyện!</p>
+                <p>{t('chat:noMessagesStart')}</p>
               </div>
             ) : (
               messages.map((msg) => {
@@ -297,7 +299,7 @@ const ChatWindow = React.memo(({ user, conversationId, onClose }) => {
                         <CardProductsOfInterest product={productData} />
                       </div>
                       <div className="message-time-center">
-                        {new Date(msg.created_at).toLocaleTimeString('vi-VN', {
+                        {new Date(msg.created_at).toLocaleTimeString(i18n.language === 'vi' ? 'vi-VN' : 'en-US', {
                           hour: '2-digit',
                           minute: '2-digit'
                         })}
@@ -343,7 +345,7 @@ const ChatWindow = React.memo(({ user, conversationId, onClose }) => {
 
                       <div className="message-meta">
                         <span className="message-time">
-                          {new Date(msg.created_at).toLocaleTimeString('vi-VN', {
+                          {new Date(msg.created_at).toLocaleTimeString(i18n.language === 'vi' ? 'vi-VN' : 'en-US', {
                             hour: '2-digit',
                             minute: '2-digit'
                           })}
@@ -385,7 +387,7 @@ const ChatWindow = React.memo(({ user, conversationId, onClose }) => {
             type="text"
             value={newMsg}
             onChange={(e) => setNewMsg(e.target.value)}
-            placeholder="Aa"
+            placeholder={t('chat:messagePlaceholder')}
             onKeyDown={(e) => e.key === "Enter" && sendMessage()}
           />
         </div>

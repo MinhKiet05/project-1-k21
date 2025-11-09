@@ -1,0 +1,12 @@
+{
+  "home": "Trang chủ",
+  "post": "Đăng bài",
+  "management": "Quản lý",
+  "about": "Về chúng tôi",
+  "login": "Đăng nhập",
+  "search": "Tìm kiếm...",
+  "loginRequired": {
+    "post": "Bạn cần đăng nhập để đăng bài",
+    "management": "Bạn cần đăng nhập để quản lý bài đăng"
+  }
+}

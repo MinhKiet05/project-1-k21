@@ -1,0 +1,12 @@
+{
+  "home": "Home",
+  "post": "Post",
+  "management": "Management", 
+  "about": "About Us",
+  "login": "Login",
+  "search": "Search...",
+  "loginRequired": {
+    "post": "You need to login to create a post",
+    "management": "You need to login to manage your posts"
+  }
+}

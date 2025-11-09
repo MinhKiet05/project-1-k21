@@ -1,0 +1,15 @@
+{
+  "title": "Notifications",
+  "markAllRead": "Mark all as read",
+  "loading": "Loading notifications...",
+  "noNotifications": "No notifications",
+  "postTitle": "Post title",
+  "justNow": "Just now",
+  "minutes": "minutes",
+  "hours": "hours", 
+  "days": "days",
+  "postApproved": "Post has been approved",
+  "postRejected": "Post was not approved", 
+  "postExpired": "Post has expired",
+  "notification": "Notification"
+}

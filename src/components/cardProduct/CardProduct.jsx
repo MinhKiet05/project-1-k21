@@ -1,10 +1,12 @@
 import React, { memo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
 import LazyImage from "../lazyImage/LazyImage.jsx";
 import "./CardProduct.css";
 
 const CardProduct = memo(({ product }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation(['common']);
 
   const handleCardClick = useCallback(() => {
     if (product?.id) {
@@ -17,18 +19,18 @@ const CardProduct = memo(({ product }) => {
       <div className="card" onClick={handleCardClick} style={{ cursor: 'pointer' }}>
         <img
           src={product?.image || "#"}
-          alt={product?.name || "Sản phẩm"}
+          alt={product?.name || t('product')}
           className="card-img"
         />
         <div className="card-content">
-          <p className="card-title">{product?.name || "Sách quốc phòng"}</p>
+          <p className="card-title">{product?.name || t('defaultProductName')}</p>
 
           <div className="price-section">
-            <p className="price-label">Giá</p>
+            <p className="price-label">{t('price')}</p>
             <div className="card-bottom">
               <p className="card-price">
-                <span>{product?.price ? product.price.toLocaleString() : "15,000"}</span>
-                <span>VND</span>
+                <span>{product?.price ? product.price.toLocaleString() : "0,000"}</span>
+                <span>{t('currency')}</span>
               </p>
             </div>
           </div>

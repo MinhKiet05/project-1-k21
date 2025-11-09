@@ -62,6 +62,7 @@
     border-radius: 4px;
     font-size: 14px;
     background: white;
+    color: #333!important;
     
 }
 .filter-select, .filter-group  input{
@@ -70,6 +71,32 @@
 .filter-select:focus {
     outline: none;
     border-color: #e67e22;
+}
+
+.filter-select option {
+    color: #333 !important;
+    background: white !important;
+}
+
+/* Ensure all select elements have proper text color */
+.search-sidebar select,
+.search-sidebar input {
+    color: #333 !important;
+}
+
+/* Force text color for all select and option elements */
+.search-page select {
+    color: #000 !important;
+}
+
+.search-page select option {
+    color: #000 !important;
+    background-color: white !important;
+}
+
+.search-page .filter-select {
+    color: #000 !important;
+    background-color: white !important;
 }
 
 .price-range {
@@ -85,6 +112,8 @@
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 14px;
+    color: #333;
+    background: white;
 }
 
 .price-separator {

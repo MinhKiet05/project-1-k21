@@ -16,7 +16,7 @@
   align-items: center;
   justify-content: space-between; /* 4 nhóm sẽ tự động căn cách đều với space-between */
   flex-wrap: nowrap; /* Giữ trên cùng 1 dòng */
-  padding: 4px 60px;
+  padding: 4px 20px;
   box-sizing: border-box;
   gap: 20px; /* Thêm gap để đảm bảo spacing */
 }
@@ -41,7 +41,7 @@
 }/* ==== NHÓM 2: NAV ==== */
 .nav {
   /* Cho nav co giãn một chút nếu cần */
-  flex-grow: 1;
+  flex-grow: 0.6;
   display: flex;
   justify-content: center;
 }
@@ -88,7 +88,7 @@
   align-items: center;
   background-color: #eccfb2;
   border-radius: 10px;
-  width:240px;
+  width:280px;
   max-width: 320px; /* Giới hạn chiều rộng tối đa */
   min-width: 180px;
   box-sizing: border-box;
@@ -257,7 +257,14 @@
 .icon-btn-user:hover {
   color: #fff;
 }
-
+header select{
+  border-radius: 8px;
+  padding: 6px 8px;
+  border: none;
+  outline: none;
+  background: #eccfb2;
+  font-size: clamp(14px, 1.1vw, 15px);
+}
 /* ==== RESPONSIVE ==== */
 @media (max-width: 768px) {
   .header-container {

@@ -1,16 +1,19 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { useUser } from '@clerk/clerk-react';
 import { usePosts } from "../../hooks/usePosts";
 import { useCategories } from "../../hooks/useCategories";
 import { useLocations } from "../../hooks/useLocations";
 import { useUpdatePostStatus } from "../../hooks/useUpdatePostStatus";
+import { getDisplayName } from "../../utils/languageUtils";
 import PostDetailModal from "../../components/PostDetailModal/PostDetailModal";
 import "./Management.css";
 
 export default function Manager() {
+  const { t, i18n } = useTranslation(['management', 'common']);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [categoryFilter, setCategoryFilter] = useState('');
@@ -57,11 +60,11 @@ export default function Manager() {
   const handleMarkAsSold = async (postId) => {
     const result = await markAsSold(postId);
     if (result.success) {
-      toast.success('Đã đánh dấu bài đăng là đã bán!');
+      toast.success(t('messages.markAsSoldSuccess'));
       handleCloseModal();
       refetch(); // Refresh danh sách
     } else {
-      toast.error('Lỗi khi cập nhật trạng thái: ' + result.error);
+      toast.error(t('messages.updateStatusError') + ': ' + result.error);
     }
   };
 
@@ -69,11 +72,11 @@ export default function Manager() {
   const handleExtendPost = async (postId) => {
     const result = await extendPost(postId);
     if (result.success) {
-      toast.success('Đã gia hạn bài đăng thêm 7 ngày!');
+      toast.success(t('messages.extendSuccess'));
       handleCloseModal();
       refetch(); // Refresh danh sách
     } else {
-      toast.error('Lỗi khi gia hạn bài đăng: ' + result.error);
+      toast.error(t('messages.extendError') + ': ' + result.error);
     }
   };
 
@@ -83,7 +86,7 @@ export default function Manager() {
       <div className="manager-container">
         <h2 className="manager-title">Quản lý các bài đăng</h2>
         <div style={{ textAlign: "center", padding: "50px", color: "#666" }}>
-          Vui lòng đăng nhập để quản lý bài đăng của bạn.
+          {t('pleaseLogin')}
         </div>
       </div>
     );
@@ -92,7 +95,7 @@ export default function Manager() {
   return (
   <div className="manager"> 
     <div className="manager-container">
-      <h2 className="manager-title">Quản lý bài đăng</h2>
+      <h2 className="manager-title">{t('title')}</h2>
 
       {/* Thanh tìm kiếm + bộ lọc */}
        <div className="search-section">
@@ -102,7 +105,7 @@ export default function Manager() {
           </div>
           <input
             type="text"
-            placeholder="Tìm kiếm theo tên người đăng hoặc tên sản phẩm"
+            placeholder={t('search')}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -113,20 +116,20 @@ export default function Manager() {
             value={sortOrder}
             onChange={(e) => setSortOrder(e.target.value)}
           >
-            <option value="newest">Mới nhất</option>
-            <option value="oldest">Cũ nhất</option>
+            <option value="newest">{t('filters.newest')}</option>
+            <option value="oldest">{t('filters.oldest')}</option>
           </select>
 
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
           >
-            <option value="all">Tất cả trạng thái</option>
-            <option value="pending">Đang chờ</option>
-            <option value="approved">Đã duyệt</option>
-            <option value="rejected">Không duyệt</option>
-            <option value="expired">Hết hạn</option>
-            <option value="sold">Đã bán</option>
+            <option value="all">{t('filters.allStatus')}</option>
+            <option value="pending">{t('status.pending')}</option>
+            <option value="approved">{t('status.approved')}</option>
+            <option value="rejected">{t('status.rejected')}</option>
+            <option value="expired">{t('status.expired')}</option>
+            <option value="sold">{t('status.sold')}</option>
           </select>
 
           <select
@@ -134,18 +137,18 @@ export default function Manager() {
             onChange={(e) => setCategoryFilter(e.target.value)}
             disabled={categoriesLoading}
           >
-            <option value="">Tất cả danh mục</option>
+            <option value="">{t('filters.allCategories')}</option>
             {categories
               .sort((a, b) => {
                 // "Khác" luôn ở cuối
                 if (a.name.toLowerCase().includes('khác')) return 1;
                 if (b.name.toLowerCase().includes('khác')) return -1;
                 // Các danh mục khác sắp xếp theo tên
-                return a.name.localeCompare(b.name, 'vi', { sensitivity: 'base' });
+                return a.displayName.localeCompare(b.displayName, 'vi', { sensitivity: 'base' });
               })
               .map((c) => (
                 <option key={c.id} value={c.id}>
-                  {c.name}
+                  {c.displayName}
                 </option>
               ))}
           </select>
@@ -155,20 +158,20 @@ export default function Manager() {
             onChange={(e) => setLocationFilter(e.target.value)}
             disabled={locationsLoading}
           >
-            <option value="">Tất cả khu vực</option>
+            <option value="">{t('filters.allLocations')}</option>
             {locations.map((l) => (
               <option key={l.id} value={l.id}>
-                {l.name}
+                {l.displayName}
               </option>
             ))}
           </select>
         </div>
 
         <div className="manager-search-result">
-          {postsLoading ? "Đang tải..." : `Tìm thấy ${posts.length} bài đăng`}
+          {postsLoading ? t('common.loading') : t('results.found', { count: posts.length })}
           {postsError && (
             <div className="manager-field-error">
-              Lỗi tải bài đăng: {postsError}
+              {t('errors.loadPosts')}: {postsError}
             </div>
           )}
         </div>
@@ -178,45 +181,45 @@ export default function Manager() {
       <table className="manager-table">
         <thead>
           <tr>
-            <th>Tên sản phẩm</th>
-            <th>Hình ảnh</th>
-            <th>Giá</th>
-            <th>Danh mục</th>
-            <th>Khu vực</th>
-            <th>Trạng thái</th>
-            <th>Thời gian tạo</th>
-            <th>Thao tác</th>
+            <th>{t('table.productName')}</th>
+            <th>{t('table.image')}</th>
+            <th>{t('table.price')}</th>
+            <th>{t('table.category')}</th>
+            <th>{t('table.location')}</th>
+            <th>{t('table.status')}</th>
+            <th>{t('table.createdAt')}</th>
+            <th>{t('table.actions')}</th>
           </tr>
         </thead>
         <tbody>
           {postsLoading ? (
             <tr>
               <td colSpan="8" style={{textAlign: 'center', padding: '20px'}}>
-                Đang tải bài đăng...
+                {t('loading.posts')}
               </td>
             </tr>
           ) : postsError ? (
             <tr>
               <td colSpan="8" style={{textAlign: 'center', padding: '20px', color: '#e74c3c'}}>
-                Lỗi: {postsError}
+                {t('common.error')}: {postsError}
               </td>
             </tr>
           ) : posts.length === 0 ? (
             <tr>
               <td colSpan="8" style={{textAlign: 'center', padding: '20px', color: '#666'}}>
-                Chưa có bài đăng nào
+                {t('noPosts')}
               </td>
             </tr>
           ) : posts.map((post) => {
-            const title = post.title || 'Không có tiêu đề';
+            const title = post.title || t('common.noTitle');
             const imageUrl = (post.image_urls && post.image_urls[0]) || 
                            (post.imageUrls && post.imageUrls[0]) || 
                            post.image_url || 
                            post.images?.[0] || 
                            'https://via.placeholder.com/60';
-            const price = post.price ? (typeof post.price === 'number' ? post.price.toLocaleString('vi-VN') + ' VNĐ' : post.price) : 'Chưa có giá';
-            const categoryName = post.category?.name || '-';
-            const locationName = post.location?.name || '-';
+            const price = post.price ? (typeof post.price === 'number' ? post.price.toLocaleString('vi-VN') + ' VNĐ' : post.price) : t('common.noPrice');
+            const categoryName = getDisplayName(post.category, i18n.language) || '-';
+            const locationName = getDisplayName(post.location, i18n.language) || '-';
             const createdAt = post.created_at ? formatDate(post.created_at) : '-';
             
             // Determine status display
@@ -225,27 +228,27 @@ export default function Manager() {
             
             switch(post.status) {
               case 'pending':
-                statusDisplay = 'Chưa duyệt';
+                statusDisplay = t('status.pending');
                 statusClass = 'status-pending';
                 break;
               case 'approved':
-                statusDisplay = 'Đã duyệt';
+                statusDisplay = t('status.approved');
                 statusClass = 'status-approved';
                 break;
               case 'rejected':
-                statusDisplay = 'Không được duyệt';
+                statusDisplay = t('status.rejected');
                 statusClass = 'status-rejected';
                 break;
               case 'expired':
-                statusDisplay = 'Hết hạn';
+                statusDisplay = t('status.expired');
                 statusClass = 'status-expired';
                 break;
               case 'sold':
-                statusDisplay = 'Đã bán';
+                statusDisplay = t('status.sold');
                 statusClass = 'status-sold';
                 break;
               default:
-                statusDisplay = 'Không xác định';
+                statusDisplay = t('status.unknown');
                 statusClass = 'status-unknown';
             }
 
@@ -271,7 +274,7 @@ export default function Manager() {
                     className="action-btn-view-detail"
                     onClick={() => handleViewDetail(post)}
                   >
-                    Xem chi tiết
+                    {t('actions.viewDetail')}
                   </button>
                 </td>
               </tr>

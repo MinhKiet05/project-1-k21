@@ -2,6 +2,7 @@ import "./Header.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useRef, useState, useEffect } from "react";
+import { useTranslation } from 'react-i18next';
 import logo from "../../assets/logo.webp";
 import {
   faBell,
@@ -31,6 +32,7 @@ import { supabase } from '../../lib/supabase';
 import { useAuthCheck } from '../../hooks/useAuthCheck';
 
 export default function Header() {
+  const { t, i18n } = useTranslation(['header', 'common']);
   const location = useLocation();
   const navigate = useNavigate();
   const { user } = useUser();
@@ -120,6 +122,11 @@ export default function Header() {
     checkAuthAndExecute(() => navigate(path), message);
   };
 
+  // Handle language change
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+  };
+
   // Fetch unread notifications count
   useEffect(() => {
     if (user?.id) {
@@ -158,7 +165,7 @@ export default function Header() {
           <ul>
             <li>
               <Link to="/home" className={isActive("/home") ? "active" : ""}>
-                Trang chủ
+                {t('home')}
               </Link>
             </li>
             <li>
@@ -167,10 +174,10 @@ export default function Header() {
                 className={isActive("/post") ? "active" : ""}
                 onClick={(e) => {
                   e.preventDefault();
-                  handleProtectedNavigation('/post', 'Bạn cần đăng nhập để đăng bài');
+                  handleProtectedNavigation('/post', t('loginRequired.post'));
                 }}
               >
-                Đăng bài
+                {t('post')}
               </a>
             </li>
             <li>
@@ -179,15 +186,15 @@ export default function Header() {
                 className={isActive("/management") ? "active" : ""}
                 onClick={(e) => {
                   e.preventDefault();
-                  handleProtectedNavigation('/management', 'Bạn cần đăng nhập để quản lý bài đăng');
+                  handleProtectedNavigation('/management', t('loginRequired.management'));
                 }}
               >
-                Quản lý
+                {t('management')}
               </a>
             </li>
             <li>
               <Link to="/about" className={isActive("/about") ? "active" : ""}>
-                Về chúng tôi
+                {t('about')}
               </Link>
             </li>
           </ul>
@@ -204,7 +211,7 @@ export default function Header() {
           <input
             ref={searchInputRef}
             type="text"
-            placeholder="Tìm kiếm..."
+            placeholder={t('search')}
             onKeyPress={(e) => {
               if (e.key === "Enter") {
                 handleSearch();
@@ -223,7 +230,7 @@ export default function Header() {
                   icon={faRightToBracket}
                   className="login-icon"
                 />
-                Đăng nhập
+                {t('login')}
               </div>
             </SignInButton>
           </SignedOut>
@@ -258,14 +265,26 @@ export default function Header() {
 
             {/* User Button */}
             <div className="header-user-display">
+              
               <UserButton afterSignOutUrl="/" />
             </div>
           </SignedIn>
+          
         </div>
-        <select name="language" id="language-select">
-          <option value="vi">Tiếng Việt</option>
-          <option value="en">English</option>
-        </select>
+
+        {/* ==== NHÓM 5: LANGUAGE ==== */}
+        <div>
+          <select 
+            name="language" 
+            id="language-select"
+            value={i18n.language}
+            onChange={(e) => changeLanguage(e.target.value)}
+          >
+            <option value="vi">Tiếng Việt</option>
+            <option value="en">English</option>
+          </select>
+        </div>
+        
       </div>
 
       {/* ==== HIỂN THỊ POPUP CHAT ==== */}

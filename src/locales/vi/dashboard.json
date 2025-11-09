@@ -1,0 +1,67 @@
+{
+  "sidebar": {
+    "users": "Người dùng",
+    "posts": "Bài đăng"
+  },
+  "posts": {
+    "title": "Quản lý bài đăng",
+    "searchPlaceholder": "Tìm kiếm theo tên người đăng hoặc tên sản phẩm",
+    "allStatuses": "Tất cả trạng thái",
+    "allCategories": "Tất cả danh mục",
+    "allLocations": "Tất cả khu vực",
+    "newest": "Mới nhất",
+    "oldest": "Cũ nhất", 
+    "found": "Tìm thấy",
+    "posts": "bài đăng",
+    "table": {
+      "userName": "Tên người dùng",
+      "productName": "Tên sản phẩm",
+      "image": "Hình ảnh",
+      "price": "Giá",
+      "category": "Danh mục",
+      "location": "Khu vực",
+      "status": "Trạng thái",
+      "createdTime": "Thời gian tạo",
+      "actions": "Thao tác"
+    },
+    "viewDetail": "Xem chi tiết",
+    "noPermission": "Không có quyền duyệt",
+    "status": {
+      "pending": "Chưa duyệt",
+      "approved": "Đã duyệt", 
+      "rejected": "Không được duyệt",
+      "expired": "Hết hạn",
+      "sold": "Đã bán"
+    }
+  },
+  "users": {
+    "title": "Quản lý người dùng",
+    "searchPlaceholder": "Tìm kiếm theo tên hoặc email...",
+    "found": "Tìm thấy",
+    "users": "người dùng",
+    "displayName": "Tên hiển thị",
+    "role": "Vai trò", 
+    "createdDate": "Ngày tạo",
+    "actions": "Thao tác",
+    "noName": "Chưa có tên",
+    "cannotEditSuperAdmin": "Không thể sửa Super Admin",
+    "noPermission": "Không có quyền",
+    "noUsersFound": "Không tìm thấy người dùng nào",
+    "superAdmin": "Super Admin",
+    "admin": "Admin", 
+    "userRole": "User",
+    "editRole": "Chỉnh sửa vai trò",
+    "newRole": "Vai trò mới",
+    "roleNotes": "* Chỉ Super Admin mới có thể cấp quyền Admin\\n* Không thể chỉnh sửa quyền của Super Admin khác",
+    "roleUpdateSuccess": "Cập nhật vai trò thành công!",
+    "roleUpdateError": "Lỗi khi cập nhật role",
+    "saving": "Đang lưu...",
+    "saveChanges": "Lưu thay đổi"
+  },
+  "categories": {
+    "title": "Quản lý danh mục"
+  },
+  "locations": {
+    "title": "Quản lý khu vực"
+  }
+}

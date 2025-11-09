@@ -1,0 +1,6 @@
+{
+  "title": "Login Required",
+  "defaultMessage": "You need to login to perform this action",
+  "login": "Login",
+  "cancel": "Cancel"
+}

@@ -3,8 +3,10 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment } from '@fortawesome/free-solid-svg-icons';
 import { useUser } from '@clerk/clerk-react';
+import { useTranslation } from 'react-i18next';
 import { supabase } from '../../lib/supabase';
 import { useChatContext } from '../../contexts/ChatContext';
+import { getDisplayName } from '../../utils/languageUtils';
 import { toast } from 'react-toastify';
 import './DetailProduct.css';
 import CardProduct from '../../components/cardProduct/CardProduct';
@@ -16,6 +18,7 @@ export default function DetailProduct() {
     const { id } = useParams();
     const navigate = useNavigate();
     const { user } = useUser();
+    const { i18n } = useTranslation();
     const { createOrFindConversation, openDirectChat } = useChatContext();
     const [post, setPost] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -47,8 +50,8 @@ export default function DetailProduct() {
                 .from('posts')
                 .select(`
                     *,
-                    categories (name),
-                    locations!location_id (name),
+                    categories (name, name_en),
+                    locations!location_id (name, name_en),
                     profiles!author_id (*)
                 `)
                 .eq('id', id)
@@ -76,12 +79,12 @@ export default function DetailProduct() {
         try {
             setRecommendedLoading(true);
             
-            const { data, error } = await supabase
+            const { data: relatedData } = await supabase
                 .from('posts')
                 .select(`
                     *,
-                    categories (name),
-                    locations!location_id (name),
+                    categories (name, name_en),
+                    locations!location_id (name, name_en),
                     profiles!author_id (full_name, avatar_url)
                 `)
                 .eq('category_id', post.category_id)
@@ -111,8 +114,8 @@ export default function DetailProduct() {
             name: post.title,
             price: post.price,
             image: post.image_urls?.[0] || post.images?.[0] || post.image_url || logoImg,
-            category: post.categories?.name,
-            location: post.locations?.name,
+            category: getDisplayName(post.categories, i18n.language),
+            location: getDisplayName(post.locations, i18n.language),
             author: post.profiles?.full_name
         };
     };
@@ -244,7 +247,7 @@ export default function DetailProduct() {
         currentImage = post.image_url;
     }
     
-    const categoryName = post.categories?.name || 'Chưa phân loại';
+    const categoryName = getDisplayName(post.categories, i18n.language) || 'Chưa phân loại';
 
     return (
         <div className="detail-container">
@@ -313,7 +316,7 @@ export default function DetailProduct() {
                         </div>
 
                         <div className="detail-category-label">Danh mục: {categoryName}</div>
-                        <div className="detail-category">Khu vực: {post.locations?.name || 'Chưa có thông tin'}</div>
+                        <div className="detail-category">Khu vực: {getDisplayName(post.locations, i18n.language) || 'Chưa có thông tin'}</div>
 
                         <div className="detail-price">
                             {post.price ? post.price.toLocaleString() : '0'} VND

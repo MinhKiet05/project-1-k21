@@ -3,8 +3,10 @@ import { useState } from 'react'
 import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faUsers, faFileAlt } from "@fortawesome/free-solid-svg-icons"
+import { useTranslation } from 'react-i18next'
 
 export default function DashboardLayout() {
+  const { t } = useTranslation(['dashboard', 'common']);
   const navigate = useNavigate()
   const location = useLocation()
   
@@ -25,14 +27,14 @@ export default function DashboardLayout() {
             onClick={() => navigate('/dashboard/users')}
           >
             <FontAwesomeIcon icon={faUsers} />
-            <span>Người dùng</span>
+            <span>{t('sidebar.users')}</span>
           </div>
           <div 
             className={`menu-item ${isPostsActive ? 'active' : ''}`}
             onClick={() => navigate('/dashboard/posts')}
           >
             <FontAwesomeIcon icon={faFileAlt} />
-            <span>Bài đăng</span>
+            <span>{t('sidebar.posts')}</span>
           </div>
         </div>
       </div>

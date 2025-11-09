@@ -2,6 +2,8 @@ import './PostDetailModal.css'
 import { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
+import { useTranslation } from 'react-i18next'
+import { getDisplayName } from '../../utils/languageUtils'
 
 export default function PostDetailModal({ 
   post, 
@@ -14,10 +16,12 @@ export default function PostDetailModal({
   isUpdating,
   showUserActions = false 
 }) {
+  const { i18n, t } = useTranslation(['postDetail', 'common'])
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0)
+  
   if (!isOpen || !post) return null
 
   const imageUrls = post.image_urls || post.imageUrls || []
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0)
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('vi-VN', {
@@ -31,17 +35,21 @@ export default function PostDetailModal({
 
   const formatPrice = (price) => {
     if (!price) return '-'
-    return typeof price === 'number' ? price.toLocaleString('vi-VN') + ' VNĐ' : price
+    if (typeof price === 'number') {
+      const formattedNumber = price.toLocaleString('vi-VN')
+      return i18n.language === 'vi' ? `${formattedNumber} VNĐ` : `${formattedNumber} VND`
+    }
+    return price
   }
 
   const getStatusBadge = (status) => {
     switch(status) {
-      case 'pending': return { text: 'Đang chờ duyệt', class: 'status-pending' }
-      case 'approved': return { text: 'Đã duyệt', class: 'status-approved' }  
-      case 'rejected': return { text: 'Không duyệt', class: 'status-rejected' }
-      case 'expired': return { text: 'Hết hạn', class: 'status-expired' }
-      case 'sold': return { text: 'Đã bán', class: 'status-sold' }
-      default: return { text: 'Không xác định', class: 'status-unknown' }
+      case 'pending': return { text: t('posts:pending'), class: 'status-pending' }
+      case 'approved': return { text: t('posts:approved'), class: 'status-approved' }  
+      case 'rejected': return { text: t('posts:rejected'), class: 'status-rejected' }
+      case 'expired': return { text: t('posts:expired'), class: 'status-expired' }
+      case 'sold': return { text: t('posts:sold'), class: 'status-sold' }
+      default: return { text: t('posts:unknown'), class: 'status-unknown' }
     }
   }
 
@@ -58,7 +66,7 @@ export default function PostDetailModal({
       <div className="post-detail-modal" onClick={(e) => e.stopPropagation()}>
         {/* Header */}
         <div className="modal-header">
-          <h2>Chi tiết bài đăng</h2>
+          <h2>{t('postDetail:details')}</h2>
           <button className="close-btn" onClick={onClose}>
             <FontAwesomeIcon icon={faTimes} />
           </button>
@@ -74,7 +82,7 @@ export default function PostDetailModal({
               {/* All Images Gallery */}
               {imageUrls.length > 0 && (
                 <div className="all-images-gallery">
-                  <div className="gallery-title">Tất cả hình ảnh ({imageUrls.length})</div>
+                  <div className="gallery-title">{t('postDetail:images')} ({imageUrls.length})</div>
                   <div className="gallery-grid">
                     {imageUrls.map((url, index) => (
                       <img 
@@ -93,56 +101,56 @@ export default function PostDetailModal({
             {/* Details */}
             <div className="post-details">
               <div className="detail-row">
-                <label>Tiêu đề:</label>
+                <label>{t('common:title')}:</label>
                 <span>{post.title}</span>
               </div>
               
               <div className="detail-row">
-                <label>Người đăng:</label>
+                <label>{t('common:author')}:</label>
                 <div className="author-info">
                   <img 
                     src={post.author?.avatar_url || 'https://via.placeholder.com/40'} 
                     alt="Author" 
                     className="author-avatar"
                   />
-                  <span>{post.author?.full_name || 'Người dùng'}</span>
+                  <span>{post.author?.full_name || (i18n.language === 'vi' ? 'Người dùng' : 'User')}</span>
                 </div>
               </div>
 
               <div className="detail-row">
-                <label>Giá:</label>
+                <label>{t('common:price')}:</label>
                 <span className="price">{formatPrice(post.price)}</span>
               </div>
 
               <div className="detail-row">
-                <label>Danh mục:</label>
-                <span>{post.category?.name || '-'}</span>
+                <label>{t('postDetail:category')}</label>
+                <span>{getDisplayName(post.category, i18n.language) || '-'}</span>
               </div>
 
               <div className="detail-row">
-                <label>Khu vực:</label>
-                <span>{post.location?.name || '-'}</span>
+                <label>{t('postDetail:location')}</label>
+                <span>{getDisplayName(post.location, i18n.language) || '-'}</span>
               </div>
 
               <div className="detail-row">
-                <label>Trạng thái:</label>
+                <label>{t('postDetail:status')}</label>
                 <span className={`status-badge ${statusInfo.class}`}>
                   {statusInfo.text}
                 </span>
               </div>
 
               <div className="detail-row">
-                <label>Ngày đăng:</label>
+                <label>{t('posts:createdAt')}</label>
                 <span>{formatDate(post.created_at)}</span>
               </div>
 
               <div className="detail-row">
-                <label>Ngày hết hạn:</label>
+                <label>{t('posts:expiresAt')}</label>
                 <span>{formatDate(post.expires_at)}</span>
               </div>
 
               <div className="detail-row description-row">
-                <label>Mô tả:</label>
+                <label>{t('postDetail:description')}</label>
                 <div className="description">{post.description}</div>
               </div>
             </div>
@@ -160,7 +168,7 @@ export default function PostDetailModal({
                   onClick={() => onMarkAsSold(post.id)}
                   disabled={isUpdating}
                 >
-                  {isUpdating ? 'Đang xử lý...' : 'Đã bán'}
+                  {isUpdating ? t('postDetail:processing') : t('postDetail:sold')}
                 </button>
               )}
               {post.status === 'expired' && (
@@ -169,14 +177,14 @@ export default function PostDetailModal({
                   onClick={() => onExtendPost(post.id)}
                   disabled={isUpdating}
                 >
-                  {isUpdating ? 'Đang xử lý...' : 'Chưa bán được'}
+                  {isUpdating ? t('postDetail:processing') : t('postDetail:notSoldYet')}
                 </button>
               )}
               {(post.status === 'pending' || post.status === 'rejected' || post.status === 'sold') && (
                 <div className="no-actions">
-                  {post.status === 'pending' && 'Bài đăng đang chờ duyệt'}
-                  {post.status === 'rejected' && 'Bài đăng không được duyệt'}
-                  {post.status === 'sold' && 'Bài đăng đã bán'}
+                  {post.status === 'pending' && t('postDetail:pendingApproval')}
+                  {post.status === 'rejected' && t('postDetail:rejected')}
+                  {post.status === 'sold' && t('postDetail:soldAlready')}
                 </div>
               )}
             </>
@@ -188,14 +196,14 @@ export default function PostDetailModal({
                 onClick={() => onReject(post.id)}
                 disabled={isUpdating || post.status === 'rejected'}
               >
-                {isUpdating ? 'Đang xử lý...' : 'Không duyệt'}
+                {isUpdating ? t('postDetail:processing') : t('posts:reject')}
               </button>
               <button 
                 className="approve-btn"
                 onClick={() => onApprove(post.id)}
                 disabled={isUpdating || post.status === 'approved'}
               >
-                {isUpdating ? 'Đang xử lý...' : 'Duyệt'}
+                {isUpdating ? t('postDetail:processing') : t('posts:approve')}
               </button>
             </>
           )}

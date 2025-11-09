@@ -1,7 +1,10 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import './CardProductsOfInterest.css';
 
 const CardProductsOfInterest = ({ product }) => {
+    const { t, i18n } = useTranslation(['cardProductsOfInterest', 'common']);
+    
     if (!product) return null;
 
     // Get the first image from the product
@@ -23,18 +26,19 @@ const CardProductsOfInterest = ({ product }) => {
 
     // Format price
     const formatPrice = (price) => {
-        if (!price) return '0đ';
-        return new Intl.NumberFormat('vi-VN').format(price) + 'đ';
+        if (!price) return i18n.language === 'vi' ? '0đ' : '$0';
+        const formattedNumber = new Intl.NumberFormat('vi-VN').format(price);
+        return i18n.language === 'vi' ? `${formattedNumber}đ` : `$${formattedNumber}`;
     };
 
     const productImage = getProductImage(product);
-    const productName = product.title || product.name || 'Không có tên';
+    const productName = product.title || product.name || t('cardProductsOfInterest:noName');
     const productPrice = formatPrice(product.price);
 
     return (
         <div className="card-products-of-interest">
             <div className="interest-card-header">
-                <span className="interest-inquiry-text">Đang hỏi về sản phẩm này</span>
+                <span className="interest-inquiry-text">{t('cardProductsOfInterest:inquiringAbout')}</span>
             </div>
             
             <div className="interest-card-content">

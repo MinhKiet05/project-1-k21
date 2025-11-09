@@ -1,0 +1,13 @@
+{
+  "loading": "Loading product details...",
+  "notFound": "Product not found",
+  "backToSearch": "Back to search",
+  "category": "Category:",
+  "location": "Location:",
+  "author": "Seller:",
+  "postedAt": "Posted at:",
+  "contact": "Contact",
+  "loginToContact": "Login to contact",
+  "similarProducts": "Similar Category",
+  "relatedProducts": "Related Products"
+}

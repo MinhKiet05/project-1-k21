@@ -5,8 +5,10 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons"
 import { useUsers } from '../../hooks/useUsers'
 import EditRoleModal from '../../components/EditRoleModal/EditRoleModal'
 import { useUserRole } from '../../contexts/UserRoleContext'
+import { useTranslation } from 'react-i18next'
 
 export default function DashboardUsers() {
+  const { t } = useTranslation(['dashboard', 'common']);
   const [searchTerm, setSearchTerm] = useState('')
   const [editingUser, setEditingUser] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -39,12 +41,12 @@ export default function DashboardUsers() {
 
   // Format role display (roles là array)
   const getRoleDisplay = (roles) => {
-    if (!Array.isArray(roles)) return 'User'
+    if (!Array.isArray(roles)) return t('users.userRole')
     
-    if (roles.includes('super_admin')) return 'Super Admin'
-    if (roles.includes('admin')) return 'Admin'
-    if (roles.includes('user')) return 'User'
-    return 'User'
+    if (roles.includes('super_admin')) return t('users.superAdmin')
+    if (roles.includes('admin')) return t('users.admin')
+    if (roles.includes('user')) return t('users.userRole')
+    return t('users.userRole')
   }
 
   // Get role badge class (roles là array)
@@ -64,7 +66,7 @@ export default function DashboardUsers() {
 
   return (
     <div className="users-management">
-      <h2 className="page-title">Quản lý người dùng</h2>
+      <h2 className="page-title">{t('users.title')}</h2>
       
       {/* Search */}
       <div className="search-section">
@@ -72,27 +74,27 @@ export default function DashboardUsers() {
           <FontAwesomeIcon icon={faSearch} className="search-icon" />
           <input 
             type="text" 
-            placeholder="Tìm kiếm theo tên hoặc email..." 
+            placeholder={t('users.searchPlaceholder')} 
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
         <div className="search-result">
-          Tìm thấy {filteredUsers.length} người dùng
+          {t('users.found')} {filteredUsers.length} {t('users.users')}
         </div>
       </div>
 
       {/* Loading State */}
       {loading && (
         <div className="loading-state">
-          <p>Đang tải dữ liệu...</p>
+          <p>{t('common:loading')}</p>
         </div>
       )}
 
       {/* Error State */}
       {error && (
         <div className="error-state">
-          <p>Lỗi: {error}</p>
+          <p>{t('common:error')}: {error}</p>
         </div>
       )}
 
@@ -102,11 +104,11 @@ export default function DashboardUsers() {
           <table className="user-table">
             <thead>
               <tr>
-                <th>Email</th>
-                <th>Tên hiển thị</th>
-                <th>Vai trò</th>
-                <th>Ngày tạo</th>
-                <th>Thao tác</th>
+                <th>{t('common:email')}</th>
+                <th>{t('users.displayName')}</th>
+                <th>{t('users.role')}</th>
+                <th>{t('users.createdDate')}</th>
+                <th>{t('users.actions')}</th>
               </tr>
             </thead>
             <tbody>
@@ -123,7 +125,7 @@ export default function DashboardUsers() {
                           e.target.src = 'https://via.placeholder.com/40'
                         }}
                       />
-                      {user.full_name || 'Chưa có tên'}
+                      {user.full_name || t('users.noName')}
                     </div>
                   </td>
                   <td>
@@ -140,11 +142,11 @@ export default function DashboardUsers() {
                         className="user-action-btn"
                         onClick={() => handleEditUser(user)}
                       >
-                        Sửa
+                        {t('common:edit')}
                       </button>
                     ) : (
                       <span className="no-permission">
-                        {user.roles?.includes('super_admin') ? 'Không thể sửa Super Admin' : 'Không có quyền'}
+                        {user.roles?.includes('super_admin') ? t('users.cannotEditSuperAdmin') : t('users.noPermission')}
                       </span>
                     )}
                   </td>
@@ -153,7 +155,7 @@ export default function DashboardUsers() {
               {filteredUsers.length === 0 && !loading && (
                 <tr>
                   <td colSpan="5" style={{textAlign: 'center', padding: '20px', color: '#666'}}>
-                    Không tìm thấy người dùng nào
+                    {t('users.noUsersFound')}
                   </td>
                 </tr>
               )}

@@ -1,0 +1,53 @@
+{
+  "title": "Thông tin cơ bản",
+  "fields": {
+    "images": "Thêm hình ảnh",
+    "productName": "Tên sản phẩm",
+    "price": "Giá bán",
+    "category": "Danh mục",
+    "location": "Khu vực",
+    "description": "Mô tả"
+  },
+  "placeholders": {
+    "productName": "Nhập tên sản phẩm",
+    "price": "Nhập giá sản phẩm",
+    "category": "Chọn danh mục",
+    "location": "Chọn khu vực",
+    "description": "Nhập mô tả chi tiết về sản phẩm..."
+  },
+  "imageInfo": "Chỉ hỗ trợ file hình ảnh • Tối đa 10 ảnh • Tổng dung lượng ≤ 10MB",
+  "imagesSelected": "Đã chọn {{count}}/10 ảnh",
+  "removeImage": "Xóa ảnh này",
+  "validation": {
+    "images": "Vui lòng thêm ít nhất một ảnh",
+    "productName": "Tên sản phẩm phải chứa ít nhất một chữ cái",
+    "productPrice": "Giá bán phải là số hợp lệ và lớn hơn 0",
+    "productPriceValid": "Giá bán phải là số hợp lệ",
+    "description": "Mô tả phải chứa ít nhất một chữ cái",
+    "category": "Vui lòng chọn danh mục",
+    "location": "Vui lòng chọn khu vực"
+  },
+  "errors": {
+    "maxImages": "Chỉ được chọn tối đa 10 ảnh",
+    "imageFormat": "Chỉ hỗ trợ các file hình ảnh (JPG, PNG, GIF, etc.)",
+    "maxSize": "Tổng kích thước ảnh không được vượt quá 10MB",
+    "loginRequired": "Vui lòng đăng nhập để đăng bài",
+    "uploadImages": "Lỗi khi tải ảnh lên",
+    "createPost": "Lỗi khi tạo bài đăng",
+    "general": "Có lỗi xảy ra",
+    "loadData": "Lỗi tải dữ liệu",
+    "loadCategories": "Không thể tải danh mục",
+    "loadLocations": "Không thể tải khu vực"
+  },
+  "success": {
+    "postCreated": "Đã tạo bài đăng thành công! Bài đăng đang chờ duyệt."
+  },
+  "rules": {
+    "title": "Lưu ý khi đăng bài",
+    "appropriate": "Không dùng những từ ngữ, hình ảnh không phù hợp, phản cảm.",
+    "expiry": "Bài đăng của bạn sẽ hết hạn sau 7 ngày sau khi được duyệt.",
+    "extend": "Nếu sản phẩm chưa được bán, vui lòng gia hạn lại sau 7 ngày."
+  },
+  "submitting": "Đang gửi...",
+  "submit": "Hoàn tất"
+}

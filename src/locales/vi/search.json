@@ -1,0 +1,21 @@
+{
+  "title": "Tìm kiếm",
+  "filters": "BỘ LỌC TÌM KIẾM",
+  "location": "Khu vực:",
+  "category": "Theo Danh Mục:",
+  "price": "Giá:",
+  "time": "Thời gian",
+  "all": "Tất cả",
+  "newest": "Mới nhất",
+  "oldest": "Cũ nhất",
+  "priceAsc": "Giá tăng dần",
+  "priceDesc": "Giá giảm dần",
+  "priceFrom": "Giá từ",
+  "priceTo": "Đến giá",
+  "resultsFor": "Kết quả tìm kiếm cho từ khóa",
+  "results": "kết quả",
+  "loading": "Đang tải kết quả...",
+  "noResults": "Không tìm thấy kết quả",
+  "noResultsMessage": "Thử thay đổi từ khóa tìm kiếm hoặc bộ lọc",
+  "allProducts": "Tất cả sản phẩm"
+}

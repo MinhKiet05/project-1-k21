@@ -1,0 +1,18 @@
+{
+  "status": "Trạng thái",
+  "active": "Hoạt động",
+  "inactive": "Không hoạt động", 
+  "pending": "Chờ duyệt",
+  "category": "Danh mục",
+  "location": "Địa điểm",
+  "images": "Hình ảnh",
+  "description": "Mô tả",
+  "contact": "Liên hệ",
+  "details": "Chi tiết bài viết",
+  "processing": "Đang xử lý...",
+  "sold": "Đã bán",
+  "notSoldYet": "Chưa bán được",
+  "pendingApproval": "Bài đăng đang chờ duyệt",
+  "rejected": "Bài đăng không được duyệt",
+  "soldAlready": "Bài đăng đã bán"
+}

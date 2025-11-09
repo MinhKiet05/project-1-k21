@@ -3,12 +3,14 @@ import { useUser } from '@clerk/clerk-react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell } from '@fortawesome/free-solid-svg-icons';
+import { useTranslation } from 'react-i18next';
 import { supabase } from '../../lib/supabase';
 import "./NotificationsPopup.css";
 
 const NotificationsPopup = React.memo(({ onClose }) => {
   const { user } = useUser();
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation(['notifications', 'common']);
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -23,34 +25,35 @@ const NotificationsPopup = React.memo(({ onClose }) => {
     const diffInDays = diffInHours / 24;
 
     if (diffInMinutes < 1) {
-      return 'Vừa xong';
+      return t('notifications:justNow');
     } else if (diffInMinutes < 60) {
-      return `${Math.floor(diffInMinutes)} phút`;
+      return `${Math.floor(diffInMinutes)} ${t('notifications:minutes')}`;
     } else if (diffInHours < 24) {
-      return `${Math.floor(diffInHours)} giờ`;
+      return `${Math.floor(diffInHours)} ${t('notifications:hours')}`;
     } else if (diffInDays < 7) {
-      return `${Math.floor(diffInDays)} ngày`;
+      return `${Math.floor(diffInDays)} ${t('notifications:days')}`;
     } else {
-      return date.toLocaleDateString('vi-VN', { 
+      const locale = i18n.language === 'vi' ? 'vi-VN' : 'en-US';
+      return date.toLocaleDateString(locale, { 
         day: '2-digit', 
         month: '2-digit' 
       });
     }
-  }, []);
+  }, [t, i18n.language]);
 
   // Get notification title based on type
   const getNotificationTitle = useCallback((type) => {
     switch (type) {
       case 'post_approved':
-        return 'Bài viết đã được duyệt';
+        return t('notifications:postApproved');
       case 'post_rejected':
-        return 'Bài viết không được duyệt';
+        return t('notifications:postRejected');
       case 'post_expired':
-        return 'Bài viết đã hết hạn';
+        return t('notifications:postExpired');
       default:
-        return 'Thông báo';
+        return t('notifications:notification');
     }
-  }, []);
+  }, [t]);
 
   // Get notification icon based on type
   const getNotificationIcon = useCallback((type) => {
@@ -186,7 +189,7 @@ const NotificationsPopup = React.memo(({ onClose }) => {
     <div className="notifications-popup">
       <div className="notifications-header">
         <div className="notifications-title">
-          <h3>Thông báo</h3>
+          <h3>{t('notifications:title')}</h3>
           <span className="notifications-count">
             {notifications.filter(n => !n.is_read).length}
           </span>
@@ -195,7 +198,7 @@ const NotificationsPopup = React.memo(({ onClose }) => {
           <button 
             className="mark-all-read-btn"
             onClick={markAllAsRead}
-            title="Đánh dấu tất cả đã đọc"
+            title={t('notifications:markAllRead')}
           >
             ✓
           </button>
@@ -212,12 +215,12 @@ const NotificationsPopup = React.memo(({ onClose }) => {
         {loading ? (
           <div className="notifications-loading">
             <div className="loading-spinner"></div>
-            <span>Đang tải thông báo...</span>
+            <span>{t('notifications:loading')}</span>
           </div>
         ) : notifications.length === 0 ? (
           <div className="notifications-empty">
             <div className="empty-icon"><FontAwesomeIcon icon={faBell} /></div>
-            <p>Chưa có thông báo nào</p>
+            <p>{t('notifications:noNotifications')}</p>
           </div>
         ) : (
           notifications.map((notification) => {
@@ -251,7 +254,7 @@ const NotificationsPopup = React.memo(({ onClose }) => {
                   </div>
                   
                   <p className="notification-description">
-                    {postData?.title || notification.title || 'Tên bài viết'}
+                    {postData?.title || notification.title || t('notifications:postTitle')}
                   </p>
 
                   {!notification.is_read && (

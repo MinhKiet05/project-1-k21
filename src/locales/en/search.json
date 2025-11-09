@@ -1,0 +1,21 @@
+{
+  "title": "Search",
+  "filters": "SEARCH FILTERS",
+  "location": "Location:",
+  "category": "By Category:",
+  "price": "Price:",
+  "time": "Time",
+  "all": "All",
+  "newest": "Newest",
+  "oldest": "Oldest",
+  "priceAsc": "Price: Low to High",
+  "priceDesc": "Price: High to Low",
+  "priceFrom": "Price from",
+  "priceTo": "To price",
+  "resultsFor": "Search results for keyword",
+  "results": "results",
+  "loading": "Loading results...",
+  "noResults": "No results found",
+  "noResultsMessage": "Try changing search keywords or filters",
+  "allProducts": "All products"
+}

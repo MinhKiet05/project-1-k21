@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useUser } from '@clerk/clerk-react';
+import { useTranslation } from 'react-i18next';
 import { useChatContext } from "../../contexts/ChatContext";
 import UserChatItem from "./UserChatItem";
 import "./ChatPopUp.css";
 
 const ChatPopup = React.memo(() => {
   const { user } = useUser();
+  const { t, i18n } = useTranslation(['chat', 'common']);
   const { 
     conversations, 
     loading, 
@@ -30,20 +32,21 @@ const ChatPopup = React.memo(() => {
     const diffInDays = diffInHours / 24;
 
     if (diffInMinutes < 1) {
-      return 'Vừa xong';
+      return t('chat:justNow');
     } else if (diffInMinutes < 60) {
-      return `${Math.floor(diffInMinutes)} phút`;
+      return `${Math.floor(diffInMinutes)} ${t('chat:minutes')}`;
     } else if (diffInHours < 24) {
-      return `${Math.floor(diffInHours)} giờ`;
+      return `${Math.floor(diffInHours)} ${t('chat:hours')}`;
     } else if (diffInDays < 7) {
-      return `${Math.floor(diffInDays)} ngày`;
+      return `${Math.floor(diffInDays)} ${t('chat:days')}`;
     } else {
-      return date.toLocaleDateString('vi-VN', { 
+      const locale = i18n.language === 'vi' ? 'vi-VN' : 'en-US';
+      return date.toLocaleDateString(locale, { 
         day: '2-digit', 
         month: '2-digit' 
       });
     }
-  }, []);
+  }, [t, i18n.language]);
 
   // Auto-open conversation if pendingConversationId is set
   useEffect(() => {
@@ -52,14 +55,14 @@ const ChatPopup = React.memo(() => {
       if (targetConversation) {
         const isPostAuthor = targetConversation.posts?.author_id === user?.id;
         const displayName = isPostAuthor 
-          ? targetConversation.otherParticipant?.full_name || 'Người dùng'
-          : targetConversation.otherParticipant?.full_name || 'Người bán';
+          ? targetConversation.otherParticipant?.full_name || t('chat:user')
+          : targetConversation.otherParticipant?.full_name || t('chat:seller');
 
         const userItem = {
           id: targetConversation.id,
           name: displayName,
           avatar: targetConversation.otherParticipant?.avatar_url || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=50&h=50&fit=crop&crop=face',
-          lastMessage: targetConversation.last_message_content || 'Chưa có tin nhắn',
+          lastMessage: targetConversation.last_message_content || t('chat:noMessages'),
           time: formatTime(targetConversation.last_message_at),
           unread: targetConversation.is_seen === false,
           isOnline: false,
@@ -79,14 +82,14 @@ const ChatPopup = React.memo(() => {
     return conversations.map(conversation => {
       const isPostAuthor = conversation.posts?.author_id === user?.id;
       const displayName = isPostAuthor 
-        ? conversation.otherParticipant?.full_name || 'Người dùng'
-        : conversation.otherParticipant?.full_name || 'Người bán';
+        ? conversation.otherParticipant?.full_name || t('chat:user')
+        : conversation.otherParticipant?.full_name || t('chat:seller');
 
       return {
         id: conversation.id,
         name: displayName,
         avatar: conversation.otherParticipant?.avatar_url || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=50&h=50&fit=crop&crop=face',
-        lastMessage: conversation.last_message_content || 'Chưa có tin nhắn',
+        lastMessage: conversation.last_message_content || t('chat:noMessages'),
         time: formatTime(conversation.last_message_at),
         unread: conversation.is_seen === false, // Unread if is_seen is false
         isOnline: false,
@@ -129,7 +132,7 @@ const ChatPopup = React.memo(() => {
     return (
       <div className="chat-popup">
         <div className="chat-popup-header">
-          <h3 className="chat-popup-title">Đoạn chat</h3>
+          <h3 className="chat-popup-title">{t('chat:chatTitle')}</h3>
         </div>
         <div className="chat-popup-list">
           <div style={{ 
@@ -148,7 +151,7 @@ const ChatPopup = React.memo(() => {
               borderRadius: '50%',
               animation: 'spin 1s linear infinite'
             }}></div>
-            <p style={{ color: '#b0b3b8', margin: 0 }}>Đang tải cuộc trò chuyện...</p>
+            <p style={{ color: '#b0b3b8', margin: 0 }}>{t('chat:loadingConversations')}</p>
           </div>
         </div>
       </div>
@@ -159,11 +162,11 @@ const ChatPopup = React.memo(() => {
     <>
       <div className="chat-popup">
         <div className="chat-popup-header">
-          <h3 className="chat-popup-title">Đoạn chat ({filteredUsers.length})</h3>
+          <h3 className="chat-popup-title">{t('chat:chatTitle')} ({filteredUsers.length})</h3>
           <button 
             className="chat-close-btn" 
             onClick={closeChatPopup}
-            aria-label="Đóng chat"
+            aria-label={t('chat:closeChat')}
           >
             ×
           </button>
@@ -182,7 +185,7 @@ const ChatPopup = React.memo(() => {
             </svg>
             <input
               type="text"
-              placeholder="Tìm kiếm trong..."
+              placeholder={t('chat:searchPlaceholder')}
               className="chat-search-input"
               value={searchQuery}
               onChange={handleSearchChange}
@@ -211,7 +214,7 @@ const ChatPopup = React.memo(() => {
           {filteredUsers.length === 0 ? (
             <div className="no-results">
               {searchQuery ? (
-                <p>Không tìm thấy kết quả cho "{searchQuery}"</p>
+                <p>{t('chat:noSearchResults', { query: searchQuery })}</p>
               ) : (
                 <div style={{
                   display: 'flex',
@@ -222,9 +225,9 @@ const ChatPopup = React.memo(() => {
                   textAlign: 'center'
                 }}>
                   <div style={{ fontSize: '48px', marginBottom: '16px' }}>💬</div>
-                  <h3 style={{ color: '#e4e6ea', margin: '0 0 8px 0' }}>Chưa có cuộc trò chuyện</h3>
+                  <h3 style={{ color: '#e4e6ea', margin: '0 0 8px 0' }}>{t('chat:noConversations')}</h3>
                   <p style={{ color: '#b0b3b8', margin: 0, fontSize: '14px' }}>
-                    Bắt đầu chat với người khác về sản phẩm để thấy cuộc trò chuyện ở đây.
+                    {t('chat:startChatHint')}
                   </p>
                 </div>
               )}
@@ -254,7 +257,7 @@ const ChatPopup = React.memo(() => {
                     borderRadius: '50%',
                     animation: 'spin 1s linear infinite'
                   }}></div>
-                  <span style={{ color: '#b0b3b8', fontSize: '14px' }}>Đang tải thêm...</span>
+                  <span style={{ color: '#b0b3b8', fontSize: '14px' }}>{t('chat:loadingMore')}</span>
                 </div>
               )}
             </>

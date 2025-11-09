@@ -1,0 +1,49 @@
+{
+  "title": "Quản lý bài đăng",
+  "search": "Tìm kiếm bài đăng...",
+  "pleaseLogin": "Vui lòng đăng nhập để quản lý bài đăng của bạn.",
+  "noPosts": "Chưa có bài đăng nào",
+  "filters": {
+    "allStatus": "Tất cả trạng thái",
+    "allCategories": "Tất cả danh mục",
+    "allLocations": "Tất cả khu vực",
+    "newest": "Mới nhất",
+    "oldest": "Cũ nhất"
+  },
+  "status": {
+    "pending": "Chưa duyệt",
+    "approved": "Đã duyệt",
+    "rejected": "Không được duyệt",
+    "expired": "Hết hạn",
+    "sold": "Đã bán",
+    "unknown": "Không xác định"
+  },
+  "table": {
+    "productName": "Tên sản phẩm",
+    "image": "Hình ảnh",
+    "price": "Giá",
+    "category": "Danh mục",
+    "location": "Khu vực",
+    "status": "Trạng thái",
+    "createdAt": "Thời gian tạo",
+    "actions": "Thao tác"
+  },
+  "results": {
+    "found": "Tìm thấy {{count}} bài đăng"
+  },
+  "errors": {
+    "loadPosts": "Lỗi tải bài đăng"
+  },
+  "loading": {
+    "posts": "Đang tải bài đăng..."
+  },
+  "actions": {
+    "viewDetail": "Xem chi tiết"
+  },
+  "messages": {
+    "markAsSoldSuccess": "Đã đánh dấu bài đăng là đã bán!",
+    "updateStatusError": "Lỗi khi cập nhật trạng thái",
+    "extendSuccess": "Đã gia hạn bài đăng thêm 7 ngày!",
+    "extendError": "Lỗi khi gia hạn bài đăng"
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "sidebar": {
+    "users": "Users",
+    "posts": "Posts"
+  },
+  "posts": {
+    "title": "Post Management",
+    "searchPlaceholder": "Search by author name or product name",
+    "allStatuses": "All statuses",
+    "allCategories": "All categories",
+    "allLocations": "All locations", 
+    "newest": "Newest",
+    "oldest": "Oldest",
+    "found": "Found",
+    "posts": "posts",
+    "table": {
+      "userName": "User Name",
+      "productName": "Product Name",
+      "image": "Image",
+      "price": "Price",
+      "category": "Category",
+      "location": "Location",
+      "status": "Status",
+      "createdTime": "Created Time",
+      "actions": "Actions"
+    },
+    "viewDetail": "View Details",
+    "noPermission": "No moderation permission",
+    "status": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected", 
+      "expired": "Expired",
+      "sold": "Sold"
+    }
+  },
+  "users": {
+    "title": "User Management",
+    "searchPlaceholder": "Search by name or email...",
+    "found": "Found",
+    "users": "users",
+    "displayName": "Display Name",
+    "role": "Role", 
+    "createdDate": "Created Date",
+    "actions": "Actions",
+    "noName": "No name",
+    "cannotEditSuperAdmin": "Cannot edit Super Admin",
+    "noPermission": "No permission",
+    "noUsersFound": "No users found",
+    "superAdmin": "Super Admin",
+    "admin": "Admin", 
+    "userRole": "User",
+    "editRole": "Edit Role",
+    "newRole": "New Role", 
+    "roleNotes": "* Only Super Admin can grant Admin privileges\\n* Cannot modify other Super Admin permissions",
+    "roleUpdateSuccess": "Role updated successfully!",
+    "roleUpdateError": "Error updating role",
+    "saving": "Saving...",
+    "saveChanges": "Save Changes"
+  },
+  "categories": {
+    "title": "Category Management"
+  },
+  "locations": {
+    "title": "Location Management"
+  }
+}

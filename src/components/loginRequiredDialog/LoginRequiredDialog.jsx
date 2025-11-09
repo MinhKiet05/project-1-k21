@@ -3,9 +3,14 @@ import './LoginRequiredDialog.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRightToBracket, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { SignInButton } from '@clerk/clerk-react';
+import { useTranslation } from 'react-i18next';
 
-const LoginRequiredDialog = ({ isOpen, onClose, message = "Bạn cần đăng nhập để thực hiện chức năng này" }) => {
+const LoginRequiredDialog = ({ isOpen, onClose, message }) => {
+  const { t } = useTranslation(['loginDialog', 'common']);
+  
   if (!isOpen) return null;
+  
+  const displayMessage = message || t('defaultMessage');
 
   return (
     <div className="login-dialog-overlay" onClick={onClose}>
@@ -19,13 +24,13 @@ const LoginRequiredDialog = ({ isOpen, onClose, message = "Bạn cần đăng nh
             <FontAwesomeIcon icon={faRightToBracket} />
           </div>
           
-          <h3 className="login-dialog-title">Yêu cầu đăng nhập</h3>
+          <h3 className="login-dialog-title">{t('title')}</h3>
           
-          <p className="login-dialog-message">{message}</p>
+          <p className="login-dialog-message">{displayMessage}</p>
           
           <div className="login-dialog-actions">
             <button className="login-dialog-cancel" onClick={onClose}>
-              Hủy
+              {t('common:cancel')}
             </button>
             
             <SignInButton mode="modal">
@@ -34,7 +39,7 @@ const LoginRequiredDialog = ({ isOpen, onClose, message = "Bạn cần đăng nh
                   icon={faRightToBracket}
                   className="login-icon"
                 />
-                Đăng nhập
+                {t('login')}
               </div>
             </SignInButton>
           </div>

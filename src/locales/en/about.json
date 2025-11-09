@@ -1,0 +1,22 @@
+{
+  "story": {
+    "title": "Our Story",
+    "heading": "No Tung Pho Co",
+    "description": "We were born from the simple desire to connect people who have the same buying and selling needs in a direct, barrier-free way. No Tung Pho Co is a non-profit project, built to create a transparent, efficient exchange space where the community can trust each other without commercial intermediaries."
+  },
+  "values": {
+    "title": "Values",
+    "convenience": {
+      "title": "Convenience",
+      "description": "No Tung Pho Co provides a completely free specialized search and connection platform, eliminating all commercial barriers. Our core utility is to create a direct, transparent communication environment, helping buyers and sellers easily exchange information to reach personal agreements as quickly as possible."
+    },
+    "quality": {
+      "title": "Product Quality",
+      "description": "We prioritize product quality above all. Every post on No Tung Pho Co is carefully reviewed by our admin team before being displayed, ensuring clear descriptions, authentic images, and reasonable prices. This allows buyers to confidently choose products and experience transparent, trustworthy transactions."
+    },
+    "connection": {
+      "title": "Quick Connection",
+      "description": "No Tung Pho Co is a minimalist bridge that helps you find trading partners (buy/sell) instantly. We streamline all processes, allowing users to contact each other directly through product messages. The goal is to create friendly, easy-to-understand exchanges that help personal transactions start easily and without delay."
+    }
+  }
+}

@@ -1,6 +1,7 @@
 import './UploadPost.css';
 import { useState, useRef } from 'react';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 import { useCategories } from '../../hooks/useCategories';
 import { useLocations } from '../../hooks/useLocations';
 import { useCreatePost } from '../../hooks/useCreatePost';
@@ -8,6 +9,7 @@ import { uploadImages } from '../../utils/uploadImages';
 import { useUser } from '@clerk/clerk-react';
 
 export default function UploadPost() {
+    const { t } = useTranslation(['upload', 'common']);
     const [images, setImages] = useState([]);
     const [error, setError] = useState('');
     const [formErrors, setFormErrors] = useState({});
@@ -27,8 +29,8 @@ export default function UploadPost() {
 
         // Kiểm tra số lượng file (tối đa 10 ảnh)
         if (files.length > 10) {
-            setError('Chỉ được chọn tối đa 10 ảnh');
-            toast.error('Chỉ được chọn tối đa 10 ảnh');
+            setError(t('errors.maxImages'));
+            toast.error(t('errors.maxImages'));
             return;
         }
 
@@ -39,8 +41,8 @@ export default function UploadPost() {
         for (let file of files) {
             // Kiểm tra định dạng file (chỉ hỗ trợ hình ảnh)
             if (!file.type.startsWith('image/')) {
-                setError('Chỉ hỗ trợ các file hình ảnh (JPG, PNG, GIF, etc.)');
-                toast.error('Chỉ hỗ trợ các file hình ảnh (JPG, PNG, GIF, etc.)');
+                setError(t('errors.imageFormat'));
+                toast.error(t('errors.imageFormat'));
                 return;
             }
 
@@ -50,8 +52,8 @@ export default function UploadPost() {
 
         // Kiểm tra tổng kích thước (tối đa 10MB = 10 * 1024 * 1024 bytes)
         if (totalSize > 10 * 1024 * 1024) {
-            setError('Tổng kích thước ảnh không được vượt quá 10MB');
-            toast.error('Tổng kích thước ảnh không được vượt quá 10MB');
+            setError(t('errors.maxSize'));
+            toast.error(t('errors.maxSize'));
             return;
         }
 
@@ -101,7 +103,7 @@ export default function UploadPost() {
             const next = { ...prev };
             if (fieldName === 'productName') {
                 if (!value || !containsLetter(value)) {
-                    next.productName = 'Tên sản phẩm phải chứa ít nhất một chữ cái';
+                    next.productName = t('validation.productName');
                 } else {
                     delete next.productName;
                 }
@@ -109,7 +111,7 @@ export default function UploadPost() {
 
             if (fieldName === 'productPrice') {
                 if (!value || !isValidNumber(value) || Number(value) <= 0) {
-                    next.productPrice = 'Giá bán phải là số hợp lệ và lớn hơn 0';
+                    next.productPrice = t('validation.productPrice');
                 } else {
                     delete next.productPrice;
                 }
@@ -117,7 +119,7 @@ export default function UploadPost() {
 
             if (fieldName === 'description') {
                 if (!value || !containsLetter(value)) {
-                    next.description = 'Mô tả phải chứa ít nhất một chữ cái';
+                    next.description = t('validation.description');
                 } else {
                     delete next.description;
                 }
@@ -134,15 +136,15 @@ export default function UploadPost() {
 
         // Kiểm tra user đăng nhập
         if (!user) {
-            setError('Vui lòng đăng nhập để đăng bài');
-            toast.error('Vui lòng đăng nhập để đăng bài');
+            setError(t('errors.loginRequired'));
+            toast.error(t('errors.loginRequired'));
             return;
         }
 
         // Validate images
         const errors = {};
         if (images.length === 0) {
-            errors.images = 'Vui lòng thêm ít nhất một ảnh';
+            errors.images = t('validation.images');
         }
 
         const formData = new FormData(e.target);
@@ -161,23 +163,23 @@ export default function UploadPost() {
         };
 
         if (!name || !containsLetter(name)) {
-            errors.productName = 'Tên sản phẩm phải chứa ít nhất một chữ cái';
+            errors.productName = t('validation.productName');
         }
 
         if (!price || !isValidNumber(price)) {
-            errors.productPrice = 'Giá bán phải là số hợp lệ';
+            errors.productPrice = t('validation.productPriceValid');
         }
 
         if (!description || !containsLetter(description)) {
-            errors.description = 'Mô tả phải chứa ít nhất một chữ cái';
+            errors.description = t('validation.description');
         }
 
         if (!categoryId) {
-            errors.category = 'Vui lòng chọn danh mục';
+            errors.category = t('validation.category');
         }
 
         if (!locationId) {
-            errors.location = 'Vui lòng chọn khu vực';
+            errors.location = t('validation.location');
         }
 
         if (Object.keys(errors).length > 0) {
@@ -202,8 +204,8 @@ export default function UploadPost() {
             const uploadResult = await uploadImages(imageFiles, 'images');
             
             if (!uploadResult.success) {
-                setError('Lỗi khi tải ảnh lên: ' + uploadResult.error);
-                toast.error('Lỗi khi tải ảnh lên: ' + uploadResult.error);
+                setError(t('errors.uploadImages') + ': ' + uploadResult.error);
+                toast.error(t('errors.uploadImages') + ': ' + uploadResult.error);
                 return;
             }
 
@@ -221,13 +223,13 @@ export default function UploadPost() {
             const createResult = await createPost(postData);
             
             if (!createResult.success) {
-                setError('Lỗi khi tạo bài đăng: ' + createResult.error);
-                toast.error('Lỗi khi tạo bài đăng: ' + createResult.error);
+                setError(t('errors.createPost') + ': ' + createResult.error);
+                toast.error(t('errors.createPost') + ': ' + createResult.error);
                 return;
             }
 
             // 3. Thành công - reset form
-            toast.success('Đã tạo bài đăng thành công! Bài đăng đang chờ duyệt.');
+            toast.success(t('success.postCreated'));
             e.target.reset();
             setImages([]);
             if (fileInputRef.current) {
@@ -235,8 +237,8 @@ export default function UploadPost() {
             }
 
         } catch (err) {
-            setError('Có lỗi xảy ra: ' + err.message);
-            toast.error('Có lỗi xảy ra: ' + err.message);
+            setError(t('errors.general') + ': ' + err.message);
+            toast.error(t('errors.general') + ': ' + err.message);
         } finally {
             setIsSubmitting(false);
         }
@@ -245,10 +247,10 @@ export default function UploadPost() {
     return (
         <div className="upload-post-page">
             <div className="upload-post-container">
-                <h1>Thông tin cơ bản</h1>
+                <h1>{t('title')}</h1>
                 <form className="upload-post-form" onSubmit={handleSubmit}>
                     <div className='upload-post-form-row'>
-                        <label>Thêm hình ảnh:<span>*</span></label>
+                        <label>{t('fields.images')}:<span>*</span></label>
                         <div className="image-upload-section">
                             <input
                                 ref={fileInputRef}
@@ -262,7 +264,7 @@ export default function UploadPost() {
                             
                             {/* Hiển thị thông tin hỗ trợ */}
                             <div className="upload-info">
-                                <small>Chỉ hỗ trợ file hình ảnh • Tối đa 10 ảnh • Tổng dung lượng ≤ 10MB</small>
+                                <small>{t('imageInfo')}</small>
                             </div>
 
                             {/* Hiển thị lỗi nếu có */}
@@ -279,7 +281,7 @@ export default function UploadPost() {
                             {images.length > 0 && (
                                 <div className="image-preview-container">
                                     <div className="preview-header">
-                                        <span>Đã chọn {images.length}/10 ảnh</span>
+                                        <span>{t('imagesSelected', { count: images.length })}</span>
                                     </div>
                                     <div className="preview-grid">
                                         {images.map((img) => (
@@ -289,7 +291,7 @@ export default function UploadPost() {
                                                     type="button"
                                                     className="remove-image-btn"
                                                     onClick={() => removeImage(img.id)}
-                                                    title="Xóa ảnh này"
+                                                    title={t('removeImage')}
                                                 >
                                                     ×
                                                 </button>
@@ -302,9 +304,9 @@ export default function UploadPost() {
                     </div>
 
                     <div className='upload-post-form-row'>
-                        <label>Tên sản phẩm:<span>*</span></label>
+                        <label>{t('fields.productName')}:<span>*</span></label>
                         <div className="field-input">
-                            <input type="text" name="productName" placeholder="Nhập tên sản phẩm" required onBlur={(e) => validateField('productName', e.target.value)} />
+                            <input type="text" name="productName" placeholder={t('placeholders.productName')} required onBlur={(e) => validateField('productName', e.target.value)} />
                             {formErrors.productName && (
                                 <div className="field-error">{formErrors.productName}</div>
                             )}
@@ -312,10 +314,10 @@ export default function UploadPost() {
                     </div>
 
                     <div className='upload-post-form-row price-row'>
-                        <label>Giá bán:<span>*</span></label>
+                        <label>{t('fields.price')}:<span>*</span></label>
                         <div className="field-input">
                             <div className="price-row-wrapper">
-                                <input type="text" name="productPrice" placeholder="Nhập giá sản phẩm" required onBlur={(e) => validateField('productPrice', e.target.value)} />
+                                <input type="text" name="productPrice" placeholder={t('placeholders.price')} required onBlur={(e) => validateField('productPrice', e.target.value)} />
                             </div>
                             {formErrors.productPrice && (
                                 <div className="field-error">{formErrors.productPrice}</div>
@@ -324,12 +326,12 @@ export default function UploadPost() {
                     </div>
 
                     <div className='upload-post-form-row'>
-                        <label>Danh mục:<span>*</span></label>
+                        <label>{t('fields.category')}:<span>*</span></label>
                         <select name="category" required disabled={categoriesLoading}>
                             <option value="">
-                                {categoriesLoading ? 'Đang tải...' : 
-                                 categoriesError ? 'Lỗi tải dữ liệu' : 
-                                 'Chọn danh mục'}
+                                {categoriesLoading ? t('common.loading') : 
+                                 categoriesError ? t('errors.loadData') : 
+                                 t('placeholders.category')}
                             </option>
                             {categories
                                 .sort((a, b) => {
@@ -337,42 +339,42 @@ export default function UploadPost() {
                                     if (a.name.toLowerCase().includes('khác')) return 1;
                                     if (b.name.toLowerCase().includes('khác')) return -1;
                                     // Các danh mục khác sắp xếp theo tên
-                                    return a.name.localeCompare(b.name, 'vi', { sensitivity: 'base' });
+                                    return a.displayName.localeCompare(b.displayName, 'vi', { sensitivity: 'base' });
                                 })
                                 .map((category) => (
                                     <option key={category.id} value={category.id}>
-                                        {category.name}
+                                        {category.displayName}
                                     </option>
                                 ))}
                         </select>
                         {categoriesError && (
-                            <div className="field-error">Không thể tải danh mục: {categoriesError}</div>
+                            <div className="field-error">{t('errors.loadCategories')}: {categoriesError}</div>
                         )}
                     </div>
 
                     <div className='upload-post-form-row'>
-                        <label>Khu vực:<span>*</span></label>
+                        <label>{t('fields.location')}:<span>*</span></label>
                         <select name="location" required disabled={locationsLoading}>
                             <option value="">
-                                {locationsLoading ? 'Đang tải...' : 
-                                 locationsError ? 'Lỗi tải dữ liệu' : 
-                                 'Chọn khu vực'}
+                                {locationsLoading ? t('common.loading') : 
+                                 locationsError ? t('errors.loadData') : 
+                                 t('placeholders.location')}
                             </option>
                             {locations.map((location) => (
                                 <option key={location.id} value={location.id}>
-                                    {location.name}
+                                    {location.displayName}
                                 </option>
                             ))}
                         </select>
                         {locationsError && (
-                            <div className="field-error">Không thể tải khu vực: {locationsError}</div>
+                            <div className="field-error">{t('errors.loadLocations')}: {locationsError}</div>
                         )}
                     </div>
 
                     <div className='upload-post-form-row'>
-                        <label>Mô tả:<span>*</span></label>
+                        <label>{t('fields.description')}:<span>*</span></label>
                         <div className="field-input">
-                            <textarea name="description" placeholder="Nhập mô tả chi tiết về sản phẩm..." required onBlur={(e) => validateField('description', e.target.value)}></textarea>
+                            <textarea name="description" placeholder={t('placeholders.description')} required onBlur={(e) => validateField('description', e.target.value)}></textarea>
                             {formErrors.description && (
                                 <div className="field-error">{formErrors.description}</div>
                             )}
@@ -380,17 +382,17 @@ export default function UploadPost() {
                     </div>
 
                     <div className='upload-post-form-row'>
-                        <label>Lưu ý khi đăng bài:</label>
+                        <label>{t('rules.title')}:</label>
                         <ul>
-                            <li>Không dùng những từ ngữ, hình ảnh không phù hợp, phản cảm.</li>
-                            <li>Bài đăng của bạn sẽ hết hạn sau 7 ngày sau khi được duyệt.</li>
-                            <li>Nếu sản phẩm chưa được bán, vui lòng gia hạn lại sau 7 ngày.</li>
+                            <li>{t('rules.appropriate')}</li>
+                            <li>{t('rules.expiry')}</li>
+                            <li>{t('rules.extend')}</li>
                         </ul>
                     </div>
 
                     <div className='upload-post-form-row-btn'>
                         <button type="submit" className="upload-post-submit-button" disabled={isSubmitting}>
-                            {isSubmitting ? 'Đang gửi...' : 'Hoàn tất'}
+                            {isSubmitting ? t('submitting') : t('submit')}
                         </button>
                     </div>
                 </form>

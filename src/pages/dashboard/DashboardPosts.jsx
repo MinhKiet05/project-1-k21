@@ -2,6 +2,7 @@ import '../dashboard/DashboardLayout.css'
 import { useState } from 'react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faSearch } from "@fortawesome/free-solid-svg-icons"
+import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 import { confirmAlert } from 'react-confirm-alert'
 import 'react-confirm-alert/src/react-confirm-alert.css'
@@ -10,9 +11,11 @@ import { useCategories } from '../../hooks/useCategories'
 import { useLocations } from '../../hooks/useLocations'
 import { useUserRole } from '../../contexts/UserRoleContext'
 import { useUpdatePostStatus } from '../../hooks/useUpdatePostStatus'
+import { getDisplayName } from '../../utils/languageUtils'
 import PostDetailModal from '../../components/PostDetailModal/PostDetailModal'
 
 export default function DashboardPosts() {
+  const { t, i18n } = useTranslation(['dashboard', 'common'])
   const [searchTerm, setSearchTerm] = useState('')
   // Filters for posts
   const [statusFilter, setStatusFilter] = useState('all')
@@ -92,7 +95,7 @@ export default function DashboardPosts() {
 
   return (
     <div className="users-management">
-      <h2 className="page-title">Quản lý bài đăng</h2>
+      <h2 className="page-title">{t('posts.title')}</h2>
       
       {/* Search & Filters */}
       <div className="search-section">
@@ -102,7 +105,7 @@ export default function DashboardPosts() {
           </div>
           <input
             type="text"
-            placeholder="Tìm kiếm theo tên người đăng hoặc tên sản phẩm"
+            placeholder={t('posts.searchPlaceholder')}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -110,37 +113,37 @@ export default function DashboardPosts() {
 
               <div className="filters-row">
                   <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
-            <option value="newest">Mới nhất</option>
-            <option value="oldest">Cũ nhất</option>
+            <option value="newest">{t('posts.newest')}</option>
+            <option value="oldest">{t('posts.oldest')}</option>
           </select>
           <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
-            <option value="all">Tất cả trạng thái</option>
-            <option value="pending">Đang chờ</option>
-            <option value="approved">Đã duyệt</option>
-            <option value="rejected">Không duyệt</option>
-            <option value="expired">Hết hạn</option>
-            <option value="sold">Đã bán</option>
+            <option value="all">{t('posts.allStatuses')}</option>
+            <option value="pending">{t('posts.status.pending')}</option>
+            <option value="approved">{t('posts.status.approved')}</option>
+            <option value="rejected">{t('posts.status.rejected')}</option>
+            <option value="expired">{t('posts.status.expired')}</option>
+            <option value="sold">{t('posts.status.sold')}</option>
           </select>
 
           <select value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)} disabled={categoriesLoading}>
-            <option value="">Tất cả danh mục</option>
+            <option value="">{t('posts.allCategories')}</option>
             {categories
               .sort((a, b) => {
                 // "Khác" luôn ở cuối
                 if (a.name.toLowerCase().includes('khác')) return 1;
                 if (b.name.toLowerCase().includes('khác')) return -1;
                 // Các danh mục khác sắp xếp theo tên
-                return a.name.localeCompare(b.name, 'vi', { sensitivity: 'base' });
+                return a.displayName.localeCompare(b.displayName, 'vi', { sensitivity: 'base' });
               })
               .map(c => (
-                <option key={c.id} value={c.id}>{c.name}</option>
+                <option key={c.id} value={c.id}>{c.displayName}</option>
               ))}
           </select>
 
           <select value={locationFilter} onChange={(e) => setLocationFilter(e.target.value)} disabled={locationsLoading}>
-            <option value="">Tất cả khu vực</option>
+            <option value="">{t('posts.allLocations')}</option>
             {locations.map(l => (
-              <option key={l.id} value={l.id}>{l.name}</option>
+              <option key={l.id} value={l.id}>{l.displayName}</option>
             ))}
           </select>
 
@@ -148,37 +151,37 @@ export default function DashboardPosts() {
         </div>
 
         <div className="search-result">
-          {postsLoading ? 'Đang tải...' : `Tìm thấy ${posts.length} bài đăng`}
-          {postsError && <div className="field-error">Lỗi tải bài đăng: {postsError}</div>}
+          {postsLoading ? t('common.loading') : `${t('posts.found')} ${posts.length} ${t('posts.posts')}`}
+          {postsError && <div className="field-error">{t('common.error')}: {postsError}</div>}
         </div>
       </div>
 
       {/* Table */}
       <div className="post-table-container">
         {postsLoading ? (
-          <div className="loading-state"><p>Đang tải bài đăng...</p></div>
+          <div className="loading-state"><p>{t('management.loading')}</p></div>
         ) : postsError ? (
-          <div className="error-state"><p>Lỗi: {postsError}</p></div>
+          <div className="error-state"><p>{t('common.error')}: {postsError}</p></div>
         ) : (
           <table className="admin-table">
             <thead>
               <tr>
-                <th>Tên người dùng</th>
-                <th >Tên sản phẩm</th>
-                <th>Hình ảnh</th>
-                <th>Giá</th>
-                <th>Danh mục</th>
-                <th>Khu vực</th>
-                <th>Trạng thái</th>
-                <th>Thời gian tạo</th>
-                <th>Thao tác</th>
+                <th>{t('posts.table.userName')}</th>
+                <th>{t('posts.table.productName')}</th>
+                <th>{t('posts.table.image')}</th>
+                <th>{t('posts.table.price')}</th>
+                <th>{t('posts.table.category')}</th>
+                <th>{t('posts.table.location')}</th>
+                <th>{t('posts.table.status')}</th>
+                <th>{t('posts.table.createdTime')}</th>
+                <th>{t('posts.table.actions')}</th>
               </tr>
             </thead>
             <tbody>
               {posts.length === 0 ? (
                 <tr>
                   <td colSpan="9" style={{textAlign: 'center', padding: '20px', color: '#666'}}>
-                    Chưa có bài đăng nào
+                    {t('management.noPosts')}
                   </td>
                 </tr>
               ) : posts.map((post) => {
@@ -186,8 +189,8 @@ export default function DashboardPosts() {
                 const title = post.title || ''
                 const imageUrl = (post.image_urls && post.image_urls[0]) || (post.imageUrls && post.imageUrls[0]) || post.image_url || post.images?.[0] || 'https://via.placeholder.com/60'
                 const price = post.price ? (typeof post.price === 'number' ? post.price.toLocaleString('vi-VN') + ' VNĐ' : post.price) : '-'
-                const categoryName = post.category?.name || '-'
-                const locationName = post.location?.name || '-'
+                const categoryName = getDisplayName(post.category, i18n.language) || '-'
+                const locationName = getDisplayName(post.location, i18n.language) || '-'
                 const createdAt = post.created_at ? formatDate(post.created_at) : '-'
                 
                 // Check if post is expired
@@ -200,27 +203,27 @@ export default function DashboardPosts() {
                 
                 switch(post.status) {
                   case 'pending':
-                    statusDisplay = 'Đang chờ';
+                    statusDisplay = t('posts.status.pending');
                     statusClass = 'status-pending';
                     break;
                   case 'approved':
-                    statusDisplay = 'Đã duyệt';
+                    statusDisplay = t('posts.status.approved');
                     statusClass = 'status-approved';
                     break;
                   case 'rejected':
-                    statusDisplay = 'Không duyệt';
+                    statusDisplay = t('posts.status.rejected');
                     statusClass = 'status-rejected';
                     break;
                   case 'expired':
-                    statusDisplay = 'Hết hạn';
+                    statusDisplay = t('posts.status.expired');
                     statusClass = 'status-expired';
                     break;
                   case 'sold':
-                    statusDisplay = 'Đã bán';
+                    statusDisplay = t('posts.status.sold');
                     statusClass = 'status-sold';
                     break;
                   default:
-                    statusDisplay = 'Không xác định';
+                    statusDisplay = t('common.unknown');
                     statusClass = 'status-unknown';
                 }
 
@@ -245,11 +248,11 @@ export default function DashboardPosts() {
                             className="action-btn-view-detail"
                             onClick={() => handleViewDetail(post)}
                           >
-                            Xem chi tiết
+                            {t('posts.viewDetail')}
                           </button>
                         </>
                       ) : (
-                        <span className="no-permission">Không có quyền duyệt</span>
+                        <span className="no-permission">{t('posts.noPermission')}</span>
                       )}
                     </td>
                   </tr>

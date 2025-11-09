@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import { toast } from 'react-toastify'
+import { useTranslation } from 'react-i18next'
 import './EditRoleModal.css'
 import { useUserRole } from '../../contexts/UserRoleContext'
 
 export default function EditRoleModal({ user, isOpen, onClose, onUpdateRole }) {
+  const { t } = useTranslation(['dashboard', 'common']);
   const { getAvailableRoles } = useUserRole()
   // Get highest role from array
   const getHighestRole = (roles) => {
@@ -25,10 +27,10 @@ export default function EditRoleModal({ user, isOpen, onClose, onUpdateRole }) {
     const result = await onUpdateRole(user.id, selectedRole)
     
     if (result.success) {
-      toast.success('Cập nhật vai trò thành công!')
+      toast.success(t('roleUpdateSuccess'))
       onClose()
     } else {
-      toast.error('Lỗi khi cập nhật role: ' + result.error)
+      toast.error(t('roleUpdateError') + ': ' + result.error)
     }
     
     setIsUpdating(false)
@@ -38,7 +40,7 @@ export default function EditRoleModal({ user, isOpen, onClose, onUpdateRole }) {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={e => e.stopPropagation()}>
         <div className="modal-header">
-          <h3>Chỉnh sửa vai trò</h3>
+          <h3>{t('editRole')}</h3>
           <button className="close-btn" onClick={onClose}>&times;</button>
         </div>
         
@@ -53,7 +55,7 @@ export default function EditRoleModal({ user, isOpen, onClose, onUpdateRole }) {
             </div>
             
             <div className="role-selection">
-              <label>Vai trò mới:</label>
+              <label>{t('newRole')}:</label>
               <select 
                 value={selectedRole} 
                 onChange={(e) => setSelectedRole(e.target.value)}
@@ -67,8 +69,7 @@ export default function EditRoleModal({ user, isOpen, onClose, onUpdateRole }) {
               </select>
               <div className="role-note">
                 <small>
-                  * Chỉ Super Admin mới có thể cấp quyền Admin<br/>
-                  * Không thể chỉnh sửa quyền của Super Admin khác
+                  {t('roleNotes')}
                 </small>
               </div>
             </div>
@@ -81,14 +82,14 @@ export default function EditRoleModal({ user, isOpen, onClose, onUpdateRole }) {
               onClick={onClose}
               disabled={isUpdating}
             >
-              Hủy
+              {t('common:cancel')}
             </button>
             <button 
               type="submit" 
               className="btn-save"
               disabled={isUpdating}
             >
-              {isUpdating ? 'Đang lưu...' : 'Lưu thay đổi'}
+              {isUpdating ? t('saving') : t('saveChanges')}
             </button>
           </div>
         </form>
