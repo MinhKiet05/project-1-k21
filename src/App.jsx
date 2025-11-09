@@ -2,7 +2,6 @@ import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import './styles/toastify-custom.css';
 import { Suspense, lazy } from 'react';
 
 import Header from "./components/header/Header.jsx";
