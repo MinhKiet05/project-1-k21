@@ -215,6 +215,7 @@ export default function Header() {
 
         {/* ==== NHÓM 4: USER ACTIONS & ICONS ==== */}
         <div className="header-user-actions">
+          
           <SignedOut>
             <SignInButton mode="modal">
               <div className="login-button">
@@ -261,6 +262,10 @@ export default function Header() {
             </div>
           </SignedIn>
         </div>
+        <select name="language" id="language-select">
+          <option value="vi">Tiếng Việt</option>
+          <option value="en">English</option>
+        </select>
       </div>
 
       {/* ==== HIỂN THỊ POPUP CHAT ==== */}

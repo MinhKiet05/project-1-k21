@@ -88,7 +88,7 @@
   align-items: center;
   background-color: #eccfb2;
   border-radius: 10px;
-  width: 100%;
+  width:240px;
   max-width: 320px; /* Giới hạn chiều rộng tối đa */
   min-width: 180px;
   box-sizing: border-box;
