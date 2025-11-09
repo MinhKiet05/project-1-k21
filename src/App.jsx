@@ -8,6 +8,7 @@ import { Suspense, lazy } from 'react';
 import Header from "./components/header/Header.jsx";
 import Footer from "./components/footer/Footer.jsx";
 import ProtectedAdminRoute from "./components/ProtectedAdminRoute/ProtectedAdminRoute.jsx";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute.jsx";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop.jsx";
 import Loading from "./components/loading/Loading.jsx";
 import { useUserSync } from "./hooks/useUserSync";
@@ -48,8 +49,16 @@ export default function App() {
               <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/home" element={<HomePage />} />
-                <Route path="/post" element={<UploadPost />} />
-                <Route path="/management" element={<Management />} />
+                <Route path="/post" element={
+                  <ProtectedRoute message="Bạn cần đăng nhập để đăng bài">
+                    <UploadPost />
+                  </ProtectedRoute>
+                } />
+                <Route path="/management" element={
+                  <ProtectedRoute message="Bạn cần đăng nhập để quản lý bài đăng">
+                    <Management />
+                  </ProtectedRoute>
+                } />
                 <Route path="/about" element={<AboutUs />} />
                 <Route path="/search" element={<SearchPage />} />
                 <Route path="/product/:id" element={<DetailProduct />} />

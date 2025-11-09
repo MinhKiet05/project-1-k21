@@ -157,7 +157,7 @@ export default function DashboardPosts() {
             <thead>
               <tr>
                 <th>Tên người dùng</th>
-                <th>Tên sản phẩm</th>
+                <th >Tên sản phẩm</th>
                 <th>Hình ảnh</th>
                 <th>Giá</th>
                 <th>Danh mục</th>
@@ -220,7 +220,7 @@ export default function DashboardPosts() {
                 return (
                   <tr key={post.id}>
                     <td className="name-cell">{authorName}</td>
-                    <td>{title}</td>
+                    <td style={{maxWidth: '300px'}}>{title}</td>
                     <td className="image-cell">
                       <img src={imageUrl} alt="Post" />
                     </td>

@@ -82,7 +82,7 @@ export default function Manager() {
     return (
       <div className="manager-container">
         <h2 className="manager-title">Quản lý các bài đăng</h2>
-        <div style={{textAlign: 'center', padding: '50px', color: '#666'}}>
+        <div style={{ textAlign: "center", padding: "50px", color: "#666" }}>
           Vui lòng đăng nhập để quản lý bài đăng của bạn.
         </div>
       </div>
@@ -90,29 +90,37 @@ export default function Manager() {
   }
 
   return (
+  <div className="manager"> 
     <div className="manager-container">
-      <h2 className="manager-title">Quản lý bài đăng của tôi</h2>
-      
-      {/* Search & Filters */}
-      <div className="manager-search-section">
-        
+      <h2 className="manager-title">Quản lý bài đăng</h2>
+
+      {/* Thanh tìm kiếm + bộ lọc */}
+       <div className="search-section">
         <div className="search-box-admin">
-          <FontAwesomeIcon icon={faSearch} className="search-icon" />
+          <div>
+            <FontAwesomeIcon icon={faSearch} className="search-icon" />
+          </div>
           <input
             type="text"
-            placeholder="Tìm kiếm theo tên bài đăng"
+            placeholder="Tìm kiếm theo tên người đăng hoặc tên sản phẩm"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
 
         <div className="manager-filters-row">
-          <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
+          <select
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+          >
             <option value="newest">Mới nhất</option>
             <option value="oldest">Cũ nhất</option>
           </select>
-          
-          <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+          >
             <option value="all">Tất cả trạng thái</option>
             <option value="pending">Đang chờ</option>
             <option value="approved">Đã duyệt</option>
@@ -121,32 +129,49 @@ export default function Manager() {
             <option value="sold">Đã bán</option>
           </select>
 
-          <select value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)} disabled={categoriesLoading}>
+          <select
+            value={categoryFilter}
+            onChange={(e) => setCategoryFilter(e.target.value)}
+            disabled={categoriesLoading}
+          >
             <option value="">Tất cả danh mục</option>
-            {categories.map(c => (
-              <option key={c.id} value={c.id}>{c.name}</option>
+            {categories.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
             ))}
           </select>
 
-          <select value={locationFilter} onChange={(e) => setLocationFilter(e.target.value)} disabled={locationsLoading}>
+          <select
+            value={locationFilter}
+            onChange={(e) => setLocationFilter(e.target.value)}
+            disabled={locationsLoading}
+          >
             <option value="">Tất cả khu vực</option>
-            {locations.map(l => (
-              <option key={l.id} value={l.id}>{l.name}</option>
+            {locations.map((l) => (
+              <option key={l.id} value={l.id}>
+                {l.name}
+              </option>
             ))}
           </select>
         </div>
 
         <div className="manager-search-result">
-          {postsLoading ? 'Đang tải...' : `Tìm thấy ${posts.length} bài đăng`}
-          {postsError && <div className="manager-field-error">Lỗi tải bài đăng: {postsError}</div>}
+          {postsLoading ? "Đang tải..." : `Tìm thấy ${posts.length} bài đăng`}
+          {postsError && (
+            <div className="manager-field-error">
+              Lỗi tải bài đăng: {postsError}
+            </div>
+          )}
         </div>
       </div>
-      
+
+      {/* Bảng bài đăng */}
       <table className="manager-table">
         <thead>
           <tr>
             <th>Tên sản phẩm</th>
-            <th>Ảnh</th>
+            <th>Hình ảnh</th>
             <th>Giá</th>
             <th>Danh mục</th>
             <th>Khu vực</th>
@@ -235,7 +260,7 @@ export default function Manager() {
                 <td>{createdAt}</td>
                 <td>
                   <button 
-                    className="manager-btn"
+                    className="action-btn-view-detail"
                     onClick={() => handleViewDetail(post)}
                   >
                     Xem chi tiết
@@ -247,7 +272,6 @@ export default function Manager() {
         </tbody>
       </table>
 
-      {/* Post Detail Modal */}
       <PostDetailModal
         post={selectedPost}
         isOpen={isModalOpen}
@@ -258,5 +282,6 @@ export default function Manager() {
         showUserActions={true}
       />
     </div>
+  </div>
   );
 }

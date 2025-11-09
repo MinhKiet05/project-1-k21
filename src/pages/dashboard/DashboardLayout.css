@@ -211,17 +211,14 @@
 
 
 .action-btn-view-detail {
-  padding: 8px 16px;
+  padding: 8px 15px;
   border: none;
   border-radius: 20px;
   cursor: pointer;
   font-size: 12px;
   font-weight: 600;
   transition: all 0.2s;
-  min-width: 80px;
-}
-
-.action-btn-view-detail {
+  min-width: 100px;
   background-color: #E59462;
   color: black;
   border: 1px solid #C6714E;

@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, memo, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { SignedIn, useUser } from "@clerk/clerk-react";
-import {
-  locationService,
-  categoryService,
-  postService,
-} from "../../lib/database.js";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { supabase } from "../../lib/supabase.js";
 import CardProduct from "../../components/cardProduct/CardProduct.jsx";
+import LazyImage from "../../components/lazyImage/LazyImage.jsx";
+import LoadingSkeleton from "../../components/loadingSkeleton/LoadingSkeleton.jsx";
 import "./HomePage.css";
 import banner1 from '../../assets/banner1.webp';
 import banner2 from '../../assets/banner2.webp';
@@ -14,10 +14,11 @@ import banner3 from '../../assets/banner3.webp';
 import banner4 from '../../assets/banner4.webp';
 import logoImg from '../../assets/logo.webp';
 
-export default function HomePage() {
+function HomePage() {
+  const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = useState(0);
-  const leftBanners = [banner1, banner2]; // Carousel bên trái
-  const rightBanners = [banner3, banner4]; // Banner tĩnh bên phải
+  const leftBanners = useMemo(() => [banner1, banner2], []);
+  const rightBanners = useMemo(() => [banner3, banner4], []);
   
   // States for data
   const [hotCategories, setHotCategories] = useState([]);
@@ -25,12 +26,11 @@ export default function HomePage() {
   const [recommendedPosts, setRecommendedPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Auto slide every 5 seconds cho carousel bên trái
+  // Auto slide every 5 seconds
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % leftBanners.length);
     }, 5000);
-
     return () => clearInterval(timer);
   }, [leftBanners.length]);
 
@@ -40,7 +40,7 @@ export default function HomePage() {
       try {
         setLoading(true);
 
-        // 1. Fetch random 4 posts từ danh mục "Giáo trình" cho "Danh mục hot"
+        // 1. Fetch categories for hot section
         const { data: categories } = await supabase
           .from('categories')
           .select('id')
@@ -57,23 +57,16 @@ export default function HomePage() {
             `)
             .eq('category_id', categories[0].id)
             .eq('status', 'approved')
-            .limit(20); // Lấy nhiều hơn để random
+            .limit(20);
           
           if (categoryPosts && categoryPosts.length > 0) {
-            // Shuffle và lấy 4 bài ngẫu nhiên
             const shuffled = [...categoryPosts].sort(() => Math.random() - 0.5);
             setHotCategories(shuffled.slice(0, 4));
-          } else {
-            setHotCategories([]);
           }
         }
 
-        // 2. Fetch 4 bài đăng được duyệt gần đây nhất
-        // Thử multiple approaches để đảm bảo có dữ liệu
-        let latest = null;
-
-        // Cách 1: Sử dụng expires_at (khi approve, expires_at được set)
-        const { data: latestByExpires } = await supabase
+        // 2. Fetch latest approved posts - sắp xếp theo expires_at xa nhất (mới duyệt nhất)
+        const { data: latestPosts } = await supabase
           .from('posts')
           .select(`
             *,
@@ -85,45 +78,10 @@ export default function HomePage() {
           .order('expires_at', { ascending: false })
           .limit(4);
 
-        if (latestByExpires && latestByExpires.length > 0) {
-          latest = latestByExpires;
-        } else {
-          // Cách 2: Fallback - sử dụng updated_at
-          const { data: latestByUpdated } = await supabase
-            .from('posts')
-            .select(`
-              *,
-              category:categories(id, name),
-              location:locations(id, name)
-            `)
-            .eq('status', 'approved')
-            .order('updated_at', { ascending: false })
-            .limit(4);
-          
-          if (latestByUpdated && latestByUpdated.length > 0) {
-            latest = latestByUpdated;
-          } else {
-            // Cách 3: Fallback cuối - sử dụng created_at  
-            const { data: latestByCreated } = await supabase
-              .from('posts')
-              .select(`
-                *,
-                category:categories(id, name),
-                location:locations(id, name)
-              `)
-              .eq('status', 'approved')
-              .order('created_at', { ascending: false })
-              .limit(4);
-            
-            latest = latestByCreated;
-          }
-        }
+        setLatestPosts(latestPosts || []);
 
-
-        setLatestPosts(latest || []);
-
-        // 3. Fetch 4 bài đăng ngẫu nhiên để gợi ý
-        const { data: random } = await supabase
+        // 3. Fetch random posts for recommendations
+        const { data: randomPosts } = await supabase
           .from('posts')
           .select(`
             *,
@@ -131,16 +89,15 @@ export default function HomePage() {
             location:locations(id, name)
           `)
           .eq('status', 'approved')
-          .limit(20); // Lấy nhiều hơn để chọn ngẫu nhiên
+          .limit(20);
 
-        if (random && random.length > 0) {
-          // Shuffle và lấy 4 bài ngẫu nhiên
-          const shuffled = [...random].sort(() => Math.random() - 0.5);
-          setRecommendedPosts(shuffled.slice(0, 4));
+        if (randomPosts && randomPosts.length > 0) {
+          const shuffled = [...randomPosts].sort(() => Math.random() - 0.5);
+          setRecommendedPosts(shuffled.slice(0, 8));
         }
 
       } catch (error) {
-        // Error fetching homepage data
+        // Handle error silently
       } finally {
         setLoading(false);
       }
@@ -149,22 +106,21 @@ export default function HomePage() {
     fetchHomePageData();
   }, []);
 
-  const nextSlide = () => {
+  // Carousel handlers
+  const nextSlide = useCallback(() => {
     setCurrentSlide((prev) => (prev + 1) % leftBanners.length);
-  };
+  }, [leftBanners.length]);
 
-  const prevSlide = () => {
-    setCurrentSlide(
-      (prev) => (prev - 1 + leftBanners.length) % leftBanners.length
-    );
-  };
+  const prevSlide = useCallback(() => {
+    setCurrentSlide((prev) => (prev - 1 + leftBanners.length) % leftBanners.length);
+  }, [leftBanners.length]);
 
-  const goToSlide = (index) => {
+  const goToSlide = useCallback((index) => {
     setCurrentSlide(index);
-  };
+  }, []);
 
-  // Convert post data to CardProduct format
-  const convertPostToProduct = (post) => {
+  // Convert post to product format
+  const convertPostToProduct = useCallback((post) => {
     const imageUrl = (post.image_urls && post.image_urls[0]) || 
                     (post.imageUrls && post.imageUrls[0]) || 
                     post.image_url || 
@@ -177,178 +133,124 @@ export default function HomePage() {
       price: post.price || 0,
       image: imageUrl
     };
-  };
+  }, []);
 
   return (
     <>
-      {/* Banner Section Layout */}
+      {/* Banner Section */}
       <div className="banner-section">
-        {/* Left Carousel */}
         <div className="left-carousel">
           <div className="carousel-wrapper">
-            <div
-              className="carousel-slides"
-              style={{ transform: `translateX(-${currentSlide * 100}%)` }}
-            >
+            <div className="carousel-slides" style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
               {leftBanners.map((banner, index) => (
                 <div key={index} className="carousel-slide">
-                  <img src={banner} alt={`Main Banner ${index + 1}`} />
+                  <LazyImage src={banner} alt={`Main Banner ${index + 1}`} />
                 </div>
               ))}
             </div>
-
-            {/* Navigation Arrows */}
-            <button
-              className="carousel-btn carousel-btn-prev"
-              onClick={prevSlide}
-            >
-              &#8249;
-            </button>
-            <button
-              className="carousel-btn carousel-btn-next"
-              onClick={nextSlide}
-            >
-              &#8250;
-            </button>
-
-            {/* Dots Indicators */}
+            <button className="carousel-btn carousel-btn-prev" onClick={prevSlide}>&#8249;</button>
+            <button className="carousel-btn carousel-btn-next" onClick={nextSlide}>&#8250;</button>
             <div className="carousel-dots">
               {leftBanners.map((_, index) => (
                 <button
                   key={index}
-                  className={`carousel-dot ${
-                    index === currentSlide ? "active" : ""
-                  }`}
+                  className={`carousel-dot ${index === currentSlide ? "active" : ""}`}
                   onClick={() => goToSlide(index)}
                 />
               ))}
             </div>
           </div>
         </div>
-
-        {/* Right Banner Group */}
         <div className="right-banners">
           <div className="right-banner-top">
-            <img src={rightBanners[0]} alt="Top Right Banner" />
+            <LazyImage src={rightBanners[0]} alt="Top Right Banner" />
           </div>
           <div className="right-banner-bottom">
-            <img src={rightBanners[1]} alt="Bottom Right Banner" />
+            <LazyImage src={rightBanners[1]} alt="Bottom Right Banner" />
           </div>
         </div>
       </div>
 
       <div className="homepage-container">
-        {/* Danh mục hot */}
+        {/* Hot Categories */}
         <div className="homepage-section">
           <h2 className="homepage-section-title">Danh mục hot - Giáo trình</h2>
           <div className="homepage-products-grid">
             {loading ? (
-              // Loading placeholder
               Array.from({ length: 4 }).map((_, index) => (
-                <CardProduct
-                  key={`hot-loading-${index}`}
-                  product={{
-                    name: "Đang tải...",
-                    price: 1,
-                    image: logoImg,
-                  }}
-                />
+                <LoadingSkeleton key={`hot-loading-${index}`} />
               ))
             ) : hotCategories.length > 0 ? (
               hotCategories.map((post, index) => (
-                <CardProduct
-                  key={`hot-${post.id || index}`}
-                  product={convertPostToProduct(post)}
-                />
+                <CardProduct key={`hot-${post.id || index}`} product={convertPostToProduct(post)} />
               ))
             ) : (
-              // Fallback khi không có dữ liệu
               Array.from({ length: 4 }).map((_, index) => (
                 <CardProduct
                   key={`hot-fallback-${index}`}
-                  product={{
-                    name: "Chưa có sản phẩm",
-                    price: 0,
-                    image: logoImg,
-                  }}
+                  product={{ name: "Chưa có sản phẩm", price: 0, image: logoImg }}
                 />
               ))
             )}
           </div>
+          <div className="see-all-container">
+            <span 
+              className="see-all" 
+              onClick={() => navigate('/search?q=&category=d1261632-4ade-4a65-ab34-d1804e31210a')}
+            >
+              Xem tất cả <FontAwesomeIcon icon={faArrowRight} />
+            </span>
+          </div>
         </div>
 
-        {/* Bài đăng mới nhất */}
+        {/* Latest Posts */}
         <div className="homepage-section">
           <h2 className="homepage-section-title">Bài đăng mới nhất</h2>
           <div className="homepage-products-grid">
             {loading ? (
-              // Loading placeholder
               Array.from({ length: 4 }).map((_, index) => (
-                <CardProduct
-                  key={`latest-loading-${index}`}
-                  product={{
-                    name: "Đang tải...",
-                    price: 0,
-                    image: logoImg,
-                  }}
-                />
+                <LoadingSkeleton key={`latest-loading-${index}`} />
               ))
             ) : latestPosts.length > 0 ? (
               latestPosts.map((post, index) => (
-                <CardProduct
-                  key={`latest-${post.id || index}`}
-                  product={convertPostToProduct(post)}
-                />
+                <CardProduct key={`latest-${post.id || index}`} product={convertPostToProduct(post)} />
               ))
             ) : (
-              // Fallback khi không có dữ liệu
               Array.from({ length: 4 }).map((_, index) => (
                 <CardProduct
                   key={`latest-fallback-${index}`}
-                  product={{
-                    name: "Chưa có bài đăng mới",
-                    price: 0,
-                    image: logoImg,
-                  }}
+                  product={{ name: "Chưa có bài đăng mới", price: 0, image: logoImg }}
                 />
               ))
             )}
           </div>
+          <div className="see-all-container">
+            <span 
+              className="see-all" 
+              onClick={() => navigate('/search?sortBy=latest')}
+            >
+              Xem tất cả <FontAwesomeIcon icon={faArrowRight} />
+            </span>
+          </div>
         </div>
 
-        {/* Gợi ý cho bạn */}
+        {/* Recommendations */}
         <div className="homepage-section">
           <h2 className="homepage-section-title">Gợi ý cho bạn</h2>
           <div className="homepage-products-grid">
             {loading ? (
-              // Loading placeholder
               Array.from({ length: 4 }).map((_, index) => (
-                <CardProduct
-                  key={`recommended-loading-${index}`}
-                  product={{
-                    name: "Đang tải...",
-                    price: 0,
-                    image: logoImg,
-                  }}
-                />
+                <LoadingSkeleton key={`recommended-loading-${index}`} />
               ))
             ) : recommendedPosts.length > 0 ? (
               recommendedPosts.map((post, index) => (
-                <CardProduct
-                  key={`recommended-${post.id || index}`}
-                  product={convertPostToProduct(post)}
-                />
+                <CardProduct key={`recommended-${post.id || index}`} product={convertPostToProduct(post)} />
               ))
             ) : (
-              // Fallback khi không có dữ liệu
               Array.from({ length: 4 }).map((_, index) => (
                 <CardProduct
                   key={`recommended-fallback-${index}`}
-                  product={{
-                    name: "Chưa có gợi ý",
-                    price: 0,
-                    image: logoImg,
-                  }}
+                  product={{ name: "Chưa có gợi ý", price: 0, image: logoImg }}
                 />
               ))
             )}
@@ -358,3 +260,5 @@ export default function HomePage() {
     </>
   );
 }
+
+export default memo(HomePage);

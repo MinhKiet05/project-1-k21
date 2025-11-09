@@ -7,6 +7,10 @@ import { supabase } from '../../lib/supabase';
 import { useChatContext } from '../../contexts/ChatContext';
 import { toast } from 'react-toastify';
 import './DetailProduct.css';
+import CardProduct from '../../components/cardProduct/CardProduct';
+import logoImg from '../../assets/logo.webp';
+import LoginRequiredDialog from '../../components/loginRequiredDialog/LoginRequiredDialog';
+import { useAuthCheck } from '../../hooks/useAuthCheck';
 
 export default function DetailProduct() {
     const { id } = useParams();
@@ -18,12 +22,22 @@ export default function DetailProduct() {
     const [error, setError] = useState(null);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [chatLoading, setChatLoading] = useState(false);
+    const [recommendedPosts, setRecommendedPosts] = useState([]);
+    const [recommendedLoading, setRecommendedLoading] = useState(false);
+    const { showLoginDialog, checkAuthAndExecute, closeLoginDialog } = useAuthCheck();
 
     useEffect(() => {
         if (id) {
             fetchPostDetail();
         }
     }, [id]);
+
+    // Fetch recommended posts khi đã có thông tin post
+    useEffect(() => {
+        if (post?.category_id) {
+            fetchRecommendedPosts();
+        }
+    }, [post?.category_id]);
 
     const fetchPostDetail = async () => {
         try {
@@ -56,6 +70,51 @@ export default function DetailProduct() {
         } finally {
             setLoading(false);
         }
+    };
+
+    const fetchRecommendedPosts = async () => {
+        try {
+            setRecommendedLoading(true);
+            
+            const { data, error } = await supabase
+                .from('posts')
+                .select(`
+                    *,
+                    categories (name),
+                    locations!location_id (name),
+                    profiles!author_id (full_name, avatar_url)
+                `)
+                .eq('category_id', post.category_id)
+                .eq('status', 'approved')
+                .neq('id', id) // Loại trừ bài đang xem
+                .limit(8); // Lấy 8 bài để shuffle
+
+            if (error) {
+                console.error('Error fetching recommended posts:', error);
+                return;
+            }
+
+            // Shuffle ngẫu nhiên và lấy 4 bài
+            const shuffled = data.sort(() => 0.5 - Math.random());
+            setRecommendedPosts(shuffled.slice(0, 4));
+
+        } catch (error) {
+            console.error('Error fetching recommended posts:', error);
+        } finally {
+            setRecommendedLoading(false);
+        }
+    };
+
+    const convertPostToProduct = (post) => {
+        return {
+            id: post.id,
+            name: post.title,
+            price: post.price,
+            image: post.image_urls?.[0] || post.images?.[0] || post.image_url || logoImg,
+            category: post.categories?.name,
+            location: post.locations?.name,
+            author: post.profiles?.full_name
+        };
     };
 
     const handleClose = () => {
@@ -289,8 +348,8 @@ export default function DetailProduct() {
                         </div>
                         <button 
                                 className="detail-contact-btn"
-                                onClick={handleContactSeller}
-                                disabled={chatLoading || !user}
+                                onClick={() => checkAuthAndExecute(handleContactSeller, "Bạn cần đăng nhập để liên hệ với người bán")}
+                                disabled={chatLoading}
                             >
                                 <FontAwesomeIcon icon={faComment} />
                                 {chatLoading ? 'Đang tạo cuộc trò chuyện...' : 'Liên hệ ngay'}
@@ -299,6 +358,50 @@ export default function DetailProduct() {
                 </div>
             </div>
 
+            <div className="suggestion-section">
+                      <h2 className="suggestion-section-title">Danh mục tương tự</h2>
+                      <div className="suggestion-products-grid">
+                        {recommendedLoading ? (
+                          // Loading placeholder
+                          Array.from({ length: 4 }).map((_, index) => (
+                            <CardProduct
+                              key={`recommended-loading-${index}`}
+                              product={{
+                                name: "Đang tải...",
+                                price: 0,
+                                image: logoImg,
+                              }}
+                            />
+                          ))
+                        ) : recommendedPosts.length > 0 ? (
+                          recommendedPosts.map((post, index) => (
+                            <CardProduct
+                              key={`recommended-${post.id || index}`}
+                              product={convertPostToProduct(post)}
+                            />
+                          ))
+                        ) : (
+                          // Fallback khi không có dữ liệu
+                          Array.from({ length: 4 }).map((_, index) => (
+                            <CardProduct
+                              key={`recommended-fallback-${index}`}
+                              product={{
+                                name: "Chưa có gợi ý",
+                                price: 0,
+                                image: logoImg,
+                              }}
+                            />
+                          ))
+                        )}
+                      </div>
+                    </div>
+
+            {/* Login Required Dialog */}
+            <LoginRequiredDialog
+                isOpen={showLoginDialog}
+                onClose={closeLoginDialog}
+                message="Bạn cần đăng nhập để liên hệ với người bán"
+            />
         </div>
     );
 }

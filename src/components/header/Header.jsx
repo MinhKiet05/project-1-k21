@@ -24,9 +24,11 @@ import { useChatContext } from "../../contexts/ChatContext";
 import ChatPopup from "../chat/ChatPopUp";
 import ChatWindow from "../chat/ChatWindow";
 import NotificationsPopup from "../notificationsPopup/NotificationsPopup";
+import LoginRequiredDialog from "../loginRequiredDialog/LoginRequiredDialog";
 import { getUnreadNotificationsCount } from "../../utils/notificationUtils";
 import { useUser } from '@clerk/clerk-react';
 import { supabase } from '../../lib/supabase';
+import { useAuthCheck } from '../../hooks/useAuthCheck';
 
 export default function Header() {
   const location = useLocation();
@@ -37,6 +39,7 @@ export default function Header() {
   const searchInputRef = useRef(null);
   const [showNotifications, setShowNotifications] = useState(false);
   const [unreadNotificationsCount, setUnreadNotificationsCount] = useState(0);
+  const { showLoginDialog, checkAuthAndExecute, closeLoginDialog } = useAuthCheck();
   
   // State để quản lý popup nào đang active
   const [activePopup, setActivePopup] = useState(null); // 'chat', 'notifications', 'directChat', null
@@ -112,6 +115,11 @@ export default function Header() {
     }
   };
 
+  // Handle auth-protected navigation
+  const handleProtectedNavigation = (path, message) => {
+    checkAuthAndExecute(() => navigate(path), message);
+  };
+
   // Fetch unread notifications count
   useEffect(() => {
     if (user?.id) {
@@ -154,17 +162,28 @@ export default function Header() {
               </Link>
             </li>
             <li>
-              <Link to="/post" className={isActive("/post") ? "active" : ""}>
+              <a 
+                href="#" 
+                className={isActive("/post") ? "active" : ""}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleProtectedNavigation('/post', 'Bạn cần đăng nhập để đăng bài');
+                }}
+              >
                 Đăng bài
-              </Link>
+              </a>
             </li>
             <li>
-              <Link
-                to="/management"
+              <a
+                href="#"
                 className={isActive("/management") ? "active" : ""}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleProtectedNavigation('/management', 'Bạn cần đăng nhập để quản lý bài đăng');
+                }}
               >
                 Quản lý
-              </Link>
+              </a>
             </li>
             <li>
               <Link to="/about" className={isActive("/about") ? "active" : ""}>
@@ -260,6 +279,12 @@ export default function Header() {
           onClose={closeDirectChat}
         />
       )}
+
+      {/* ==== LOGIN REQUIRED DIALOG ==== */}
+      <LoginRequiredDialog
+        isOpen={showLoginDialog}
+        onClose={closeLoginDialog}
+      />
     </header>
   );
 }

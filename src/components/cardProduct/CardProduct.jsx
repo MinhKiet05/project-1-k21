@@ -1,15 +1,16 @@
-import React from "react";
+import React, { memo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import LazyImage from "../lazyImage/LazyImage.jsx";
 import "./CardProduct.css";
 
-export default function CardProduct({ product }) {
+const CardProduct = memo(({ product }) => {
   const navigate = useNavigate();
 
-  const handleCardClick = () => {
+  const handleCardClick = useCallback(() => {
     if (product?.id) {
       navigate(`/product/${product.id}`);
     }
-  };
+  }, [product?.id, navigate]);
 
   return (
     <>
@@ -35,4 +36,8 @@ export default function CardProduct({ product }) {
       </div>
     </>
   );
-}
+});
+
+CardProduct.displayName = 'CardProduct';
+
+export default CardProduct;

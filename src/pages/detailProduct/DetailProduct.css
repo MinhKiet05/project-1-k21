@@ -10,6 +10,7 @@
     justify-content: center;
     font-family: 'BeVietNamPro', sans-serif;
     position: relative;
+    flex-direction: column;
 }
 
 .detail-wrapper {
@@ -18,8 +19,9 @@
     padding: 30px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     position: relative;
-    width: 1200px;
+    width: 1140px;
     display: block;
+    margin: 0 auto;
 }
 
 /* Bỏ close button vì không cần modal */
@@ -377,4 +379,85 @@
     opacity: 0.6;
     cursor: not-allowed;
     background-color: #ccc;
+}
+
+/* Suggestion Section - Similar to Homepage */
+.suggestion-section {
+    margin: 50px auto 0;
+    background-color: #fcfafa;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    max-width: 1140px;
+}
+
+.suggestion-section-title {
+    color: #4b0e0e;
+    font-family: "Be Vietnam Pro", sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    padding-bottom: 12px;
+    position: relative;
+    text-shadow: 2px 2px 3px #00000040;
+    display: inline-block;
+    width: 100%;
+}
+
+.suggestion-section-title::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(90deg, #e67e22, #f39c12);
+    border-radius: 2px;
+}
+
+.suggestion-products-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+}
+
+/* Responsive Grid for Suggestion Section */
+@media (max-width: 968px) {
+    .suggestion-section {
+        margin: 30px 10px 0;
+        padding: 20px;
+    }
+    
+    .suggestion-products-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+    
+    .suggestion-section-title {
+        font-size: 24px;
+    }
+}
+
+@media (max-width: 768px) {
+    .suggestion-section {
+        margin: 20px 5px 0;
+        padding: 15px;
+    }
+    
+    .suggestion-products-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+    
+    .suggestion-section-title {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .suggestion-products-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
 }
