@@ -57,7 +57,7 @@ function HomePage() {
             `)
             .eq('category_id', categories[0].id)
             .eq('status', 'approved')
-            .limit(20);
+            .limit(10);
           
           if (categoryPosts && categoryPosts.length > 0) {
             const shuffled = [...categoryPosts].sort(() => Math.random() - 0.5);

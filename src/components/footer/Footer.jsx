@@ -20,7 +20,7 @@ function Footer() {
         {/* Logo */}
         <div className="footer-logo">
                   <img src={logo} alt="Logo" />
-                  <div>
+                  <div className="footer-name">
                     <div className="footer-name-top">Nổ Tung </div>
                     <div className="footer-name-bottom">Phố Cổ</div>
                   </div>
