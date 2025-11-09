@@ -223,7 +223,14 @@ export default function Manager() {
                 : "Chưa có giá";
               const categoryName = post.category?.name || "-";
               const locationName = post.location?.name || "-";
-              const createdAt = post.created_at || "-";
+              const createdAt = post.created_at
+                  ? new Date(post.created_at).toLocaleString("vi-VN", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                  })
+                  : "-";
+
               const username = post.user?.name || "Ẩn danh";
 
               // Trạng thái hiển thị
