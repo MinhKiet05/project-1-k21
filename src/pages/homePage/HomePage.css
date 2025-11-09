@@ -7,15 +7,17 @@
   gap: 8px;
   width: 100%;
   max-width: 1200px;
-  margin: 20px auto;
-  padding: 0 20px;
+  margin: 20px auto 0px auto;
+  padding-bottom: 20px;
+}
+
+.banner-section * {
+  box-sizing: border-box;
 }
 
 /* Left Carousel (Main Banner) */
 .left-carousel {
   flex: 2;
-  position: relative;
-  overflow: hidden;
   border-radius: 8px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
@@ -23,8 +25,9 @@
 .carousel-wrapper {
   position: relative;
   width: 100%;
-  height: 280px;
+  height: 260px;
   overflow: hidden;
+  line-height: 0; /* Remove line-height spacing */
 }
 
 .carousel-slides {
@@ -36,13 +39,22 @@
 .carousel-slide {
   min-width: 100%;
   height: 100%;
+  line-height: 0; /* Remove line-height spacing */
 }
 
 .carousel-slide img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center center;
   display: block;
+  margin: 0;
+  padding: 0;
+  transition: transform 0.3s ease;
+}
+
+.carousel-slide:hover img {
+  transform: scale(1.05); /* Zoom nhẹ khi hover */
 }
 
 /* Right Banner Group */
@@ -67,13 +79,16 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center center;
   display: block;
+  margin: 0;
+  padding: 0;
   transition: transform 0.3s ease;
 }
 
 .right-banner-top:hover img,
 .right-banner-bottom:hover img {
-  transform: scale(1.02);
+  transform: scale(1.05);
 }
 
 /* Navigation Arrows */
@@ -163,12 +178,13 @@
   .right-banners {
     flex-direction: row;
     gap: 8px;
-    height: auto;
+    height: 200px; /* Same height as carousel */
   }
 
   .right-banner-top,
   .right-banner-bottom {
-    height: 120px;
+    height: 200px; /* Same height as carousel */
+    flex: 1;
   }
 
   .carousel-btn {
@@ -209,12 +225,13 @@
   .right-banners {
     flex-direction: column;
     gap: 6px;
-    height: auto;
+    height: 160px; /* Same height as carousel */
   }
 
   .right-banner-top,
   .right-banner-bottom {
-    height: 80px;
+    height: 160px; /* Same height as carousel */
+    flex: 1;
   }
 }
 
