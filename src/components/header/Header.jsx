@@ -250,7 +250,7 @@ export default function Header() {
 
             {/* Dashboard (admin) */}
             {isAdmin() && (
-              <Link to="/dashboard" className="header-icon-btn">
+              <Link to="/dashboard" className={`header-icon-btn ${isActive("/dashboard") ? "active" : ""}`}>
                 <FontAwesomeIcon icon={faCrown} className="icon-btn-bell" />
               </Link>
             )}

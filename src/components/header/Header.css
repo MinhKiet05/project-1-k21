@@ -158,7 +158,6 @@
 /* Active state cho popup đang mở - CHUNG cho chat và notifications */
 .header-icon-btn.active {
   background-color: rgba(255, 255, 255, 0.6);
-  transform: translateY(-1px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 .header-icon-btn.active .icon-btn,
