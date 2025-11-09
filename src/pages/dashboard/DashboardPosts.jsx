@@ -125,9 +125,17 @@ export default function DashboardPosts() {
 
           <select value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)} disabled={categoriesLoading}>
             <option value="">Tất cả danh mục</option>
-            {categories.map(c => (
-              <option key={c.id} value={c.id}>{c.name}</option>
-            ))}
+            {categories
+              .sort((a, b) => {
+                // "Khác" luôn ở cuối
+                if (a.name.toLowerCase().includes('khác')) return 1;
+                if (b.name.toLowerCase().includes('khác')) return -1;
+                // Các danh mục khác sắp xếp theo tên
+                return a.name.localeCompare(b.name, 'vi', { sensitivity: 'base' });
+              })
+              .map(c => (
+                <option key={c.id} value={c.id}>{c.name}</option>
+              ))}
           </select>
 
           <select value={locationFilter} onChange={(e) => setLocationFilter(e.target.value)} disabled={locationsLoading}>

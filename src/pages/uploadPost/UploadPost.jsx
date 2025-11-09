@@ -331,11 +331,19 @@ export default function UploadPost() {
                                  categoriesError ? 'Lỗi tải dữ liệu' : 
                                  'Chọn danh mục'}
                             </option>
-                            {categories.map((category) => (
-                                <option key={category.id} value={category.id}>
-                                    {category.name}
-                                </option>
-                            ))}
+                            {categories
+                                .sort((a, b) => {
+                                    // "Khác" luôn ở cuối
+                                    if (a.name.toLowerCase().includes('khác')) return 1;
+                                    if (b.name.toLowerCase().includes('khác')) return -1;
+                                    // Các danh mục khác sắp xếp theo tên
+                                    return a.name.localeCompare(b.name, 'vi', { sensitivity: 'base' });
+                                })
+                                .map((category) => (
+                                    <option key={category.id} value={category.id}>
+                                        {category.name}
+                                    </option>
+                                ))}
                         </select>
                         {categoriesError && (
                             <div className="field-error">Không thể tải danh mục: {categoriesError}</div>
