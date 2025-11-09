@@ -5,7 +5,6 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons"
 import { toast } from 'react-toastify'
 import { confirmAlert } from 'react-confirm-alert'
 import 'react-confirm-alert/src/react-confirm-alert.css'
-import '../../styles/confirm-alert.css'
 import { usePosts } from '../../hooks/usePosts'
 import { useCategories } from '../../hooks/useCategories'
 import { useLocations } from '../../hooks/useLocations'
