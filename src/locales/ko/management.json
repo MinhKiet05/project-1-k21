@@ -1,0 +1,49 @@
+{
+  "title": "게시물 관리",
+  "search": "게시물 검색...",
+  "pleaseLogin": "게시물을 관리하려면 로그인해주세요.",
+  "noPosts": "게시물이 아직 없습니다",
+  "filters": {
+    "allStatus": "모든 상태",
+    "allCategories": "모든 카테고리",
+    "allLocations": "모든 지역",
+    "newest": "최신",
+    "oldest": "오래된"
+  },
+  "status": {
+    "pending": "승인 대기",
+    "approved": "승인됨",
+    "rejected": "거부됨",
+    "expired": "만료됨",
+    "sold": "판매완료",
+    "unknown": "알 수 없음"
+  },
+  "table": {
+    "productName": "상품명",
+    "image": "이미지",
+    "price": "가격",
+    "category": "카테고리",
+    "location": "지역",
+    "status": "상태",
+    "createdAt": "생성일",
+    "actions": "작업"
+  },
+  "results": {
+    "found": "{{count}}개 게시물을 찾았습니다"
+  },
+  "errors": {
+    "loadPosts": "게시물 로드 오류"
+  },
+  "loading": {
+    "posts": "게시물 로딩 중..."
+  },
+  "actions": {
+    "viewDetail": "자세히 보기"
+  },
+  "messages": {
+    "markAsSoldSuccess": "게시물이 판매완료로 성공적으로 표시되었습니다!",
+    "updateStatusError": "상태 업데이트 오류",
+    "extendSuccess": "게시물이 7일 더 연장되었습니다!",
+    "extendError": "게시물 연장 오류"
+  }
+}

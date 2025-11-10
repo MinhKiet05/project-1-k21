@@ -1,0 +1,29 @@
+{
+  "title": "在线聊天",
+  "placeholder": "输入消息...",
+  "send": "发送",
+  "online": "在线",
+  "offline": "离线",
+  "typing": "正在输入...",
+  "messageActions": {
+    "copy": "复制",
+    "delete": "删除",
+    "reply": "回复"
+  },
+  "fileUpload": {
+    "selectFile": "选择文件",
+    "uploadImage": "上传图片",
+    "uploadDocument": "上传文档"
+  },
+  "connectionStatus": {
+    "connected": "已连接",
+    "connecting": "连接中...",
+    "disconnected": "连接断开",
+    "reconnecting": "重新连接中..."
+  },
+  "chatList": {
+    "title": "聊天列表",
+    "search": "搜索聊天",
+    "noChats": "暂无聊天记录"
+  }
+}

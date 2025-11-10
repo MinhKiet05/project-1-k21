@@ -1,0 +1,38 @@
+{
+  "title": "热门商品",
+  "categories": [
+    {
+      "id": "electronics",
+      "name": "电子产品",
+      "icon": "smartphone"
+    },
+    {
+      "id": "clothing",
+      "name": "服装",
+      "icon": "shirt"
+    },
+    {
+      "id": "home",
+      "name": "家居用品",
+      "icon": "home"
+    },
+    {
+      "id": "books",
+      "name": "图书",
+      "icon": "book"
+    },
+    {
+      "id": "sports",
+      "name": "运动用品",
+      "icon": "dumbbell"
+    },
+    {
+      "id": "other",
+      "name": "其他",
+      "icon": "grid"
+    }
+  ],
+  "loadMore": "加载更多",
+  "noProducts": "暂无商品",
+  "priceRange": "价格区间"
+}

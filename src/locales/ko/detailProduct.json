@@ -1,0 +1,28 @@
+{
+  "title": "상품 상세정보",
+  "backToSearch": "검색으로 돌아가기",
+  "price": "가격",
+  "condition": "상품 상태",
+  "location": "지역",
+  "seller": "판매자",
+  "postedDate": "등록일",
+  "description": "상품 설명",
+  "specifications": "상품 사양",
+  "contact": {
+    "title": "연락처",
+    "message": "메시지 보내기",
+    "phone": "전화 연락",
+    "email": "이메일 연락"
+  },
+  "actions": {
+    "addToFavorites": "찜 목록에 추가",
+    "share": "상품 공유",
+    "reportIssue": "문제 신고"
+  },
+  "relatedProducts": "관련 상품",
+  "reviews": {
+    "title": "사용자 리뷰",
+    "noReviews": "리뷰가 없습니다",
+    "writeReview": "리뷰 작성"
+  }
+}

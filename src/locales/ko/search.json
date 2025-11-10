@@ -1,0 +1,21 @@
+{
+  "title": "검색",
+  "filters": "검색 필터",
+  "location": "지역:",
+  "category": "카테고리별:",
+  "price": "가격:",
+  "time": "시간",
+  "all": "전체",
+  "newest": "최신",
+  "oldest": "오래된",
+  "priceAsc": "가격: 낮은순부터",
+  "priceDesc": "가격: 높은순부터",
+  "priceFrom": "최저 가격",
+  "priceTo": "최고 가격",
+  "resultsFor": "키워드 검색 결과",
+  "results": "결과",
+  "loading": "결과 로딩 중...",
+  "noResults": "결과를 찾을 수 없습니다",
+  "noResultsMessage": "검색 키워드나 필터를 변경해 보세요",
+  "allProducts": "모든 상품"
+}

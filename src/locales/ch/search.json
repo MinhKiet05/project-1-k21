@@ -1,0 +1,21 @@
+{
+  "title": "搜索",
+  "filters": "搜索筛选",
+  "location": "地区:",
+  "category": "按类别:",
+  "price": "价格:",
+  "time": "时间",
+  "all": "全部",
+  "newest": "最新",
+  "oldest": "最早",
+  "priceAsc": "价格：从低到高",
+  "priceDesc": "价格：从高到低",
+  "priceFrom": "价格从",
+  "priceTo": "到价格",
+  "resultsFor": "关键词搜索结果",
+  "results": "结果",
+  "loading": "正在加载结果...",
+  "noResults": "未找到结果",
+  "noResultsMessage": "尝试更改搜索关键词或筛选条件",
+  "allProducts": "所有商品"
+}

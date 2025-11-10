@@ -2,7 +2,7 @@ import "./Header.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useRef, useState, useEffect } from "react";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 import logo from "../../assets/logo.webp";
 import {
   faBell,
@@ -11,6 +11,37 @@ import {
   faRightToBracket,
   faCrown,
 } from "@fortawesome/free-solid-svg-icons";
+
+// Import flag WebP files
+import vietnamFlag from "../../assets/flags/vietNamFlag.webp";
+import ukFlag from "../../assets/flags/ukFlag.webp";
+import chinaFlag from "../../assets/flags/chinaFlag.webp";
+import koreaFlag from "../../assets/flags/koreaFlag.webp";
+
+// Flag component with actual flag images
+const FlagIcon = ({ countryCode, className }) => {
+  const flagImages = {
+    vi: vietnamFlag,
+    en: ukFlag,
+    ch: chinaFlag,
+    ko: koreaFlag,
+  };
+
+  const flagAltTexts = {
+    vi: "Vietnam Flag",
+    en: "United Kingdom Flag",
+    ch: "China Flag",
+    ko: "South Korea Flag",
+  };
+
+  return (
+    <img
+      src={flagImages[countryCode]}
+      alt={flagAltTexts[countryCode] || "Flag"}
+      className={`flag-image ${className || ""}`}
+    />
+  );
+};
 
 import {
   SignedIn,
@@ -27,27 +58,46 @@ import ChatWindow from "../chat/ChatWindow";
 import NotificationsPopup from "../notificationsPopup/NotificationsPopup";
 import LoginRequiredDialog from "../loginRequiredDialog/LoginRequiredDialog";
 import { getUnreadNotificationsCount } from "../../utils/notificationUtils";
-import { useUser } from '@clerk/clerk-react';
-import { supabase } from '../../lib/supabase';
-import { useAuthCheck } from '../../hooks/useAuthCheck';
+import { useUser } from "@clerk/clerk-react";
+import { supabase } from "../../lib/supabase";
+import { useAuthCheck } from "../../hooks/useAuthCheck";
 
 export default function Header() {
-  const { t, i18n } = useTranslation(['header', 'common']);
+  const { t, i18n } = useTranslation(["header", "common"]);
   const location = useLocation();
   const navigate = useNavigate();
+
+  // Language configuration
+  const languages = {
+    vi: { text: "Tiếng Việt" },
+    en: { text: "English" },
+    ch: { text: "中文" },
+    ko: { text: "한국어" },
+  };
   const { user } = useUser();
   const { isAdmin } = useUserRole();
-  const { showChatPopup, openChatPopup, closeChatPopup, conversations, directChatUser, closeDirectChat } = useChatContext();
+  const {
+    showChatPopup,
+    openChatPopup,
+    closeChatPopup,
+    conversations,
+    directChatUser,
+    closeDirectChat,
+  } = useChatContext();
   const searchInputRef = useRef(null);
   const [showNotifications, setShowNotifications] = useState(false);
   const [unreadNotificationsCount, setUnreadNotificationsCount] = useState(0);
-  const { showLoginDialog, checkAuthAndExecute, closeLoginDialog } = useAuthCheck();
-  
+  const { showLoginDialog, checkAuthAndExecute, closeLoginDialog } =
+    useAuthCheck();
+  const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
+
   // State để quản lý popup nào đang active
   const [activePopup, setActivePopup] = useState(null); // 'chat', 'notifications', 'directChat', null
-  
+
   // Check if there are unread messages
-  const hasUnreadMessages = conversations.some(conv => conv.is_seen === false);
+  const hasUnreadMessages = conversations.some(
+    (conv) => conv.is_seen === false
+  );
 
   // Cập nhật activePopup khi các popup thay đổi
   useEffect(() => {
@@ -55,11 +105,11 @@ export default function Header() {
       // Khi mở direct chat, đóng tất cả popup khác
       if (showNotifications) setShowNotifications(false);
       if (showChatPopup) closeChatPopup();
-      setActivePopup('directChat');
+      setActivePopup("directChat");
     } else if (showChatPopup) {
-      setActivePopup('chat');
+      setActivePopup("chat");
     } else if (showNotifications) {
-      setActivePopup('notifications');
+      setActivePopup("notifications");
     } else {
       setActivePopup(null);
     }
@@ -75,7 +125,7 @@ export default function Header() {
       if (showChatPopup) closeChatPopup();
       if (directChatUser) closeDirectChat();
       setShowNotifications(true);
-      setActivePopup('notifications');
+      setActivePopup("notifications");
     }
   };
 
@@ -89,7 +139,7 @@ export default function Header() {
       if (showNotifications) setShowNotifications(false);
       if (directChatUser) closeDirectChat();
       openChatPopup();
-      setActivePopup('chat');
+      setActivePopup("chat");
     }
   };
 
@@ -97,9 +147,8 @@ export default function Header() {
   const handleDirectChatOpen = () => {
     if (showNotifications) setShowNotifications(false);
     if (showChatPopup) closeChatPopup();
-    setActivePopup('directChat');
+    setActivePopup("directChat");
   };
-
 
   // Function to check if current path is active
   const isActive = (path) => {
@@ -131,19 +180,25 @@ export default function Header() {
   useEffect(() => {
     if (user?.id) {
       getUnreadNotificationsCount(user.id).then(setUnreadNotificationsCount);
-      
+
       // Subscribe to real-time notifications updates
       const subscription = supabase
-        .channel('notifications_count')
-        .on('postgres_changes', {
-          event: '*',
-          schema: 'public',
-          table: 'notifications',
-          filter: `user_id=eq.${user.id}`
-        }, () => {
-          // Refetch count when notifications change
-          getUnreadNotificationsCount(user.id).then(setUnreadNotificationsCount);
-        })
+        .channel("notifications_count")
+        .on(
+          "postgres_changes",
+          {
+            event: "*",
+            schema: "public",
+            table: "notifications",
+            filter: `user_id=eq.${user.id}`,
+          },
+          () => {
+            // Refetch count when notifications change
+            getUnreadNotificationsCount(user.id).then(
+              setUnreadNotificationsCount
+            );
+          }
+        )
         .subscribe();
 
       return () => {
@@ -151,6 +206,22 @@ export default function Header() {
       };
     }
   }, [user?.id]);
+
+  // Close language dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest(".language-dropdown-container")) {
+        setShowLanguageDropdown(false);
+      }
+    };
+
+    if (showLanguageDropdown) {
+      document.addEventListener("click", handleClickOutside);
+      return () => {
+        document.removeEventListener("click", handleClickOutside);
+      };
+    }
+  }, [showLanguageDropdown]);
 
   return (
     <header className="header">
@@ -165,19 +236,19 @@ export default function Header() {
           <ul>
             <li>
               <Link to="/home" className={isActive("/home") ? "active" : ""}>
-                {t('home')}
+                {t("home")}
               </Link>
             </li>
             <li>
-              <a 
-                href="#" 
+              <a
+                href="#"
                 className={isActive("/post") ? "active" : ""}
                 onClick={(e) => {
                   e.preventDefault();
-                  handleProtectedNavigation('/post', t('loginRequired.post'));
+                  handleProtectedNavigation("/post", t("loginRequired.post"));
                 }}
               >
-                {t('post')}
+                {t("post")}
               </a>
             </li>
             <li>
@@ -186,15 +257,18 @@ export default function Header() {
                 className={isActive("/management") ? "active" : ""}
                 onClick={(e) => {
                   e.preventDefault();
-                  handleProtectedNavigation('/management', t('loginRequired.management'));
+                  handleProtectedNavigation(
+                    "/management",
+                    t("loginRequired.management")
+                  );
                 }}
               >
-                {t('management')}
+                {t("management")}
               </a>
             </li>
             <li>
               <Link to="/about" className={isActive("/about") ? "active" : ""}>
-                {t('about')}
+                {t("about")}
               </Link>
             </li>
           </ul>
@@ -211,7 +285,7 @@ export default function Header() {
           <input
             ref={searchInputRef}
             type="text"
-            placeholder={t('search')}
+            placeholder={t("search")}
             onKeyPress={(e) => {
               if (e.key === "Enter") {
                 handleSearch();
@@ -222,7 +296,6 @@ export default function Header() {
 
         {/* ==== NHÓM 4: USER ACTIONS & ICONS ==== */}
         <div className="header-user-actions">
-          
           <SignedOut>
             <SignInButton mode="modal">
               <div className="login-button">
@@ -230,7 +303,7 @@ export default function Header() {
                   icon={faRightToBracket}
                   className="login-icon"
                 />
-                {t('login')}
+                {t("login")}
               </div>
             </SignInButton>
           </SignedOut>
@@ -238,7 +311,13 @@ export default function Header() {
           <SignedIn>
             {/* Nút chat: toggle popup */}
             <button
-              className={`header-icon-btn ${hasUnreadMessages ? 'has-unread' : ''} ${activePopup === 'chat' || activePopup === 'directChat' ? 'active' : ''}`}
+              className={`header-icon-btn ${
+                hasUnreadMessages ? "has-unread" : ""
+              } ${
+                activePopup === "chat" || activePopup === "directChat"
+                  ? "active"
+                  : ""
+              }`}
               onClick={handleChatClick}
             >
               <FontAwesomeIcon icon={faComment} className="icon-btn-chat" />
@@ -246,8 +325,10 @@ export default function Header() {
             </button>
 
             {/* Notifications Bell */}
-            <button 
-              className={`header-icon-btn ${unreadNotificationsCount > 0 ? 'has-unread' : ''} ${activePopup === 'notifications' ? 'active' : ''}`}
+            <button
+              className={`header-icon-btn ${
+                unreadNotificationsCount > 0 ? "has-unread" : ""
+              } ${activePopup === "notifications" ? "active" : ""}`}
               onClick={handleNotificationsClick}
             >
               <FontAwesomeIcon icon={faBell} className="icon-btn-bell" />
@@ -258,43 +339,72 @@ export default function Header() {
 
             {/* Dashboard (admin) */}
             {isAdmin() && (
-              <Link to="/dashboard" className={`header-icon-btn ${isActive("/dashboard") ? "active" : ""}`}>
+              <Link
+                to="/dashboard"
+                className={`header-icon-btn ${
+                  isActive("/dashboard") ? "active" : ""
+                }`}
+              >
                 <FontAwesomeIcon icon={faCrown} className="icon-btn-bell" />
               </Link>
             )}
 
             {/* User Button */}
             <div className="header-user-display">
-              
               <UserButton afterSignOutUrl="/" />
             </div>
           </SignedIn>
-          
         </div>
 
         {/* ==== NHÓM 5: LANGUAGE ==== */}
-        <div>
-          <select 
-            name="language" 
-            id="language-select"
-            value={i18n.language}
-            onChange={(e) => changeLanguage(e.target.value)}
+        <div className="language-dropdown-container">
+          <button
+            className="language-dropdown-trigger"
+            onClick={() => setShowLanguageDropdown(!showLanguageDropdown)}
           >
-            <option value="vi">Tiếng Việt</option>
-            <option value="en">English</option>
-          </select>
+            <span className="current-language">
+              <FlagIcon countryCode={i18n.language} className="flag-main" />
+              <span className="language-text">
+                {languages[i18n.language]?.text}
+              </span>
+            </span>
+            <span
+              className={`dropdown-arrow ${showLanguageDropdown ? "open" : ""}`}
+            >
+              ▼
+            </span>
+          </button>
+
+          {showLanguageDropdown && (
+            <div className="language-dropdown-menu">
+              {Object.entries(languages).map(([code, lang]) => (
+                <div
+                  key={code}
+                  className={`language-option ${
+                    i18n.language === code ? "active" : ""
+                  }`}
+                  onClick={() => {
+                    changeLanguage(code);
+                    setShowLanguageDropdown(false);
+                  }}
+                >
+                  <FlagIcon countryCode={code} className="flag-option" />
+                  <span className="language-text">{lang.text}</span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
-        
       </div>
 
       {/* ==== HIỂN THỊ POPUP CHAT ==== */}
       {showChatPopup && <ChatPopup />}
-      
+
       {/* ==== HIỂN THỊ NOTIFICATIONS POPUP ==== */}
       {showNotifications && (
         <NotificationsPopup onClose={() => setShowNotifications(false)} />
       )}
-      
+
       {/* ==== HIỂN THỊ DIRECT CHATWINDOW ==== */}
       {directChatUser && (
         <ChatWindow

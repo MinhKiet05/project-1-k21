@@ -1,0 +1,12 @@
+{
+  "home": "홈",
+  "post": "게시",
+  "management": "관리",
+  "about": "회사 소개",
+  "login": "로그인",
+  "search": "검색...",
+  "loginRequired": {
+    "post": "게시물을 작성하려면 로그인이 필요합니다",
+    "management": "게시물을 관리하려면 로그인이 필요합니다"
+  }
+}
