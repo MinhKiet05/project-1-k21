@@ -15,16 +15,12 @@ import {
 // Import flag WebP files
 import vietnamFlag from "../../assets/flags/vietNamFlag.webp";
 import ukFlag from "../../assets/flags/ukFlag.webp";
-import chinaFlag from "../../assets/flags/chinaFlag.webp";
-import koreaFlag from "../../assets/flags/koreaFlag.webp";
 
 // Flag component with actual flag images
 const FlagIcon = ({ countryCode, className }) => {
   const flagImages = {
     vi: vietnamFlag,
     en: ukFlag,
-    ch: chinaFlag,
-    ko: koreaFlag,
   };
 
   const flagAltTexts = {
@@ -69,10 +65,8 @@ export default function Header() {
 
   // Language configuration
   const languages = {
-    vi: { text: "Tiếng Việt" },
-    en: { text: "English" },
-    ch: { text: "中文" },
-    ko: { text: "한국어" },
+    vi: { text: "VIE" },
+    en: { text: "ENG" },
   };
   const { user } = useUser();
   const { isAdmin } = useUserRole();

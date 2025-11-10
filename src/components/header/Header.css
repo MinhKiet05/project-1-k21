@@ -279,7 +279,7 @@
   transition: all 0.3s ease;
   color: #2d2d2d;
   font-family: "Be Vietnam Pro", sans-serif;
-  min-width: 130px;
+  min-width: 80px;
   justify-content: space-between;
 }
 
@@ -404,7 +404,7 @@
   border-radius: 12px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
   padding: 8px 0;
-  min-width: 150px;
+  min-width: 112px;
   z-index: 1001;
   opacity: 0;
   transform: translateY(-10px);
