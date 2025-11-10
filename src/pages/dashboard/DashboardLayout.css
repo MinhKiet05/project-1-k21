@@ -261,12 +261,35 @@
   overflow: hidden;
   height: 600px;           /* cố định chiều cao để cuộn được */
   overflow-y: auto;
+  overflow-x: auto;        /* cho phép cuộn ngang */
 }
+
 .user-table {
   width: 100%;
+  min-width: 800px;        /* đảm bảo bảng rộng hơn container để có thanh cuộn ngang */
   border-collapse: collapse;
 }
 
+/* Tùy chỉnh thanh cuộn ngang */
+.user-table-container::-webkit-scrollbar {
+  height: 12px;            
+  width: 12px;             
+}
+
+.user-table-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 5px;
+}
+
+.user-table-container::-webkit-scrollbar-thumb {
+  background: #c5c5c5;    
+  border-radius: 5px;
+  border: 2px solid #f1f1f1;
+}
+
+.user-table-container::-webkit-scrollbar-thumb:hover {
+  background: #868686;
+}
 /* Header */
 .user-table thead {
   background-color: #E59462;
@@ -426,7 +449,7 @@
 }
 
 /* ===== RESPONSIVE ===== */
-@media (max-width: 768px) {
+@media (max-width: 800px) {
   .admin-container {
     flex-direction: column;
   }
