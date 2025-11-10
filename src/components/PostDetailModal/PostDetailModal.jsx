@@ -44,12 +44,12 @@ export default function PostDetailModal({
 
   const getStatusBadge = (status) => {
     switch(status) {
-      case 'pending': return { text: t('posts:pending'), class: 'status-pending' }
-      case 'approved': return { text: t('posts:approved'), class: 'status-approved' }  
-      case 'rejected': return { text: t('posts:rejected'), class: 'status-rejected' }
-      case 'expired': return { text: t('posts:expired'), class: 'status-expired' }
-      case 'sold': return { text: t('posts:sold'), class: 'status-sold' }
-      default: return { text: t('posts:unknown'), class: 'status-unknown' }
+      case 'pending': return { text: t('postDetail:pending'), class: 'status-pending' }
+      case 'approved': return { text: t('postDetail:approved'), class: 'status-approved' }  
+      case 'rejected': return { text: t('postDetail:rejected'), class: 'status-rejected' }
+      case 'expired': return { text: t('postDetail:expired'), class: 'status-expired' }
+      case 'sold': return { text: t('postDetail:sold'), class: 'status-sold' }
+      default: return { text: t('postDetail:unknown'), class: 'status-unknown' }
     }
   }
 
@@ -123,34 +123,34 @@ export default function PostDetailModal({
               </div>
 
               <div className="detail-row">
-                <label>{t('postDetail:category')}</label>
+                <label>{t('postDetail:category')}:</label>
                 <span>{getDisplayName(post.category, i18n.language) || '-'}</span>
               </div>
 
               <div className="detail-row">
-                <label>{t('postDetail:location')}</label>
+                <label>{t('postDetail:location')}:</label>
                 <span>{getDisplayName(post.location, i18n.language) || '-'}</span>
               </div>
 
               <div className="detail-row">
-                <label>{t('postDetail:status')}</label>
+                <label>{t('postDetail:status')}:</label>
                 <span className={`status-badge ${statusInfo.class}`}>
                   {statusInfo.text}
                 </span>
               </div>
 
               <div className="detail-row">
-                <label>{t('posts:createdAt')}</label>
+                <label>{t('postDetail:createdAt')}:</label>
                 <span>{formatDate(post.created_at)}</span>
               </div>
 
               <div className="detail-row">
-                <label>{t('posts:expiresAt')}</label>
+                <label>{t('postDetail:expiresAt')}:</label>
                 <span>{formatDate(post.expires_at)}</span>
               </div>
 
               <div className="detail-row description-row">
-                <label>{t('postDetail:description')}</label>
+                <label>{t('postDetail:description')}:</label>
                 <div className="description">{post.description}</div>
               </div>
             </div>
@@ -196,14 +196,14 @@ export default function PostDetailModal({
                 onClick={() => onReject(post.id)}
                 disabled={isUpdating || post.status === 'rejected'}
               >
-                {isUpdating ? t('postDetail:processing') : t('posts:reject')}
+                {isUpdating ? t('postDetail:processing') : t('postDetail:reject')}
               </button>
               <button 
                 className="approve-btn"
                 onClick={() => onApprove(post.id)}
                 disabled={isUpdating || post.status === 'approved'}
               >
-                {isUpdating ? t('postDetail:processing') : t('posts:approve')}
+                {isUpdating ? t('postDetail:processing') : t('postDetail:approve')}
               </button>
             </>
           )}
