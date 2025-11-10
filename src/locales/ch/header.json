@@ -1,0 +1,12 @@
+{
+  "home": "首页",
+  "post": "发布",
+  "management": "管理",
+  "about": "关于我们",
+  "login": "登录",
+  "search": "搜索...",
+  "loginRequired": {
+    "post": "您需要登录才能创建帖子",
+    "management": "您需要登录才能管理您的帖子"
+  }
+}

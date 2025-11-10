@@ -1,0 +1,49 @@
+{
+  "title": "帖子管理",
+  "search": "搜索帖子...",
+  "pleaseLogin": "请登录以管理您的帖子。",
+  "noPosts": "还没有帖子",
+  "filters": {
+    "allStatus": "所有状态",
+    "allCategories": "所有类别",
+    "allLocations": "所有地区",
+    "newest": "最新",
+    "oldest": "最早"
+  },
+  "status": {
+    "pending": "待审核",
+    "approved": "已通过",
+    "rejected": "已拒绝",
+    "expired": "已过期",
+    "sold": "已售出",
+    "unknown": "未知"
+  },
+  "table": {
+    "productName": "商品名称",
+    "image": "图片",
+    "price": "价格",
+    "category": "类别",
+    "location": "地区",
+    "status": "状态",
+    "createdAt": "创建时间",
+    "actions": "操作"
+  },
+  "results": {
+    "found": "找到 {{count}} 个帖子"
+  },
+  "errors": {
+    "loadPosts": "加载帖子时出错"
+  },
+  "loading": {
+    "posts": "正在加载帖子..."
+  },
+  "actions": {
+    "viewDetail": "查看详情"
+  },
+  "messages": {
+    "markAsSoldSuccess": "帖子已成功标记为已售出！",
+    "updateStatusError": "更新状态时出错",
+    "extendSuccess": "帖子已延长7天！",
+    "extendError": "延长帖子时出错"
+  }
+}

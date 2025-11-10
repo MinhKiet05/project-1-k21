@@ -1,0 +1,53 @@
+{
+  "title": "基本信息",
+  "fields": {
+    "images": "添加图片",
+    "productName": "商品名称",
+    "price": "价格",
+    "category": "类别",
+    "location": "地区",
+    "description": "描述"
+  },
+  "placeholders": {
+    "productName": "输入商品名称",
+    "price": "输入商品价格",
+    "category": "选择类别",
+    "location": "选择地区",
+    "description": "输入详细商品描述..."
+  },
+  "imageInfo": "仅限图片文件 • 最多10张图片 • 总大小≤10MB",
+  "imagesSelected": "已选择 {{count}}/10 张图片",
+  "removeImage": "删除此图片",
+  "validation": {
+    "images": "请至少添加一张图片",
+    "productName": "商品名称必须包含至少一个字母",
+    "productPrice": "价格必须是大于0的有效数字",
+    "productPriceValid": "价格必须是有效数字",
+    "description": "描述必须包含至少一个字母",
+    "category": "请选择类别",
+    "location": "请选择地区"
+  },
+  "errors": {
+    "maxImages": "最多允许10张图片",
+    "imageFormat": "仅支持图片文件（JPG、PNG、GIF等）",
+    "maxSize": "图片总大小不得超过10MB",
+    "loginRequired": "请登录后创建帖子",
+    "uploadImages": "上传图片错误",
+    "createPost": "创建帖子错误",
+    "general": "发生错误",
+    "loadData": "加载数据错误",
+    "loadCategories": "无法加载类别",
+    "loadLocations": "无法加载地区"
+  },
+  "success": {
+    "postCreated": "帖子创建成功！您的帖子正在等待审核。"
+  },
+  "rules": {
+    "title": "发布准则",
+    "appropriate": "不要使用不当或冒犯性的词语或图片。",
+    "expiry": "您的帖子将在审核通过后7天过期。",
+    "extend": "如果商品未售出，请在7天后延长。"
+  },
+  "submitting": "提交中...",
+  "submit": "完成"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "알림",
+  "markAllAsRead": "모두 읽음으로 표시",
+  "noNotifications": "알림이 없습니다",
+  "types": {
+    "system": "시스템 알림",
+    "message": "메시지 알림",
+    "transaction": "거래 알림",
+    "promotion": "프로모션 알림"
+  },
+  "actions": {
+    "markAsRead": "읽음으로 표시",
+    "delete": "삭제",
+    "view": "보기"
+  },
+  "time": {
+    "justNow": "방금 전",
+    "minutesAgo": "{{minutes}}분 전",
+    "hoursAgo": "{{hours}}시간 전",
+    "daysAgo": "{{days}}일 전"
+  }
+}

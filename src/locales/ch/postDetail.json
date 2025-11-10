@@ -1,0 +1,28 @@
+{
+  "title": "商品详情",
+  "price": "价格",
+  "condition": "商品状态",
+  "location": "地区",
+  "postedBy": "发布者",
+  "postedAt": "发布时间",
+  "description": "商品描述",
+  "contact": {
+    "title": "联系卖家",
+    "phone": "电话",
+    "email": "邮箱",
+    "chat": "在线聊天"
+  },
+  "actions": {
+    "favorite": "收藏",
+    "share": "分享",
+    "report": "举报"
+  },
+  "similarProducts": "相似商品",
+  "conditions": {
+    "new": "全新",
+    "likeNew": "几乎全新",
+    "good": "良好",
+    "fair": "一般",
+    "poor": "较差"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "title": "商品详情",
+  "backToSearch": "返回搜索",
+  "price": "价格",
+  "condition": "商品状态",
+  "location": "地区",
+  "seller": "卖家",
+  "postedDate": "发布日期",
+  "description": "商品描述",
+  "specifications": "规格参数",
+  "contact": {
+    "title": "联系方式",
+    "message": "发送消息",
+    "phone": "电话联系",
+    "email": "邮箱联系"
+  },
+  "actions": {
+    "addToFavorites": "加入收藏",
+    "share": "分享商品",
+    "reportIssue": "举报问题"
+  },
+  "relatedProducts": "相关商品",
+  "reviews": {
+    "title": "用户评价",
+    "noReviews": "暂无评价",
+    "writeReview": "写评价"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "title": "기본 정보",
+  "fields": {
+    "images": "이미지 추가",
+    "productName": "상품명",
+    "price": "가격",
+    "category": "카테고리",
+    "location": "지역",
+    "description": "설명"
+  },
+  "placeholders": {
+    "productName": "상품명 입력",
+    "price": "상품 가격 입력",
+    "category": "카테고리 선택",
+    "location": "지역 선택",
+    "description": "상세한 상품 설명을 입력하세요..."
+  },
+  "imageInfo": "이미지 파일만 • 최대 10개 이미지 • 총 크기 ≤ 10MB",
+  "imagesSelected": "선택된 {{count}}/10개 이미지",
+  "removeImage": "이 이미지 제거",
+  "validation": {
+    "images": "최소 한 개의 이미지를 추가해주세요",
+    "productName": "상품명은 최소 한 글자 이상 포함해야 합니다",
+    "productPrice": "가격은 0보다 큰 유효한 숫자여야 합니다",
+    "productPriceValid": "가격은 유효한 숫자여야 합니다",
+    "description": "설명은 최소 한 글자 이상 포함해야 합니다",
+    "category": "카테고리를 선택해주세요",
+    "location": "지역을 선택해주세요"
+  },
+  "errors": {
+    "maxImages": "최대 10개 이미지까지 허용됩니다",
+    "imageFormat": "이미지 파일만 지원됩니다 (JPG, PNG, GIF 등)",
+    "maxSize": "총 이미지 크기는 10MB를 초과할 수 없습니다",
+    "loginRequired": "게시물을 작성하려면 로그인해주세요",
+    "uploadImages": "이미지 업로드 오류",
+    "createPost": "게시물 생성 오류",
+    "general": "오류가 발생했습니다",
+    "loadData": "데이터 로딩 오류",
+    "loadCategories": "카테고리를 로드할 수 없습니다",
+    "loadLocations": "지역을 로드할 수 없습니다"
+  },
+  "success": {
+    "postCreated": "게시물이 성공적으로 생성되었습니다! 게시물이 승인 대기 중입니다."
+  },
+  "rules": {
+    "title": "게시 가이드라인",
+    "appropriate": "부적절하거나 모욕적인 단어나 이미지를 사용하지 마세요.",
+    "expiry": "게시물은 승인 후 7일 후에 만료됩니다.",
+    "extend": "상품이 판매되지 않았다면 7일 후에 연장해주세요."
+  },
+  "submitting": "제출 중...",
+  "submit": "완료"
+}
