@@ -136,7 +136,8 @@
 /* ===== TABLE ===== */
 .post-table-container {
   background: white;
-  overflow: hidden;
+  /* allow horizontal scrolling when table is wider than container */
+  overflow-x: auto;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   max-height: 600px;
   overflow-y: auto;
@@ -145,6 +146,8 @@
 .admin-table {
   width: 100%;
   border-collapse: collapse;
+  /* ensure table can grow wider than its container so a horizontal scrollbar appears on small screens */
+  min-width: 800px;
 }
 
 .admin-table thead {
