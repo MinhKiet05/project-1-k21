@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 import logo from '../../assets/logo.webp';
 function Footer() {
-  const { t } = useTranslation(['common', 'header']);
+  const { t } = useTranslation(['common', 'header', 'footer']);
   const location = useLocation();
   
   // Function to check if current path is active
@@ -30,22 +30,22 @@ function Footer() {
 
         {/* Liên kết nhanh */}
         <div className="footer-links">
-          <h3>{t('quickLinks')}</h3>
+          <h3>{t('footer:quickLinks')}</h3>
           <ul>
-            <li><Link to="/home" className={isActive('/home') ? 'active' : ''}><u>{t('header:home')}</u></Link></li>
-            <li><Link to="/post" className={isActive('/post') ? 'active' : ''}><u>{t('header:post')}</u></Link></li>
-            <li><Link to="/management" className={isActive('/management') ? 'active' : ''}><u>{t('header:management')}</u></Link></li>
-            <li><Link to="/about" className={isActive('/about') ? 'active' : ''}><u>{t('header:about')}</u></Link></li>
+            <li><Link to="/home" className={isActive('/home') ? 'active' : ''}>{t('footer:home')}</Link></li>
+            <li><Link to="/post" className={isActive('/post') ? 'active' : ''}>{t('footer:post')}</Link></li>
+            <li><Link to="/management" className={isActive('/management') ? 'active' : ''}>{t('footer:management')}</Link></li>
+            <li><Link to="/about" className={isActive('/about') ? 'active' : ''}>{t('footer:about')}</Link></li>
           </ul>
         </div>
 
         {/* Liên hệ */}
         <div className="footer-contact">
-          <h3>{t('contact')}</h3>
+          <h3>{t('footer:contact')}</h3>
           <ul>
-            <li><b>{t('email')}:</b> <a href="mailto:notungphoco@gmail.com">notungphoco@gmail.com</a></li>
-            <li><b>{t('phone')}:</b> <a href="tel:0336748385">0336748385</a></li>
-            <li><b>{t('address')}:</b> {t('addressDetail')}</li>
+            <li><b>{t('footer:email')}:</b> <a href="mailto:notungphoco@gmail.com">notungphoco@gmail.com</a></li>
+            <li><b>{t('footer:phone')}:</b> <a href="tel:0336748385">0336748385</a></li>
+            <li><b>{t('footer:address')}:</b> {t('footer:addressDetail')}</li>
           </ul>
         </div>
 
@@ -54,7 +54,7 @@ function Footer() {
       
     </footer>
     <div className="footer-bottom">
-        <p>{t('copyright')}</p>
+        <p>© 2025 No Tung Pho Co. All rights reserved.</p>
       </div>
       </>
   );

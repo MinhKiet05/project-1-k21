@@ -2,7 +2,12 @@
   "status": "Status",
   "active": "Active",
   "inactive": "Inactive",
-  "pending": "Pending", 
+  "pending": "Pending",
+  "approved": "Approved",
+  "rejected": "Rejected",
+  "expired": "Expired",
+  "sold": "Sold",
+  "unknown": "Unknown",
   "category": "Category",
   "location": "Location",
   "images": "Images",
@@ -10,9 +15,11 @@
   "contact": "Contact",
   "details": "Post Details",
   "processing": "Processing...",
-  "sold": "Sold",
   "notSoldYet": "Not sold yet",
   "pendingApproval": "Post is pending approval",
-  "rejected": "Post has been rejected",
-  "soldAlready": "Post has been sold"
+  "soldAlready": "Post has been sold",
+  "createdAt": "Created At",
+  "expiresAt": "Expires At", 
+  "reject": "Reject",
+  "approve": "Approve"
 }

@@ -420,7 +420,56 @@
     grid-template-columns: repeat(4, 1fr);
     gap: 25px;
 }
+/* See All Styles */
+.see-all-container {
+  text-align: center;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(183, 174, 170, 0.3);
+}
 
+.see-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #e9925c;
+  cursor: pointer;
+  padding: 8px 24px;
+  border: 2px solid #e9925c;
+  border-radius: 25px;
+  background: linear-gradient(135deg, transparent 0%, rgba(255, 122, 24, 0.05) 100%);
+  transition: all 0.3s ease;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.see-all:hover {
+  background: #e9925c;
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+/* Ripple effect */
+.see-all::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;transition: all 0.6s ease;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.see-all:hover::before {
+  width: 200px;
+  height: 200px;
+}
 /* Responsive Grid for Suggestion Section */
 @media (max-width: 968px) {
     .suggestion-section {
@@ -459,5 +508,163 @@
     .suggestion-products-grid {
         grid-template-columns: 1fr;
         gap: 15px;
+    }
+}
+
+/* Skeleton Loading Styles */
+.skeleton-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.skeleton-card {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+    border-radius: 12px;
+    height: 300px;
+    position: relative;
+    overflow: hidden;
+}
+
+.skeleton-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.4),
+        transparent
+    );
+    animation: shimmer 2s infinite;
+}
+
+@keyframes loading {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        left: -100%;
+    }
+    100% {
+        left: 100%;
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+/* Empty State Styles */
+.empty-recommendations {
+    text-align: center;
+    padding: 60px 20px;
+    color: #666;
+}
+
+.empty-recommendations i {
+    font-size: 64px;
+    color: #ddd;
+    margin-bottom: 20px;
+    display: block;
+}
+
+.empty-recommendations h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #555;
+}
+
+.empty-recommendations p {
+    font-size: 16px;
+    color: #777;
+    max-width: 400px;
+    margin: 0 auto;
+    line-height: 1.5;
+}
+
+/* Loading Trigger Styles */
+.loading-trigger {
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsive Skeleton */
+@media (max-width: 768px) {
+    .skeleton-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+    
+    .skeleton-card {
+        height: 250px;
+    }
+    
+    .empty-recommendations {
+        padding: 40px 15px;
+    }
+    
+    .empty-recommendations i {
+        font-size: 48px;
+    }
+    
+    .empty-recommendations h3 {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .skeleton-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .skeleton-card {
+        height: 220px;
+    }
+    
+    .see-all-container {
+        margin-top: 20px;
+        padding: 15px 0;
+    }
+    
+    .see-all {
+        padding: 10px 20px;
+        font-size: 13px;
+        gap: 6px;
     }
 }

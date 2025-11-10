@@ -69,6 +69,7 @@ const resources = {
   vi: {
     common: viCommon,
     header: viHeader,
+    footer: viFooter,
     homepage: viHomepage,
     search: viSearch,
     upload: viUpload,
@@ -85,6 +86,7 @@ const resources = {
   en: {
     common: enCommon,
     header: enHeader,
+    footer: enFooter,
     homepage: enHomepage,
     search: enSearch,
     upload: enUpload,

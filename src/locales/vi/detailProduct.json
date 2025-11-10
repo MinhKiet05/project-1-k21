@@ -9,5 +9,21 @@
   "contact": "Liên hệ",
   "loginToContact": "Đăng nhập để liên hệ",
   "similarProducts": "Danh mục tương tự",
-  "relatedProducts": "Sản phẩm liên quan"
+  "relatedProducts": "Sản phẩm liên quan",
+  "loadingRecommendations": "Đang tải gợi ý sản phẩm...",
+  "noSimilarProducts": "Không tìm thấy sản phẩm tương tự",
+  "tryOtherCategories": "Hãy thử xem các danh mục khác",
+  "loadingProductInfo": "Đang tải thông tin sản phẩm...",
+  "errorLoadingProduct": "Có lỗi xảy ra khi tải thông tin sản phẩm",
+  "backButton": "Quay lại",
+  "noImages": "Không có hình ảnh",
+  "description": "Mô tả:",
+  "noDescription": "Chưa có mô tả chi tiết.",
+  "noLocationInfo": "Chưa có thông tin",
+  "noSellerInfo": "Chưa có thông tin",
+  "contactNow": "Liên hệ ngay",
+  "creatingConversation": "Đang tạo cuộc trò chuyện...",
+  "loginRequiredMessage": "Bạn cần đăng nhập để liên hệ với người bán",
+  "cannotMessageYourself": "Bạn không thể nhắn tin với chính mình",
+  "seeAll": "Xem tất cả"
 }

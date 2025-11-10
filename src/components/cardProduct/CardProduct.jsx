@@ -30,7 +30,7 @@ const CardProduct = memo(({ product }) => {
             <div className="card-bottom">
               <p className="card-price">
                 <span>{product?.price ? product.price.toLocaleString() : "0,000"}</span>
-                <span>{t('currency')}</span>
+                <span>{t("VND")}</span>
               </p>
             </div>
           </div>

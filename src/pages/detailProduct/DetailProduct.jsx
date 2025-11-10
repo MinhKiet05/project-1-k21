@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faComment } from '@fortawesome/free-solid-svg-icons';
+import { faComment, faArrowRight, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { useUser } from '@clerk/clerk-react';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '../../lib/supabase';
@@ -18,7 +18,7 @@ export default function DetailProduct() {
     const { id } = useParams();
     const navigate = useNavigate();
     const { user } = useUser();
-    const { i18n } = useTranslation();
+    const { t, i18n } = useTranslation(['detailProduct', 'common']);
     const { createOrFindConversation, openDirectChat } = useChatContext();
     const [post, setPost] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -27,7 +27,9 @@ export default function DetailProduct() {
     const [chatLoading, setChatLoading] = useState(false);
     const [recommendedPosts, setRecommendedPosts] = useState([]);
     const [recommendedLoading, setRecommendedLoading] = useState(false);
+    const [recommendedLoaded, setRecommendedLoaded] = useState(false);
     const { showLoginDialog, checkAuthAndExecute, closeLoginDialog } = useAuthCheck();
+    const recommendedSectionRef = useRef(null);
 
     useEffect(() => {
         if (id) {
@@ -35,12 +37,34 @@ export default function DetailProduct() {
         }
     }, [id]);
 
-    // Fetch recommended posts khi đã có thông tin post
+    // Lazy load recommended posts when section is visible
     useEffect(() => {
-        if (post?.category_id) {
-            fetchRecommendedPosts();
+        if (!post?.category_id || recommendedLoaded) return;
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                const [entry] = entries;
+                if (entry.isIntersecting && !recommendedLoaded) {
+                    fetchRecommendedPosts();
+                    setRecommendedLoaded(true);
+                }
+            },
+            {
+                threshold: 0.1, // Trigger when 10% of the section is visible
+                rootMargin: '50px' // Start loading 50px before the section comes into view
+            }
+        );
+
+        if (recommendedSectionRef.current) {
+            observer.observe(recommendedSectionRef.current);
         }
-    }, [post?.category_id]);
+
+        return () => {
+            if (recommendedSectionRef.current) {
+                observer.unobserve(recommendedSectionRef.current);
+            }
+        };
+    }, [post?.category_id, recommendedLoaded]);
 
     const fetchPostDetail = async () => {
         try {
@@ -63,13 +87,13 @@ export default function DetailProduct() {
             }
 
             if (!data) {
-                setError('Không tìm thấy sản phẩm');
+                setError(t('detailProduct:notFound'));
                 return;
             }
 
             setPost(data);
         } catch (error) {
-            setError('Có lỗi xảy ra khi tải thông tin sản phẩm');
+            setError(t('detailProduct:errorLoadingProduct'));
         } finally {
             setLoading(false);
         }
@@ -79,7 +103,7 @@ export default function DetailProduct() {
         try {
             setRecommendedLoading(true);
             
-            const { data: relatedData } = await supabase
+            const { data: relatedData, error } = await supabase
                 .from('posts')
                 .select(`
                     *,
@@ -97,12 +121,17 @@ export default function DetailProduct() {
                 return;
             }
 
-            // Shuffle ngẫu nhiên và lấy 4 bài
-            const shuffled = data.sort(() => 0.5 - Math.random());
-            setRecommendedPosts(shuffled.slice(0, 4));
+            // Check if data exists and shuffle
+            if (relatedData && relatedData.length > 0) {
+                const shuffled = relatedData.sort(() => 0.5 - Math.random());
+                setRecommendedPosts(shuffled.slice(0, 4));
+            } else {
+                setRecommendedPosts([]);
+            }
 
         } catch (error) {
             console.error('Error fetching recommended posts:', error);
+            setRecommendedPosts([]);
         } finally {
             setRecommendedLoading(false);
         }
@@ -174,12 +203,12 @@ export default function DetailProduct() {
 
     const handleContactSeller = async () => {
         if (!user) {
-            toast.warning('Bạn cần đăng nhập để liên hệ với người bán');
+            toast.warning(t('detailProduct:loginRequiredMessage'));
             return;
         }
 
         if (post?.author_id === user.id) {
-            toast.warning('Bạn không thể nhắn tin với chính mình');
+            toast.warning(t('detailProduct:cannotMessageYourself'));
             return;
         }
 
@@ -202,7 +231,7 @@ export default function DetailProduct() {
             openDirectChat(conversationId, sellerInfo);
             
         } catch (error) {
-            toast.error('Có lỗi xảy ra khi tạo cuộc trò chuyện');
+            toast.error(t('detailProduct:errorLoadingProduct'));
         } finally {
             setChatLoading(false);
         }
@@ -212,7 +241,7 @@ export default function DetailProduct() {
         return (
             <div className="detail-container">
                 <div className="detail-loading">
-                    Đang tải thông tin sản phẩm...
+                    {t('detailProduct:loadingProductInfo')}
                 </div>
             </div>
         );
@@ -224,13 +253,13 @@ export default function DetailProduct() {
                 <div className="detail-error">
                     <div className="detail-error-title">Oops!</div>
                     <div className="detail-error-message">
-                        {error || 'Không tìm thấy sản phẩm'}
+                        {error || t('detailProduct:notFound')}
                     </div>
                     <button 
                         className="detail-back-btn"
                         onClick={handleClose}
                     >
-                        Quay lại
+                        {t('detailProduct:backButton')}
                     </button>
                 </div>
             </div>
@@ -258,11 +287,11 @@ export default function DetailProduct() {
                         <div className="detail-image-container">
                             <div className="detail-image-wrapper">
                                 <img
-                                    src={currentImage || 'https://via.placeholder.com/450x450?text=Không+có+hình+ảnh'}
+                                    src={currentImage || `https://via.placeholder.com/450x450?text=${encodeURIComponent(t('detailProduct:noImages'))}`}
                                     alt={post.title}
                                     className="detail-main-image"
                                     onError={(e) => {
-                                        e.target.src = 'https://via.placeholder.com/450x450?text=Không+có+hình+ảnh';
+                                        e.target.src = `https://via.placeholder.com/450x450?text=${encodeURIComponent(t('detailProduct:noImages'))}`;
                                     }}
                                 />
                             </div>
@@ -310,13 +339,13 @@ export default function DetailProduct() {
                     <div className="detail-info-section">
                         <h1 className="detail-title">{post.title}</h1>
 
-                        <div className="detail-description-label">Mô tả:</div>
+                        <div className="detail-description-label">{t('detailProduct:description')}</div>
                         <div className="detail-description">
-                            {post.description || 'Chưa có mô tả chi tiết.'}
+                            {post.description || t('detailProduct:noDescription')}
                         </div>
 
-                        <div className="detail-category-label">Danh mục: {categoryName}</div>
-                        <div className="detail-category">Khu vực: {getDisplayName(post.locations, i18n.language) || 'Chưa có thông tin'}</div>
+                        <div className="detail-category-label">{t('detailProduct:category')} {categoryName}</div>
+                        <div className="detail-category">{t('detailProduct:location')} {getDisplayName(post.locations, i18n.language) || t('detailProduct:noLocationInfo')}</div>
 
                         <div className="detail-price">
                             {post.price ? post.price.toLocaleString() : '0'} VND
@@ -338,12 +367,12 @@ export default function DetailProduct() {
                                     }}
                                 />
                                 <div className="detail-seller-details">
-                                    <strong>Người bán:</strong>
+                                    <strong>{t('detailProduct:author')}</strong>
                                     <span className="detail-seller-name">
                                         {post.profiles?.full_name || 
                                          post.profiles?.name || 
                                          post.profiles?.username || 
-                                         'Chưa có thông tin'}
+                                         t('detailProduct:noSellerInfo')}
                                     </span>
                                 </div>
                             </div>
@@ -351,59 +380,65 @@ export default function DetailProduct() {
                         </div>
                         <button 
                                 className="detail-contact-btn"
-                                onClick={() => checkAuthAndExecute(handleContactSeller, "Bạn cần đăng nhập để liên hệ với người bán")}
+                                onClick={() => checkAuthAndExecute(handleContactSeller, t('detailProduct:loginRequiredMessage'))}
                                 disabled={chatLoading}
                             >
                                 <FontAwesomeIcon icon={faComment} />
-                                {chatLoading ? 'Đang tạo cuộc trò chuyện...' : 'Liên hệ ngay'}
+                                {chatLoading ? t('detailProduct:creatingConversation') : t('detailProduct:contactNow')}
                             </button>
                     </div>
                 </div>
             </div>
 
-            <div className="suggestion-section">
-                      <h2 className="suggestion-section-title">Danh mục tương tự</h2>
-                      <div className="suggestion-products-grid">
-                        {recommendedLoading ? (
-                          // Loading placeholder
-                          Array.from({ length: 4 }).map((_, index) => (
+            <div className="suggestion-section" ref={recommendedSectionRef}>
+                <h2 className="suggestion-section-title">{t('detailProduct:similarProducts')}</h2>
+                <div className="suggestion-products-grid">
+                    {!recommendedLoaded ? (
+                        // Initial state - show placeholder until section is visible
+                        <div className="recommendation-placeholder">
+                            <div className="placeholder-text">{t('detailProduct:loadingRecommendations')}</div>
+                        </div>
+                    ) : recommendedLoading ? (
+                        // Loading state - show skeleton cards
+                        Array.from({ length: 4 }).map((_, index) => (
+                            <div key={`skeleton-${index}`} className="skeleton-card"></div>
+                        ))
+                    ) : recommendedPosts.length > 0 ? (
+                        // Success state - show actual products
+                        recommendedPosts.map((recommendedPost, index) => (
                             <CardProduct
-                              key={`recommended-loading-${index}`}
-                              product={{
-                                name: "Đang tải...",
-                                price: 0,
-                                image: logoImg,
-                              }}
+                                key={`recommended-${recommendedPost.id || index}`}
+                                product={convertPostToProduct(recommendedPost)}
                             />
-                          ))
-                        ) : recommendedPosts.length > 0 ? (
-                          recommendedPosts.map((post, index) => (
-                            <CardProduct
-                              key={`recommended-${post.id || index}`}
-                              product={convertPostToProduct(post)}
-                            />
-                          ))
-                        ) : (
-                          // Fallback khi không có dữ liệu
-                          Array.from({ length: 4 }).map((_, index) => (
-                            <CardProduct
-                              key={`recommended-fallback-${index}`}
-                              product={{
-                                name: "Chưa có gợi ý",
-                                price: 0,
-                                image: logoImg,
-                              }}
-                            />
-                          ))
-                        )}
-                      </div>
+                        ))
+                    ) : (
+                        // Empty state - no recommendations found
+                        <div className="empty-recommendations">
+                            <i className="fas fa-search"></i>
+                            <h3>{t('detailProduct:noSimilarProducts')}</h3>
+                            <p>{t('detailProduct:tryOtherCategories')}</p>
+                        </div>
+                    )}
+                </div>
+                
+                {/* See All Button - only show when we have recommendations */}
+                {recommendedPosts.length > 0 && (
+                    <div className="see-all-container">
+                        <span 
+                            className="see-all" 
+                            onClick={() => navigate(`/search?category=${post?.category_id || ''}`)}
+                        >
+                            {t('detailProduct:seeAll')} <FontAwesomeIcon icon={faArrowRight} />
+                        </span>
                     </div>
+                )}
+            </div>
 
             {/* Login Required Dialog */}
             <LoginRequiredDialog
                 isOpen={showLoginDialog}
                 onClose={closeLoginDialog}
-                message="Bạn cần đăng nhập để liên hệ với người bán"
+                message={t('detailProduct:loginRequiredMessage')}
             />
         </div>
     );

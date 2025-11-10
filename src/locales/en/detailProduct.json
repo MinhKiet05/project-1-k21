@@ -9,5 +9,21 @@
   "contact": "Contact",
   "loginToContact": "Login to contact",
   "similarProducts": "Similar Category",
-  "relatedProducts": "Related Products"
+  "relatedProducts": "Related Products",
+  "loadingRecommendations": "Loading product suggestions...",
+  "noSimilarProducts": "No similar products found",
+  "tryOtherCategories": "Try browsing other categories",
+  "loadingProductInfo": "Loading product information...",
+  "errorLoadingProduct": "Error occurred while loading product information",
+  "backButton": "Go Back",
+  "noImages": "No images available",
+  "description": "Description:",
+  "noDescription": "No detailed description available.",
+  "noLocationInfo": "No information available",
+  "noSellerInfo": "No information available",
+  "contactNow": "Contact Now",
+  "creatingConversation": "Creating conversation...",
+  "loginRequiredMessage": "You need to login to contact the seller",
+  "cannotMessageYourself": "You cannot message yourself",
+  "seeAll": "See All"
 }

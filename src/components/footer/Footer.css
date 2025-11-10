@@ -112,7 +112,7 @@ tablet max-width: 768px
 mobile max-width: 480px
 */
 
-@media (max-width: 992px) {
+@media (max-width: 1200px) {
   .footer-container {
     flex-direction: column;
     align-items: center;
