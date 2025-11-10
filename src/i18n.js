@@ -4,6 +4,7 @@ import { initReactI18next } from 'react-i18next';
 // Vietnamese translations
 import viCommon from './locales/vi/common.json';
 import viHeader from './locales/vi/header.json';
+import viFooter from './locales/vi/footer.json';
 import viHomepage from './locales/vi/homepage.json';
 import viSearch from './locales/vi/search.json';
 import viUpload from './locales/vi/upload.json';
@@ -19,6 +20,7 @@ import viLoginDialog from './locales/vi/loginDialog.json';
 // English translations
 import enCommon from './locales/en/common.json';
 import enHeader from './locales/en/header.json';
+import enFooter from './locales/en/footer.json';
 import enHomepage from './locales/en/homepage.json';
 import enSearch from './locales/en/search.json';
 import enUpload from './locales/en/upload.json';
@@ -35,6 +37,7 @@ const resources = {
   vi: {
     common: viCommon,
     header: viHeader,
+    footer: viFooter,
     homepage: viHomepage,
     search: viSearch,
     upload: viUpload,
@@ -50,6 +53,7 @@ const resources = {
   en: {
     common: enCommon,
     header: enHeader,
+    footer: enFooter,
     homepage: enHomepage,
     search: enSearch,
     upload: enUpload,
@@ -82,7 +86,7 @@ i18n
     },
 
     // Configure namespaces
-    ns: ['common', 'header', 'homepage', 'search', 'upload', 'management', 'dashboard', 'postDetail', 'detailProduct', 'about', 'notifications', 'chat', 'loginDialog'],
+    ns: ['common', 'header', 'footer', 'homepage', 'search', 'upload', 'management', 'dashboard', 'postDetail', 'detailProduct', 'about', 'notifications', 'chat', 'loginDialog'],
     defaultNS: 'common',
   });
 

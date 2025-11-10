@@ -16,9 +16,11 @@
   align-items: center;
   justify-content: space-between; /* 4 nhóm sẽ tự động căn cách đều với space-between */
   flex-wrap: nowrap; /* Giữ trên cùng 1 dòng */
-  padding: 4px 20px;
+  padding: 4px 0px;
   box-sizing: border-box;
   gap: 20px; /* Thêm gap để đảm bảo spacing */
+  max-width: 1400px;
+  margin: 0 auto; /* Căn giữa header-container trong header */
 }
 
 /* ==== NHÓM 1: LOGO ==== */

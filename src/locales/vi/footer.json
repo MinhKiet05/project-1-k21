@@ -1,0 +1,13 @@
+{
+  "quickLinks": "Liên kết nhanh",
+  "home": "Trang chủ",
+  "post": "Đăng bài", 
+  "management": "Quản lý",
+  "about": "Về chúng tôi",
+  "contact": "Liên hệ",
+  "email": "Email",
+  "phone": "Số điện thoại",
+  "address": "Địa chỉ",
+  "addressDetail": "addressDetail",
+  "copyright": "© {{year}} Nổ Tung Phố Cổ. Bảo lưu mọi quyền."
+}

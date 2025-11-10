@@ -1,0 +1,13 @@
+{
+  "quickLinks": "Quick Links",
+  "home": "Home",
+  "post": "Post",
+  "management": "Management", 
+  "about": "About Us",
+  "contact": "Contact",
+  "email": "Email",
+  "phone": "Phone",
+  "address": "Address",
+  "addressDetail": "addressDetail",
+  "copyright": "© {{year}} No Tung Pho Co. All rights reserved."
+}
