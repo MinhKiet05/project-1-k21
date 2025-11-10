@@ -32,10 +32,10 @@ function Footer() {
         <div className="footer-links">
           <h3>{t('footer:quickLinks')}</h3>
           <ul>
-            <li><Link to="/home" className={isActive('/home') ? 'active' : ''}><u>{t('footer:home')}</u></Link></li>
-            <li><Link to="/post" className={isActive('/post') ? 'active' : ''}><u>{t('footer:post')}</u></Link></li>
-            <li><Link to="/management" className={isActive('/management') ? 'active' : ''}><u>{t('footer:management')}</u></Link></li>
-            <li><Link to="/about" className={isActive('/about') ? 'active' : ''}><u>{t('footer:about')}</u></Link></li>
+            <li><Link to="/home" className={isActive('/home') ? 'active' : ''}>{t('footer:home')}</Link></li>
+            <li><Link to="/post" className={isActive('/post') ? 'active' : ''}>{t('footer:post')}</Link></li>
+            <li><Link to="/management" className={isActive('/management') ? 'active' : ''}>{t('footer:management')}</Link></li>
+            <li><Link to="/about" className={isActive('/about') ? 'active' : ''}>{t('footer:about')}</Link></li>
           </ul>
         </div>
 
@@ -54,7 +54,7 @@ function Footer() {
       
     </footer>
     <div className="footer-bottom">
-        <p>2025 No Tung Pho Co. All rights reserved.</p>
+        <p>© 2025 No Tung Pho Co. All rights reserved.</p>
       </div>
       </>
   );
