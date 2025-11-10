@@ -270,6 +270,16 @@
   border-collapse: collapse;
 }
 
+/* Email column styling cho desktop */
+.user-table th:nth-child(1), /* Email */
+.user-table td:nth-child(1) {
+  min-width: 250px;
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /* Tùy chỉnh thanh cuộn ngang */
 .user-table-container::-webkit-scrollbar {
   height: 12px;            
