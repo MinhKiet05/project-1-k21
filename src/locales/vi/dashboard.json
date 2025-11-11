@@ -13,6 +13,7 @@
     "oldest": "Cũ nhất", 
     "found": "Tìm thấy",
     "posts": "bài đăng",
+    "noPosts": "Không có bài đăng nào",
     "table": {
       "userName": "Tên người dùng",
       "productName": "Tên sản phẩm",

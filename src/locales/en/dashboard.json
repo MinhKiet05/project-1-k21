@@ -13,6 +13,7 @@
     "oldest": "Oldest",
     "found": "Found",
     "posts": "posts",
+    "noPosts": "No posts found",
     "table": {
       "userName": "User Name",
       "productName": "Product Name",

@@ -27,10 +27,10 @@ export default function EditRoleModal({ user, isOpen, onClose, onUpdateRole }) {
     const result = await onUpdateRole(user.id, selectedRole)
     
     if (result.success) {
-      toast.success(t('roleUpdateSuccess'))
+      toast.success(t('users.roleUpdateSuccess'))
       onClose()
     } else {
-      toast.error(t('roleUpdateError') + ': ' + result.error)
+      toast.error(t('users.roleUpdateError') + ': ' + result.error)
     }
     
     setIsUpdating(false)
@@ -40,7 +40,7 @@ export default function EditRoleModal({ user, isOpen, onClose, onUpdateRole }) {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={e => e.stopPropagation()}>
         <div className="modal-header">
-          <h3>{t('editRole')}</h3>
+          <h3>{t('users.editRole')}</h3>
           <button className="close-btn" onClick={onClose}>&times;</button>
         </div>
         
@@ -55,7 +55,7 @@ export default function EditRoleModal({ user, isOpen, onClose, onUpdateRole }) {
             </div>
             
             <div className="role-selection">
-              <label>{t('newRole')}:</label>
+              <label>{t('users.newRole')}:</label>
               <select 
                 value={selectedRole} 
                 onChange={(e) => setSelectedRole(e.target.value)}
@@ -69,7 +69,7 @@ export default function EditRoleModal({ user, isOpen, onClose, onUpdateRole }) {
               </select>
               <div className="role-note">
                 <small>
-                  {t('roleNotes')}
+                  {t('users.roleNotes')}
                 </small>
               </div>
             </div>
@@ -89,7 +89,7 @@ export default function EditRoleModal({ user, isOpen, onClose, onUpdateRole }) {
               className="btn-save"
               disabled={isUpdating}
             >
-              {isUpdating ? t('saving') : t('saveChanges')}
+              {isUpdating ? t('users.saving') : t('users.saveChanges')}
             </button>
           </div>
         </form>

@@ -151,17 +151,17 @@ export default function DashboardPosts() {
         </div>
 
         <div className="search-result">
-          {postsLoading ? t('common.loading') : `${t('posts.found')} ${posts.length} ${t('posts.posts')}`}
-          {postsError && <div className="field-error">{t('common.error')}: {postsError}</div>}
+          {postsLoading ? t('common:loading') : `${t('posts.found')} ${posts.length} ${t('posts.posts')}`}
+          {postsError && <div className="field-error">{t('common:error')}: {postsError}</div>}
         </div>
       </div>
 
       {/* Table */}
       <div className="post-table-container">
         {postsLoading ? (
-          <div className="loading-state"><p>{t('management.loading')}</p></div>
+          <div className="loading-state"><p>{t('common:loading')}</p></div>
         ) : postsError ? (
-          <div className="error-state"><p>{t('common.error')}: {postsError}</p></div>
+          <div className="error-state"><p>{t('common:error')}: {postsError}</p></div>
         ) : (
           <table className="admin-table">
             <thead>
@@ -181,7 +181,7 @@ export default function DashboardPosts() {
               {posts.length === 0 ? (
                 <tr>
                   <td colSpan="9" style={{textAlign: 'center', padding: '20px', color: '#666'}}>
-                    {t('management.noPosts')}
+                    {t('posts.noPosts')}
                   </td>
                 </tr>
               ) : posts.map((post) => {
