@@ -402,14 +402,14 @@
   right: 0;
   background: white;
   border-radius: 12px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-  padding: 8px 0;
-  min-width: 112px;
+  box-shadow: none;
+  padding: 0;
+  width: fit-content;
   z-index: 1001;
   opacity: 0;
   transform: translateY(-10px);
   animation: dropdownSlideIn 0.3s ease forwards;
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  border: none;
 }
 
 @keyframes dropdownSlideIn {
