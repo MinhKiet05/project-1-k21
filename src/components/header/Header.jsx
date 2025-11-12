@@ -10,6 +10,7 @@ import {
   faComment,
   faRightToBracket,
   faCrown,
+  faTimes,
 } from "@fortawesome/free-solid-svg-icons";
 
 // Import flag WebP files
@@ -84,6 +85,7 @@ export default function Header() {
   const { showLoginDialog, checkAuthAndExecute, closeLoginDialog } =
     useAuthCheck();
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
+  const [isSearchExpanded, setIsSearchExpanded] = useState(false);
 
   // State để quản lý popup nào đang active
   const [activePopup, setActivePopup] = useState(null); // 'chat', 'notifications', 'directChat', null
@@ -154,9 +156,20 @@ export default function Header() {
 
   // Handle search function
   const handleSearch = () => {
-    const query = searchInputRef.current?.value.trim();
-    if (query) {
-      navigate(`/search?q=${encodeURIComponent(query)}`);
+    if (!isSearchExpanded) {
+      setIsSearchExpanded(true);
+      setTimeout(() => {
+        searchInputRef.current?.focus();
+      }, 300);
+    } else {
+      const query = searchInputRef.current?.value.trim();
+      if (query) {
+        navigate(`/search?q=${encodeURIComponent(query)}`);
+        setIsSearchExpanded(false);
+      } else {
+        // If no query, just close the search
+        setIsSearchExpanded(false);
+      }
     }
   };
 
@@ -217,6 +230,24 @@ export default function Header() {
     }
   }, [showLanguageDropdown]);
 
+  // Close search when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest(".search-container") && isSearchExpanded) {
+        if (!searchInputRef.current?.value.trim()) {
+          setIsSearchExpanded(false);
+        }
+      }
+    };
+
+    if (isSearchExpanded) {
+      document.addEventListener("click", handleClickOutside);
+      return () => {
+        document.removeEventListener("click", handleClickOutside);
+      };
+    }
+  }, [isSearchExpanded]);
+
   return (
     <header className="header">
       <div className="header-container">
@@ -268,26 +299,6 @@ export default function Header() {
           </ul>
         </nav>
 
-        {/* ==== NHÓM 3: SEARCH BOX ==== */}
-        <div className="search-box">
-          <FontAwesomeIcon
-            icon={faSearch}
-            className="search-icon-header"
-            onClick={handleSearch}
-            style={{ cursor: "pointer" }}
-          />
-          <input
-            ref={searchInputRef}
-            type="text"
-            placeholder={t("search")}
-            onKeyPress={(e) => {
-              if (e.key === "Enter") {
-                handleSearch();
-              }
-            }}
-          />
-        </div>
-
         {/* ==== NHÓM 4: USER ACTIONS & ICONS ==== */}
         <div className="header-user-actions">
           <SignedOut>
@@ -303,6 +314,41 @@ export default function Header() {
           </SignedOut>
 
           <SignedIn>
+            {/* Search Icon */}
+            <div
+              className={`search-container ${
+                isSearchExpanded ? "expanded" : "collapsed"
+              }`}
+            >
+              {isSearchExpanded && (
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  placeholder={t("search")}
+                  className="search-input-expanded"
+                  onKeyPress={(e) => {
+                    if (e.key === "Enter") {
+                      handleSearch();
+                    }
+                  }}
+                  onBlur={() => {
+                    if (!searchInputRef.current?.value.trim()) {
+                      setTimeout(() => setIsSearchExpanded(false), 150);
+                    }
+                  }}
+                />
+              )}
+              <button
+                className="header-icon-btn search-icon-btn"
+                onClick={handleSearch}
+              >
+                <FontAwesomeIcon
+                  icon={isSearchExpanded ? faTimes : faSearch}
+                  className="icon-btn-search"
+                />
+              </button>
+            </div>
+
             {/* Nút chat: toggle popup */}
             <button
               className={`header-icon-btn ${
