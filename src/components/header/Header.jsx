@@ -391,7 +391,8 @@ export default function Header() {
         {/* ==== NHÓM 4: USER ACTIONS & ICONS ==== */}
         <div className="header-user-actions">
           {/* Search Icon */}
-            <div
+          <div
+              id="an-tren-tablet-mobile"
               className={`search-container ${
                 isSearchExpanded ? "expanded" : "collapsed"
               }`}

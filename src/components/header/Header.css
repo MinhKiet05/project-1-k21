@@ -702,6 +702,7 @@
 }
 
 @media (max-width: 1200px) {
+
   /* Show burger button */
   .burger-btn {
     display: flex;
@@ -818,6 +819,9 @@
 }
 
 @media (max-width: 768px) {
+  #an-tren-tablet-mobile{
+    display: none;
+  }
   /* Hide search container on mobile */
   .search-container {
     display: none;

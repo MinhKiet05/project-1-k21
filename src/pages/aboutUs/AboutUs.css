@@ -158,7 +158,7 @@
 }
 
 /* -------------------- RESPONSIVE -------------------- */
-@media (max-width: 900px) {
+@media (max-width: 1150px) {
   .story-content,
   .value-item {
     flex-direction: column;
