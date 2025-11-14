@@ -280,7 +280,9 @@ export default function Header() {
               className="burger-icon"
             />
           </button>
+          <Link to="/home" className={isActive("/home") ? "active" : ""}>
           <img src={logo} alt="Logo" />
+          </Link>
         </div>
 
         {/* ==== NHÓM 2: NAV ==== */}
