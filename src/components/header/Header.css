@@ -16,10 +16,10 @@
   align-items: center;
   justify-content: space-between; /* 4 nhóm sẽ tự động căn cách đều với space-between */
   flex-wrap: nowrap; /* Giữ trên cùng 1 dòng */
-  padding: 4px 0px;
+  padding: 4px 10px;
   box-sizing: border-box;
   gap: 20px; /* Thêm gap để đảm bảo spacing */
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto; /* Căn giữa header-container trong header */
 }
 
@@ -97,7 +97,7 @@
 }
 
 .search-container.expanded {
-  width: 280px;
+  width: 240px;
   background-color: rgba(236, 207, 178, 0.9);
   border-radius: 25px;
   border: 2px solid rgba(90, 70, 53, 0.3);
