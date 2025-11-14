@@ -177,112 +177,113 @@ export default function Manager() {
         </div>
       </div>
 
-      {/* Bảng bài đăng */}
-      <table className="manager-table">
-        <thead>
-          <tr>
-            <th>{t('table.productName')}</th>
-            <th>{t('table.image')}</th>
-            <th>{t('table.price')}</th>
-            <th>{t('table.category')}</th>
-            <th>{t('table.location')}</th>
-            <th>{t('table.status')}</th>
-            <th>{t('table.createdAt')}</th>
-            <th>{t('table.actions')}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {postsLoading ? (
-            <tr>
-              <td colSpan="8" style={{textAlign: 'center', padding: '20px'}}>
-                {t('loading.posts')}
-              </td>
-            </tr>
-          ) : postsError ? (
-            <tr>
-              <td colSpan="8" style={{textAlign: 'center', padding: '20px', color: '#e74c3c'}}>
-                {t('common.error')}: {postsError}
-              </td>
-            </tr>
-          ) : posts.length === 0 ? (
-            <tr>
-              <td colSpan="8" style={{textAlign: 'center', padding: '20px', color: '#666'}}>
-                {t('noPosts')}
-              </td>
-            </tr>
-          ) : posts.map((post) => {
-            const title = post.title || t('common.noTitle');
-            const imageUrl = (post.image_urls && post.image_urls[0]) || 
-                           (post.imageUrls && post.imageUrls[0]) || 
-                           post.image_url || 
-                           post.images?.[0] || 
-                           'https://via.placeholder.com/60';
-            const price = post.price ? (typeof post.price === 'number' ? post.price.toLocaleString('vi-VN') + ' VNĐ' : post.price) : t('common.noPrice');
-            const categoryName = getDisplayName(post.category, i18n.language) || '-';
-            const locationName = getDisplayName(post.location, i18n.language) || '-';
-            const createdAt = post.created_at ? formatDate(post.created_at) : '-';
-            
-            // Determine status display
-            let statusDisplay = '';
-            let statusClass = '';
-            
-            switch(post.status) {
-              case 'pending':
-                statusDisplay = t('status.pending');
-                statusClass = 'status-pending';
-                break;
-              case 'approved':
-                statusDisplay = t('status.approved');
-                statusClass = 'status-approved';
-                break;
-              case 'rejected':
-                statusDisplay = t('status.rejected');
-                statusClass = 'status-rejected';
-                break;
-              case 'expired':
-                statusDisplay = t('status.expired');
-                statusClass = 'status-expired';
-                break;
-              case 'sold':
-                statusDisplay = t('status.sold');
-                statusClass = 'status-sold';
-                break;
-              default:
-                statusDisplay = t('status.unknown');
-                statusClass = 'status-unknown';
-            }
-
-            return (
-              <tr key={post.id}>
-                <td>{title}</td>
-                <td>
-                  <img
-                    src={imageUrl}
-                    alt={title}
-                    className="manager-img"
-                  />
-                </td>
-                <td>{price}</td>
-                <td>{categoryName}</td>
-                <td>{locationName}</td>
-                <td>
-                  <p className={statusClass}>{statusDisplay}</p>
-                </td>
-                <td>{createdAt}</td>
-                <td>
-                  <button 
-                    className="action-btn-view-detail"
-                    onClick={() => handleViewDetail(post)}
-                  >
-                    {t('actions.viewDetail')}
-                  </button>
-                </td>
+        {/* Bảng bài đăng */}
+        <div className="manager-table-container">
+          <table className="manager-table">
+            <thead>
+              <tr>
+                <th>{t('table.productName')}</th>
+                <th>{t('table.image')}</th>
+                <th>{t('table.price')}</th>
+                <th>{t('table.category')}</th>
+                <th>{t('table.location')}</th>
+                <th>{t('table.status')}</th>
+                <th>{t('table.createdAt')}</th>
+                <th>{t('table.actions')}</th>
               </tr>
-            );
-          })}
-        </tbody>
-      </table>
+            </thead>
+            <tbody>
+              {postsLoading ? (
+                <tr>
+                  <td colSpan="8" style={{ textAlign: 'center', padding: '20px' }}>
+                    {t('loading.posts')}
+                  </td>
+                </tr>
+              ) : postsError ? (
+                <tr>
+                  <td colSpan="8" style={{ textAlign: 'center', padding: '20px', color: '#e74c3c' }}>
+                    {t('common.error')}: {postsError}
+                  </td>
+                </tr>
+              ) : posts.length === 0 ? (
+                <tr>
+                  <td colSpan="8" style={{ textAlign: 'center', padding: '20px', color: '#666' }}>
+                    {t('noPosts')}
+                  </td>
+                </tr>
+              ) : posts.map((post) => {
+                const title = post.title || t('common.noTitle');
+                const imageUrl = (post.image_urls && post.image_urls[0]) ||
+                  (post.imageUrls && post.imageUrls[0]) ||
+                  post.image_url ||
+                  post.images?.[0] ||
+                  'https://via.placeholder.com/60';
+                const price = post.price ? (typeof post.price === 'number' ? post.price.toLocaleString('vi-VN') + ' VNĐ' : post.price) : t('common.noPrice');
+                const categoryName = getDisplayName(post.category, i18n.language) || '-';
+                const locationName = getDisplayName(post.location, i18n.language) || '-';
+                const createdAt = post.created_at ? formatDate(post.created_at) : '-';
 
+                // Determine status display
+                let statusDisplay = '';
+                let statusClass = '';
+
+                switch (post.status) {
+                  case 'pending':
+                    statusDisplay = t('status.pending');
+                    statusClass = 'status-pending';
+                    break;
+                  case 'approved':
+                    statusDisplay = t('status.approved');
+                    statusClass = 'status-approved';
+                    break;
+                  case 'rejected':
+                    statusDisplay = t('status.rejected');
+                    statusClass = 'status-rejected';
+                    break;
+                  case 'expired':
+                    statusDisplay = t('status.expired');
+                    statusClass = 'status-expired';
+                    break;
+                  case 'sold':
+                    statusDisplay = t('status.sold');
+                    statusClass = 'status-sold';
+                    break;
+                  default:
+                    statusDisplay = t('status.unknown');
+                    statusClass = 'status-unknown';
+                }
+
+                return (
+                  <tr key={post.id}>
+                    <td>{title}</td>
+                    <td>
+                      <img
+                        src={imageUrl}
+                        alt={title}
+                        className="manager-img"
+                      />
+                    </td>
+                    <td>{price}</td>
+                    <td>{categoryName}</td>
+                    <td>{locationName}</td>
+                    <td>
+                      <p className={statusClass}>{statusDisplay}</p>
+                    </td>
+                    <td>{createdAt}</td>
+                    <td>
+                      <button
+                        className="action-btn-view-detail"
+                        onClick={() => handleViewDetail(post)}
+                      >
+                        {t('actions.viewDetail')}
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       <PostDetailModal
         post={selectedPost}
         isOpen={isModalOpen}

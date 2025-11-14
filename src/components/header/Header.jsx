@@ -323,10 +323,7 @@ export default function Header() {
                 {t("about")}
               </Link>
             </li>
-            
-            {/* Mobile-only items */}
-            <SignedIn>
-              {/* Mobile Search */}
+            {/* Mobile Search */}
               <li className="mobile-search-item">
                 <div className="mobile-search-container">
                   <input
@@ -346,6 +343,9 @@ export default function Header() {
                   <FontAwesomeIcon icon={faSearch} className="mobile-search-icon" />
                 </div>
               </li>
+            {/* Mobile-only items */}
+            <SignedIn>
+              
               
               {/* Mobile Admin Link */}
               {isAdmin() && (
@@ -390,20 +390,7 @@ export default function Header() {
 
         {/* ==== NHÓM 4: USER ACTIONS & ICONS ==== */}
         <div className="header-user-actions">
-          <SignedOut>
-            <SignInButton mode="modal">
-              <div className="login-button">
-                <FontAwesomeIcon
-                  icon={faRightToBracket}
-                  className="login-icon"
-                />
-                {t("login")}
-              </div>
-            </SignInButton>
-          </SignedOut>
-
-          <SignedIn>
-            {/* Search Icon */}
+          {/* Search Icon */}
             <div
               className={`search-container ${
                 isSearchExpanded ? "expanded" : "collapsed"
@@ -437,6 +424,20 @@ export default function Header() {
                 />
               </button>
             </div>
+          <SignedOut>
+            <SignInButton mode="modal">
+              <div className="login-button">
+                <FontAwesomeIcon
+                  icon={faRightToBracket}
+                  className="login-icon"
+                />
+                {t("login")}
+              </div>
+            </SignInButton>
+          </SignedOut>
+
+          <SignedIn>
+            
 
             {/* Nút chat: toggle popup */}
             <button
