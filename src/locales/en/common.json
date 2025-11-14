@@ -27,5 +27,6 @@
   "failed": "Failed",
   "warning": "Warning",
   "info": "Information",
-  "author": "Author"
+  "author": "Author",
+  "language": "Language"
 }

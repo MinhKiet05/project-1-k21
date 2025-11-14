@@ -19,7 +19,7 @@
   padding: 4px 10px;
   box-sizing: border-box;
   gap: 20px; /* Thêm gap để đảm bảo spacing */
-  max-width: 1200px;
+  max-width: 1220px;
   margin: 0 auto; /* Căn giữa header-container trong header */
 }
 
@@ -35,6 +35,7 @@
   font-size: 16px;
   padding: 0px 8px;
   border-radius: 5px;
+  position: relative;
 }
 
 .header-logo img {
@@ -95,7 +96,9 @@
 .search-container.collapsed {
   width: 36px;
 }
-
+.mobile-admin-item-link-link{
+  display: none;
+}
 .search-container.expanded {
   width: 240px;
   background-color: rgba(236, 207, 178, 0.9);
@@ -587,53 +590,357 @@
     transform: translateY(0);
   }
 }
+/* ==== BURGER MENU BUTTON ==== */
+.burger-btn {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  color: #2d2d2d;
+  font-size: 18px;
+  margin-left: 12px;
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.burger-btn:hover {
+  background-color: #eccfb2;
+}
+
+.burger-icon {
+  transition: transform 0.3s ease;
+}
+
+/* ==== MOBILE MENU OVERLAY ==== */
+.mobile-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  opacity: 0;
+  animation: fadeInOverlay 0.3s ease forwards;
+}
+
+@keyframes fadeInOverlay {
+  to {
+    opacity: 1;
+  }
+}
+
 /* ==== RESPONSIVE ==== */
-@media (max-width: 768px) {
-  .header-container {
-    flex-direction: column; /* Xếp 4 nhóm theo chiều dọc */
-    align-items: center;
-    gap: 15px; /* Thêm gap cho chế độ mobile */
+/* Desktop styles - ensure navigation is visible above 1200px */
+@media (min-width: 1201px) {
+  .burger-btn {
+    display: none;
   }
-
+  
   .nav {
-    width: 100%;
-    order: 2; /* Đưa nav xuống dưới logo */
+    display: flex;
+    position: static;
+    background: transparent;
+    box-shadow: none;
+    z-index: auto;
+    border-radius: 0;
   }
+  
   .nav ul {
-    gap: 10px;
-    width: 100%;
-    justify-content: space-around; /* Căn đều nav trên mobile */
+    display: flex;
+    flex-direction: row;
+    gap: 1vw;
+    padding: 0;
   }
-
-  .search-container.expanded {
-    width: 250px; /* Nhỏ hơn trên mobile */
+  
+  .nav li {
+    width: auto;
+    border-bottom: none;
   }
+  
+  .nav a {
+    display: flex;
+    padding: 8px 12px;
+    color: #2d2d2d;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: clamp(14px, 1.2vw, 16px);
+    align-items: center;
+    gap: 6px;
+    transition: 0.2s;
+    border-radius: 8px;
+  }
+  
+  .nav a:hover {
+    color: #000000;
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+  
+  .nav a.active {
+    background-color: rgba(255, 255, 255, 0.3);
+    color: #000000;
+  }
+  
+  .nav a.active::before {
+    display: none;
+  }
+  
+  /* Hide mobile-only elements on desktop */
+  .mobile-search-item,
+  .mobile-search-container,
+  .mobile-admin-icon,
+  .mobile-language-item,
+  .mobile-language-selector,
+  .mobile-language-label,
+  .mobile-language-options,
+  .mobile-language-btn,
+  .flag-mobile {
+    display: none !important;
+  }
+}
 
+@media (max-width: 1200px) {
+  /* Show burger button */
+  .burger-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Ensure header container keeps proper layout */
+  .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  /* Keep user actions and language on the right */
   .header-user-actions {
-    width: 100%;
-    justify-content: center; /* Căn giữa các icon */
-    max-width: none;
-    order: 4; /* Cuối cùng */
+    order: 2;
+    margin-left: auto;
+    margin-right: 10px;
   }
-
-  .logo {
-    order: 1; /* Logo luôn ở trên cùng */
-  }
-
-  /* Language dropdown responsive */
+  
   .language-dropdown-container {
-    order: 5; /* Đặt language selector ở cuối */
-    margin-top: 10px;
+    order: 3;
   }
+  
+  /* Hide navigation by default */
+  .nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    border-radius: 0 0 12px 12px;
+  }
+  
+  /* Show navigation when burger menu is open */
+  .nav.nav-open {
+    display: block;
+    animation: slideDown 0.3s ease forwards;
+  }
+  
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Style navigation items for mobile */
+  .nav ul {
+    flex-direction: column;
+    gap: 0;
+  }
+  
+  .nav li {
+    width: 100%;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  
+  .nav li:last-child {
+    border-bottom: none;
+  }
+  
+  .nav a {
+    display: block;
+    padding: 18px 30px;
+    color: #2d2d2d;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border-radius: 0;
+  }
+  
+  .nav a:hover {
+    background-color: #f8f9fa;
+    color: #e9925c;
+  }
+  
+  .nav a.active {
+    background-color: #fff3ed;
+    color: #e9925c;
+    font-weight: 600;
+    position: relative;
+  }
+  
+  .nav a.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background-color: #e9925c;
+  }
+  .mobile-search-item,
+  .mobile-search-container,
+  .mobile-admin-icon,
+  .mobile-language-item,
+  .mobile-language-selector,
+  .mobile-language-label,
+  .mobile-language-options,
+  .mobile-language-btn,
+  .flag-mobile {
+    display: none !important;
+  }
+}
 
-  .language-dropdown-trigger {
-    min-width: 120px;
+@media (max-width: 768px) {
+  /* Hide search container on mobile */
+  .search-container {
+    display: none;
+  }
+  
+  /* Hide admin dashboard link on mobile */
+  .header-user-actions .header-icon-btn[href="/dashboard"] {
+    display: none;
+  }
+  
+  /* Hide language dropdown on mobile */
+  .language-dropdown-container {
+    display: none;
+  }
+  
+  /* Adjust user actions spacing for mobile */
+  .header-user-actions {
+    gap: 8px;
+  }
+  
+  /* Adjust header container padding */
+  .header-container {
+    padding: 8px 15px;
+  }
+  
+  /* Mobile-only elements - show only on mobile */
+  .mobile-search-item {
+    display: list-item !important;
+    border-bottom: 1px solid #f0f0f0 !important;
+  }
+  
+  .mobile-search-container {
+    display: flex !important;
+    align-items: center;
+    margin: 15px 20px;
+    background-color: #f8f9fa;
+    border-radius: 25px;
+    padding: 12px 16px;
+    gap: 12px;
+    border: 2px solid #e9ecef;
+  }
+  
+  .mobile-search-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 16px;
+    outline: none;
+    color: #2d2d2d;
+    font-family: "Be Vietnam Pro", sans-serif;
+  }
+  
+  .mobile-search-input::placeholder {
+    color: #6c757d;
+  }
+  
+  .mobile-search-icon {
+    color: #6c757d;
+    font-size: 16px;
+  }
+  
+  .mobile-admin-icon {
+    display: inline-block !important;
+    margin-right: 8px;
+    color: #e9925c;
+  }
+  
+  .mobile-language-item {
+    display: list-item !important;
+    border-bottom: none !important;
+  }
+  
+  .mobile-language-selector {
+    display: block !important;
+    padding: 20px 30px;
+    background-color: #f8f9fa;
+  }
+  
+  .mobile-language-label {
+    display: block !important;
+    font-weight: 600;
+    color: #2d2d2d;
+    margin-bottom: 15px;
+    font-size: 16px;
+  }
+  
+  .mobile-language-options {
+    display: flex !important;
+    gap: 12px;
+    justify-content: center;
+  }
+  
+  .mobile-language-btn {
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+    background-color: #ffffff;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
     font-size: 14px;
+    font-weight: 500;
+    color: #2d2d2d;
   }
-
-  .language-dropdown-menu {
-    right: 50%;
-    transform: translateX(50%);
-    min-width: 140px;
+  
+  .mobile-language-btn:hover {
+    border-color: #e9925c;
+    background-color: #fff3ed;
+    color: #e9925c;
+  }
+  
+  .mobile-language-btn.active {
+    background-color: #e9925c;
+    border-color: #e9925c;
+    color: #ffffff;
+  }
+  
+  .flag-mobile {
+    display: inline-block !important;
+    width: 20px;
+    height: 15px;
+    border-radius: 2px;
   }
 }

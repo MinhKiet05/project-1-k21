@@ -11,6 +11,7 @@ import {
   faRightToBracket,
   faCrown,
   faTimes,
+  faBars,
 } from "@fortawesome/free-solid-svg-icons";
 
 // Import flag WebP files
@@ -86,6 +87,7 @@ export default function Header() {
     useAuthCheck();
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // State để quản lý popup nào đang active
   const [activePopup, setActivePopup] = useState(null); // 'chat', 'notifications', 'directChat', null
@@ -178,6 +180,11 @@ export default function Header() {
     checkAuthAndExecute(() => navigate(path), message);
   };
 
+  // Toggle mobile menu
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
   // Handle language change
   const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);
@@ -248,16 +255,36 @@ export default function Header() {
     }
   }, [isSearchExpanded]);
 
+  // Handle mobile menu overlay effect
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMobileMenuOpen]);
+
   return (
     <header className="header">
       <div className="header-container">
         {/* ==== NHÓM 1: LOGO ==== */}
         <div className="header-logo">
+          
+          <button className="burger-btn" onClick={toggleMobileMenu}>
+            <FontAwesomeIcon 
+              icon={isMobileMenuOpen ? faTimes : faBars} 
+              className="burger-icon"
+            />
+          </button>
           <img src={logo} alt="Logo" />
         </div>
 
         {/* ==== NHÓM 2: NAV ==== */}
-        <nav className="nav">
+        <nav className={`nav ${isMobileMenuOpen ? 'nav-open' : ''}`}>
           <ul>
             <li>
               <Link to="/home" className={isActive("/home") ? "active" : ""}>
@@ -295,6 +322,68 @@ export default function Header() {
               <Link to="/about" className={isActive("/about") ? "active" : ""}>
                 {t("about")}
               </Link>
+            </li>
+            
+            {/* Mobile-only items */}
+            <SignedIn>
+              {/* Mobile Search */}
+              <li className="mobile-search-item">
+                <div className="mobile-search-container">
+                  <input
+                    type="text"
+                    placeholder={t("search")}
+                    className="mobile-search-input"
+                    onKeyPress={(e) => {
+                      if (e.key === "Enter") {
+                        const query = e.target.value.trim();
+                        if (query) {
+                          navigate(`/search?q=${encodeURIComponent(query)}`);
+                          setIsMobileMenuOpen(false);
+                        }
+                      }
+                    }}
+                  />
+                  <FontAwesomeIcon icon={faSearch} className="mobile-search-icon" />
+                </div>
+              </li>
+              
+              {/* Mobile Admin Link */}
+              {isAdmin() && (
+                <li className="mobile-admin-item-link-link">
+                  <Link 
+                    to="/dashboard" 
+                    className={isActive("/dashboard") ? "active" : ""}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <FontAwesomeIcon icon={faCrown} className="mobile-admin-icon" />
+                    Quản lý cho admin
+                  </Link>
+                </li>
+              )}
+            </SignedIn>
+            
+            {/* Mobile Language Selector */}
+            <li className="mobile-language-item">
+              <div className="mobile-language-selector">
+                <span className="mobile-language-label">{t("common:language")}:</span>
+                <div className="mobile-language-options">
+                  {Object.entries(languages).map(([code, lang]) => (
+                    <button
+                      key={code}
+                      className={`mobile-language-btn ${
+                        i18n.language === code ? "active" : ""
+                      }`}
+                      onClick={() => {
+                        changeLanguage(code);
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      <FlagIcon countryCode={code} className="flag-mobile" />
+                      <span>{lang.text}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
             </li>
           </ul>
         </nav>
@@ -436,6 +525,14 @@ export default function Header() {
           )}
         </div>
       </div>
+
+      {/* ==== MOBILE MENU OVERLAY ==== */}
+      {isMobileMenuOpen && (
+        <div 
+          className="mobile-menu-overlay" 
+          onClick={() => setIsMobileMenuOpen(false)}
+        ></div>
+      )}
 
       {/* ==== HIỂN THỊ POPUP CHAT ==== */}
       {showChatPopup && <ChatPopup />}
