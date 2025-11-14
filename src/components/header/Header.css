@@ -822,7 +822,9 @@
   .search-container {
     display: none;
   }
-  
+  .mobile-admin-item-link-link{
+    display: inline-block;
+  }
   /* Hide admin dashboard link on mobile */
   .header-user-actions .header-icon-btn[href="/dashboard"] {
     display: none;
