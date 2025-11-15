@@ -1,24 +1,24 @@
-@import url('https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&display=swap");
 .footer {
- width: 100%;
- background-color: #E59462;
- display: flex;
- flex-direction: column;
- justify-content: center;
- align-items: center; /* <--- CHỈ CẦN THÊM DÒNG NÀY */
- font-family: 'Be Vietnam Pro', sans-serif;
- color: #2b2b2b;
- padding: 20px 0 ;
+  width: 100%;
+  background-color: #e59462;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: "Be Vietnam Pro", sans-serif;
+  color: #2b2b2b;
+  padding: 20px 0;
 }
 
 /* Căn bố cục 3 phần: logo - liên kết - liên hệ */
 .footer-container {
- max-width: 1200px;
- display: flex;
- justify-content: space-between;
- align-items: flex-start;
- /* Cần thêm width: 100% để nó chiếm hết 1200px */
-  width: 90%; 
+  max-width: 1200px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  /* Cần thêm width: 100% để nó chiếm hết 1200px */
+  width: 90%;
 }
 
 /* Logo và tên thương hiệu */
@@ -27,7 +27,7 @@
   display: flex;
   align-items: center;
   gap: 20px;
-  font-family: 'Cherry Bomb One', cursive;
+  font-family: "Cherry Bomb One", cursive;
   font-size: clamp(20px, 2.2vw, 28px);
   color: #2d2d2d;
   font-weight: 400;
@@ -35,12 +35,23 @@
   padding: 0px 8px;
   border-radius: 5px;
   user-select: none;
+  transition: all 0.3s ease;
+}
+
+.footer-logo:hover {
+  transform: translateY(-5px) scale(1.02);
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.2));
 }
 
 .footer-logo img {
   width: 130px;
   height: 130px;
   object-fit: cover;
+  transition: all 0.4s ease;
+}
+
+.footer-logo img:hover {
+  transform: rotate(360deg) scale(1.1);
 }
 
 .footer-logo h2 {
@@ -70,23 +81,27 @@
   list-style: none;
   padding: 0;
   margin: 0;
-} 
+}
+
 .footer-links a,
 .footer-links a[data-rr-ui-link],
 .footer-contact a {
   color: #2b2b2b;
   text-decoration: none;
 }
+
 .footer-links a:hover,
 .footer-links a[data-rr-ui-link]:hover,
 .footer-contact a:hover {
   text-decoration: underline;
 }
+
 .footer-links a.active,
 .footer-links a[data-rr-ui-link].active {
   font-weight: bold;
   color: #1a1a1a;
 }
+
 .footer-links ul li,
 .footer-contact ul li {
   margin-bottom: 8px;
@@ -94,7 +109,7 @@
 /* Phần dòng bản quyền */
 .footer-bottom {
   height: 40px;
-  background-color: #C6714E;
+  background-color: #c6714e;
   text-align: center;
   font-size: 20px;
   font-weight: bold;
@@ -102,9 +117,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-
 }
-
 
 /*
 desktop max-width: 1200px
@@ -129,5 +142,3 @@ mobile max-width: 480px
     text-align: center;
   }
 }
-
-

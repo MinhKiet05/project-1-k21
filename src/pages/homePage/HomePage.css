@@ -50,11 +50,6 @@
   display: block;
   margin: 0;
   padding: 0;
-  transition: transform 0.3s ease;
-}
-
-.carousel-slide:hover img {
-  transform: scale(1.05); /* Zoom nhẹ khi hover */
 }
 
 /* Right Banner Group */
@@ -83,12 +78,6 @@
   display: block;
   margin: 0;
   padding: 0;
-  transition: transform 0.3s ease;
-}
-
-.right-banner-top:hover img,
-.right-banner-bottom:hover img {
-  transform: scale(1.05);
 }
 
 /* Navigation Arrows */
@@ -245,12 +234,11 @@
 .homepage-section {
   margin-bottom: 50px;
   background-color: #fcfafa;
-  padding: 30px 30px 12px 30px;
+  padding: 30px 30px 30px 30px;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   max-width: 1140px;
   margin: 0 auto 40px auto;
-
 }
 
 .homepage-section-title {
@@ -294,7 +282,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-family: 'Be Vietnam Pro', sans-serif;
+  font-family: "Be Vietnam Pro", sans-serif;
   font-size: 16px;
   font-weight: 600;
   color: #e9925c;
@@ -302,7 +290,11 @@
   padding: 8px 24px;
   border: 2px solid #e9925c;
   border-radius: 25px;
-  background: linear-gradient(135deg, transparent 0%, rgba(255, 122, 24, 0.05) 100%);
+  background: linear-gradient(
+    135deg,
+    transparent 0%,
+    rgba(255, 122, 24, 0.05) 100%
+  );
   transition: all 0.3s ease;
   text-decoration: none;
   position: relative;
@@ -317,12 +309,13 @@
 
 /* Ripple effect */
 .see-all::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   left: 50%;
   width: 0;
-  height: 0;transition: all 0.6s ease;
+  height: 0;
+  transition: all 0.6s ease;
   transform: translate(-50%, -50%);
   border-radius: 50%;
   pointer-events: none;
@@ -366,7 +359,7 @@
     padding: 10px 20px;
     gap: 6px;
   }
-  
+
   .see-all svg {
     font-size: 13px;
   }
@@ -395,19 +388,19 @@
     width: 60px;
     height: 3px;
   }
-  
+
   .see-all-container {
     margin-top: 20px;
     padding-top: 15px;
   }
-  
+
   .see-all {
     font-size: 14px;
     padding: 8px 16px;
     gap: 5px;
     border-radius: 20px;
   }
-  
+
   .see-all svg {
     font-size: 12px;
   }
