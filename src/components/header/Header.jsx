@@ -268,6 +268,11 @@ export default function Header() {
     };
   }, [isMobileMenuOpen]);
 
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [location.pathname]);
+
   return (
     <header className="header">
       <div className="header-container">

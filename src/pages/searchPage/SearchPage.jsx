@@ -224,16 +224,23 @@ export default function SearchPage() {
                                 <option value="price-asc">{t('priceAsc')}</option>
                                 <option value="price-desc">{t('priceDesc')}</option>
                             </select>
-                            <span>{t('priceFrom')}:</span>
-                            <div className="price-range">
+                        </div>
+                         <div className="filter-group form-price-to-price" >
+                            <div>
+                                <div className="price-range">
+                                    <span>{t('priceFrom')}:</span>
                                 <input
                                     type="number"
                                     className="price-input"
                                     placeholder={t('priceFrom')}
                                     value={filters.priceMin}
                                     onChange={(e) => handleFilterChange('priceMin', e.target.value)}
-                                />
-                                <span>{t('priceTo')}:</span>
+                                    />
+                                    </div>
+                                    <div>
+                                        <span>{t('priceTo')}:</span>
+                                    
+                                
                                 <input
                                     type="number"
                                     className="price-input"
@@ -241,7 +248,9 @@ export default function SearchPage() {
                                     value={filters.priceMax}
                                     onChange={(e) => handleFilterChange('priceMax', e.target.value)}
                                 />
+                                </div>
                             </div>
+                            
                         </div>
                         <div className="filter-group">
                             <label className="filter-label">{t('time')}</label>
