@@ -26,6 +26,9 @@ function HomePage() {
   const [hotCategories, setHotCategories] = useState([]);
   const [latestPosts, setLatestPosts] = useState([]);
   const [recommendedPosts, setRecommendedPosts] = useState([]);
+  const [allRecommendedPosts, setAllRecommendedPosts] = useState([]); // Store all recommended posts
+  const [recommendedDisplayCount, setRecommendedDisplayCount] = useState(8); // Number of posts to display
+  const [loadingMore, setLoadingMore] = useState(false); // Loading state for "see more"
   const [loading, setLoading] = useState(true);
 
   // Auto slide every 5 seconds
@@ -91,11 +94,12 @@ function HomePage() {
             location:locations(id, name)
           `)
           .eq('status', 'approved')
-          .limit(20);
+          .limit(50); // Increase limit to get more posts for "see more" functionality
 
         if (randomPosts && randomPosts.length > 0) {
           const shuffled = [...randomPosts].sort(() => Math.random() - 0.5);
-          setRecommendedPosts(shuffled.slice(0, 8));
+          setAllRecommendedPosts(shuffled); // Store all posts
+          setRecommendedPosts(shuffled.slice(0, 8)); // Display first 8
         }
 
       } catch (error) {
@@ -136,6 +140,45 @@ function HomePage() {
       image: imageUrl
     };
   }, []);
+
+  // Load more recommended posts
+  const loadMoreRecommended = useCallback(async () => {
+    setLoadingMore(true);
+    
+    // If we have more posts in allRecommendedPosts, show more
+    if (allRecommendedPosts.length > recommendedDisplayCount) {
+      const newCount = Math.min(recommendedDisplayCount + 8, allRecommendedPosts.length);
+      setRecommendedPosts(allRecommendedPosts.slice(0, newCount));
+      setRecommendedDisplayCount(newCount);
+    } else {
+      // Fetch more posts from database if we've shown all cached posts
+      try {
+        const { data: morePosts } = await supabase
+          .from('posts')
+          .select(`
+            *,
+            category:categories(id, name),
+            location:locations(id, name)
+          `)
+          .eq('status', 'approved')
+          .range(allRecommendedPosts.length, allRecommendedPosts.length + 15);
+
+        if (morePosts && morePosts.length > 0) {
+          const shuffled = [...morePosts].sort(() => Math.random() - 0.5);
+          const updatedAllPosts = [...allRecommendedPosts, ...shuffled];
+          const newCount = recommendedDisplayCount + 8;
+          
+          setAllRecommendedPosts(updatedAllPosts);
+          setRecommendedPosts(updatedAllPosts.slice(0, newCount));
+          setRecommendedDisplayCount(newCount);
+        }
+      } catch (error) {
+        console.error('Error loading more posts:', error);
+      }
+    }
+    
+    setLoadingMore(false);
+  }, [allRecommendedPosts, recommendedDisplayCount]);
 
   return (
     <>
@@ -255,6 +298,24 @@ function HomePage() {
                   product={{ name: t('noRecommendations'), price: 0, image: logoImg }}
                 />
               ))
+            )}
+          </div>
+          <div className="see-all-container">
+            {allRecommendedPosts.length > recommendedDisplayCount ? (
+              <span 
+                className={`see-all ${loadingMore ? 'loading' : ''}`}
+                onClick={loadingMore ? undefined : loadMoreRecommended}
+                style={{ cursor: loadingMore ? 'not-allowed' : 'pointer' }}
+              >
+                {loadingMore ? (t('loading') || 'Loading...') : (t('seeMore') || 'Xem thêm')} <FontAwesomeIcon icon={faArrowRight} />
+              </span>
+            ) : (
+              <span 
+                className="see-all" 
+                onClick={() => navigate('/search?q=&category=d1261632-4ade-4a65-ab34-d1804e31210a')}
+              >
+                {t('seeAll')} <FontAwesomeIcon icon={faArrowRight} />
+              </span>
             )}
           </div>
         </div>
