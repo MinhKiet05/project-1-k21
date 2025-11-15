@@ -318,10 +318,10 @@ export default function UploadPost() {
                         <div className="field-input">
                             <div className="price-row-wrapper">
                                 <input type="text" name="productPrice" placeholder={t('placeholders.price')} required onBlur={(e) => validateField('productPrice', e.target.value)} />
-                            </div>
-                            {formErrors.productPrice && (
+                                {formErrors.productPrice && (
                                 <div className="field-error">{formErrors.productPrice}</div>
                             )}
+                            </div>
                         </div>
                     </div>
 

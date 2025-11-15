@@ -298,4 +298,7 @@
         width: 100%;
         max-width: none;
     }
+    .price-row-wrapper input{
+        width: calc(100% - 80px);  
+    }
 }
