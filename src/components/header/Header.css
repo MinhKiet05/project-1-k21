@@ -5,9 +5,27 @@
 .header {
   background-color: #e9925c;
   font-family: "Be Vietnam Pro", sans-serif;
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 1000; /* Thêm z-index để header luôn ở trên cùng */
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Header visibility states */
+.header-visible {
+  transform: translateY(0);
+}
+
+.header-hidden {
+  transform: translateY(-100%);
+}
+
+/* Add padding to body to prevent content jumping */
+body {
+  padding-top: 58px; /* Adjust based on your header height */
 }
 
 .header-container {
