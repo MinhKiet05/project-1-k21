@@ -88,8 +88,6 @@ export default function Header() {
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isHeaderVisible, setIsHeaderVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
 
   // State để quản lý popup nào đang active
   const [activePopup, setActivePopup] = useState(null); // 'chat', 'notifications', 'directChat', null
@@ -275,44 +273,8 @@ export default function Header() {
     setIsMobileMenuOpen(false);
   }, [location.pathname]);
 
-  // Handle scroll to hide/show header
-  useEffect(() => {
-    const controlHeader = () => {
-      const currentScrollY = window.scrollY;
-      
-      // Don't hide header if mobile menu is open
-      if (isMobileMenuOpen) return;
-      
-      // Show header when at top
-      if (currentScrollY < 10) {
-        setIsHeaderVisible(true);
-      }
-      // Hide header when scrolling down
-      else if (currentScrollY > lastScrollY && currentScrollY > 100) {
-        setIsHeaderVisible(false);
-        // Close any open dropdowns when hiding
-        setShowLanguageDropdown(false);
-        setIsSearchExpanded(false);
-      }
-      // Show header when scrolling up
-      else if (currentScrollY < lastScrollY) {
-        setIsHeaderVisible(true);
-      }
-      
-      setLastScrollY(currentScrollY);
-    };
-
-    // Add scroll event listener
-    window.addEventListener('scroll', controlHeader, { passive: true });
-    
-    // Cleanup
-    return () => {
-      window.removeEventListener('scroll', controlHeader);
-    };
-  }, [lastScrollY, isMobileMenuOpen]);
-
   return (
-    <header className={`header ${isHeaderVisible ? 'header-visible' : 'header-hidden'}`}>
+    <header className="header">
       <div className="header-container">
         {/* ==== NHÓM 1: LOGO ==== */}
         <div className="header-logo">

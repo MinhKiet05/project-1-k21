@@ -7,8 +7,8 @@
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
   overflow: hidden;
   position: fixed;
-  bottom: 2px;
-  right: 2px;
+  bottom: 2px!important;
+  right: 2px!important;
   display: flex;
   flex-direction: column;
   color: #e4e6ea;
@@ -290,8 +290,8 @@
 @media (max-width: 480px) {
   .chat-popup {
     width: calc(100vw - 40px);
-    right: 20px;
-    left: 20px;
+    right: 2px;
+    bottom: 2px;
     max-width: 360px;
   }
 }
