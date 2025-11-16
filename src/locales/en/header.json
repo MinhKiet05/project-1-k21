@@ -7,6 +7,7 @@
   "search": "Search...",
   "loginRequired": {
     "post": "You need to login to create a post",
-    "management": "You need to login to manage your posts"
-  }
+    "management": "You need to login to manage posts"
+  },
+  "adminDashboard": "Admin Dashboard"
 }

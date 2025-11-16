@@ -363,7 +363,7 @@ export default function Header() {
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     <FontAwesomeIcon icon={faCrown} className="mobile-admin-icon" />
-                    Quản lý cho admin
+                    {t("adminDashboard")}
                   </Link>
                 </li>
               )}
