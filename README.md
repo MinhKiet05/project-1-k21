@@ -162,7 +162,6 @@ npm run lint         # Chạy ESLint
 - Chat trực tiếp 1-1
 - Thông báo real-time với Supabase subscriptions
 - UI/UX tối ưu với popup management
-- Trạng thái online/offline
 
 ### 🌐 **i18n Support**
 - Hỗ trợ đầy đủ Tiếng Việt và Tiếng Anh
