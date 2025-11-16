@@ -20,6 +20,7 @@
     position: relative;
     max-width: 1140px;
     display: block;
+    width: calc(100% - 60px);
 }
 
 /* Bỏ close button vì không cần modal */
@@ -279,6 +280,7 @@
     .detail-wrapper {
         padding: 20px;
         margin: 20px 0;
+        width: calc(100% - 40px);
     }
     
     .detail-content {
