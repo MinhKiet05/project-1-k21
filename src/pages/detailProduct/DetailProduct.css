@@ -1,11 +1,8 @@
 /* DetailProduct.css */
 .detail-container {
     width: 100%;
-    margin: 0 auto;
-    padding: 20px!important;
     background-color: #f9f9f9;
-    min-height: calc(100vh - 58px - 40px);
-    padding: 20px 0px;
+    padding: 20px 20px;
     display: flex;
     justify-content: center;
     font-family: 'BeVietNamPro', sans-serif;
@@ -21,7 +18,7 @@
     padding: 30px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     position: relative;
-    max-width: calc(100% - 40px);
+    max-width: 1140px;
     display: block;
 }
 
@@ -276,7 +273,7 @@
 @media (max-width: 768px) {
     .detail-container {
         padding: 10px;
-        max-width: calc(100vw - 40px);
+        max-width: calc(100vw - 20px);
     }
     
     .detail-wrapper {
@@ -390,6 +387,7 @@
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     max-width: 1140px;
+    margin: 20px auto 40px;
 }
 
 .suggestion-section-title {
@@ -474,7 +472,7 @@
 /* Responsive Grid for Suggestion Section */
 @media (max-width: 968px) {
     .suggestion-section {
-        margin: 30px 10px 0;
+        margin: 30px 0px 0;
         padding: 20px;
     }
     
