@@ -139,8 +139,9 @@
   /* allow horizontal scrolling when table is wider than container */
   overflow-x: auto;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  max-height: 380px;
   overflow-y: auto;
+  flex: 1; /* Chiếm hết không gian còn lại */
+  min-height: 0; /* Cho phép flex shrink */
 }
 
 .admin-table {
@@ -248,6 +249,9 @@
   border-radius: 8px;
   padding: 0;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  height: calc(100%); /* Chiếm hết không gian trừ 60px padding */
+  display: flex;
+  flex-direction: column;
 }
 
 .users-management .page-title {
@@ -262,7 +266,8 @@
   background: white;
   border-radius: 0 0 8px 8px;
   overflow: hidden;
-  height: 420px;           /* cố định chiều cao để cuộn được */
+  flex: 1; /* Chiếm hết không gian còn lại */
+  min-height: 0; /* Cho phép flex shrink */
   overflow-y: auto;
   overflow-x: auto;        /* cho phép cuộn ngang */
 }
@@ -463,17 +468,35 @@
 }
 
 /* ===== RESPONSIVE ===== */
-@media (max-width: 800px) {
+@media (max-width: 1200px) {
   .admin-container {
     flex-direction: column;
+    height: calc(100vh - 63px); /* Giữ nguyên height */
   }
   
   .admin-sidebar {
     width: 100%;
+    height: auto; /* Sidebar không cố định chiều cao */
   }
   
   .admin-main {
     padding: 15px;
+    flex: 1; /* Cho phép main content chiếm hết không gian còn lại */
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 63px - 120px); /* Giới hạn chiều cao trừ header và sidebar */
+    overflow: hidden; /* Ngăn tràn */
+  }
+  
+  .users-management {
+    height: 100%; /* Chiếm hết không gian của admin-main */
+  }
+  
+  .post-table-container,
+  .user-table-container {
+    flex: 1; /* Chiếm hết không gian còn lại */
+    height: auto; /* Không cố định chiều cao */
+    min-height: 300px; /* Chiều cao tối thiểu */
   }
   
   .admin-table {
