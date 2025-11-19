@@ -1,19 +1,36 @@
-.manager-container {
-  padding: 30px 40px;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-  font-family: 'BeVietNamPro', sans-serif;
-}
-
-.manager{
+/* ==========================
+   WRAPPER CHÍNH
+========================== */
+.manager {
   padding: 30px 20px;
   background-color: #F8F9FA;
   border-radius: 10px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
   border: 1px solid #ddd;
+  height: calc(100vh - 123px); /* chiều cao chuẩn */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
+/* ==========================
+   CONTAINER BÊN TRONG
+========================== */
+.manager-container {
+  background-color: #fff;
+  padding: 30px 30px;
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0; 
+}
+
+/* ==========================
+   TITLE
+========================== */
 .manager-title {
   color: #d63c00;
   font-size: 26px;
@@ -21,16 +38,15 @@
   margin-bottom: 20px;
 }
 
-.manager-search-section {
-  margin-bottom: 20px;
-}
-
-
-/* ===== SEARCH SECTION ===== */
+/* ==========================
+  SEARCH BOX
+========================== */
 .search-section {
   background: white;
   padding: 16px;
+  border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
 }
 
 .search-box-admin {
@@ -43,30 +59,22 @@
 .search-box-admin input {
   flex: 1;
   padding: 12px 15px;
-  border: 1px solid #ddd;
   border-radius: 25px;
-  outline: none;
+  border: 1px solid #ddd;
   font-size: 14px;
-  max-width: calc(100% - 61px);
+  outline: none;
 }
 
 .search-btn {
   background: #E59462;
-  color: blanchedalmond;
+  color: #fff;
   border: none;
-  padding: 12px 12px;
+  padding: 12px;
   border-radius: 25px;
   cursor: pointer;
-  transition: background-color 0.2s;
 }
-
 .search-btn:hover {
-  background: #6d5a44;
-}
-
-.search-result {
-  color: #666;
-  font-size: 14px;
+  background-color: #6d5a44;
 }
 
 .manager-filters-row {
@@ -75,29 +83,7 @@
   flex-wrap: wrap;
   margin-bottom: 10px;
 }
-.action-btn-view-detail {
-  padding: 8px 15px;
-  border: none;
-  border-radius: 20px;
-  cursor: pointer;
-  font-size: 12px;
-  font-weight: 600;
-  transition: all 0.2s;
-  min-width: 100px;
-  background-color: #E59462;
-  color: black;
-  border: 1px solid #C6714E;
-}
 
-.action-btn.reject:hover {
-  background-color: #C6714E;
-  transform: translateY(-1px);
-}
-
-.action-btn.approve {
-  background-color: #8B7355;
-  color: white;
-}
 .manager-filters-row select {
   padding: 8px 12px;
   border-radius: 8px;
@@ -109,32 +95,42 @@
   font-size: 15px;
   color: #555;
 }
-.manager-table-container{
+
+/* ==========================
+   TABLE WRAPPER (auto height)
+========================== */
+.manager-table-container {
+  flex: 1;
   width: 100%;
   overflow-x: auto;
-
+  overflow-y: auto;
+  min-height: 0; /* fix scroll không hoạt động */
 }
+
+/* ==========================
+   TABLE
+========================== */
 .manager-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 10px;
-  border: 1px solid#ddd;
-
+  border: 1px solid #ddd;
 }
 
 .manager-table th {
   background-color: #E59462;
-  color: #000000;
   padding: 10px;
+  color: #000;
   text-align: left;
 }
 
 .manager-table td {
   padding: 10px;
   border-bottom: 1px solid #f0f0f0;
-  vertical-align: middle;
 }
 
+/* ==========================
+   IMAGE
+========================== */
 .manager-img {
   width: 60px;
   height: 60px;
@@ -143,38 +139,26 @@
   border: 1px solid #ddd;
 }
 
-.manager-btn {
-  background-color: #e87d2b;
-  color: #000000;
-  border: none;
+/* ==========================
+   BUTTONS
+========================== */
+.action-btn-view-detail {
+  padding: 8px 15px;
   border-radius: 20px;
-  padding: 6px 16px;
+  border: none;
   cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 12px;
+  background-color: #E59462;
+  border: 1px solid #C6714E;
+  transition: 0.2s;
 }
-
-.manager-btn:hover {
+.action-btn-view-detail:hover {
   background-color: #cf6d19;
 }
 
-.status-approved {
-  color: #00994c;
-  font-weight: 600;
-}
-
-.status-pending {
-  color: #e6b800;
-}
-
-.status-rejected {
-  color: #e74c3c;
-}
-
-.status-expired {
-  color: #999;
-}
-
-.status-sold {
-  color: #888;
-}
+/* STATUS COLORS */
+.status-approved { color: #00994c; font-weight: 600; }
+.status-pending { color: #e6b800; }
+.status-rejected { color: #e74c3c; }
+.status-expired  { color: #999; }
+.status-sold     { color: #888; }
