@@ -6,6 +6,7 @@ import { Suspense, lazy } from 'react';
 
 import Header from "./components/header/Header.jsx";
 import Footer from "./components/footer/Footer.jsx";
+import TourOrchestrator from "./components/TourOrchestrator.jsx";
 import ProtectedAdminRoute from "./components/ProtectedAdminRoute/ProtectedAdminRoute.jsx";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute.jsx";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop.jsx";
@@ -93,6 +94,9 @@ export default function App() {
           pauseOnHover
           theme="light"
         />
+        
+        {/* Tour Orchestrator - handles guided tours */}
+        <TourOrchestrator />
       </Router>
       </ChatProvider>
     </UserRoleProvider>
