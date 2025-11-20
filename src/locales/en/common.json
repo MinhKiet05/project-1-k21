@@ -28,5 +28,7 @@
   "warning": "Warning",
   "info": "Information",
   "author": "Author",
-  "language": "Language"
+  "language": "Language",
+  "tourGuide": "Guide me",
+  "tourGuideTitle": "Show me how to use this page"
 }

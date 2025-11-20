@@ -152,14 +152,10 @@ export default async function startSiteTour(stepsOverride = null, opts = {}) {
                 nextBtnText: "Next",
                 prevBtnText: "Back",
                 doneBtnText: "Done",
-                // Confirm before exit when tour is not finished
+                // Let custom onCloseClick handle confirmation
                 onDestroyStarted: () => {
-                  if (
-                    !driverInstance.hasNextStep() ||
-                    confirm("Bạn có chắc muốn thoát tour không?")
-                  ) {
-                    driverInstance.destroy();
-                  }
+                  // Don't show browser dialog, let custom logic handle it
+                  return true;
                 },
               },
               opts
@@ -193,14 +189,9 @@ export default async function startSiteTour(stepsOverride = null, opts = {}) {
                     nextBtnText: "Next",
                     prevBtnText: "Back",
                     doneBtnText: "Done",
-                    // Confirm before exit when tour is not finished
+                    // Let custom onCloseClick handle confirmation
                     onDestroyStarted: () => {
-                      if (
-                        !inst.hasNextStep() ||
-                        confirm("Bạn có chắc muốn thoát tour không?")
-                      ) {
-                        inst.destroy();
-                      }
+                      return true;
                     },
                   },
                   opts
@@ -225,14 +216,9 @@ export default async function startSiteTour(stepsOverride = null, opts = {}) {
                   nextBtnText: "Next",
                   prevBtnText: "Back",
                   doneBtnText: "Done",
-                  // Confirm before exit when tour is not finished
+                  // Let custom onCloseClick handle confirmation
                   onDestroyStarted: () => {
-                    if (
-                      !driverInstance.hasNextStep() ||
-                      confirm("Bạn có chắc muốn thoát tour không?")
-                    ) {
-                      driverInstance.destroy();
-                    }
+                    return true;
                   },
                 },
                 opts

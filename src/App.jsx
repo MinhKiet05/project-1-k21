@@ -4,9 +4,9 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Suspense, lazy } from 'react';
 
-import Header from "./components/header/Header.jsx";
+import Header from "./components/header/header.jsx";
 import Footer from "./components/footer/Footer.jsx";
-import TourOrchestrator from "./components/TourOrchestrator.jsx";
+import TourOrchestrator from "./components/TourGuideButton/TourOrchestrator.jsx";
 import ProtectedAdminRoute from "./components/ProtectedAdminRoute/ProtectedAdminRoute.jsx";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute.jsx";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop.jsx";
