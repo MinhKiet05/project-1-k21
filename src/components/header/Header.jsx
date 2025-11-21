@@ -12,6 +12,7 @@ import {
   faCrown,
   faTimes,
   faBars,
+  faQuestionCircle,
 } from "@fortawesome/free-solid-svg-icons";
 
 // Import flag WebP files
@@ -258,13 +259,13 @@ export default function Header() {
   // Handle mobile menu overlay effect
   useEffect(() => {
     if (isMobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     }
 
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     };
   }, [isMobileMenuOpen]);
 
@@ -278,20 +279,19 @@ export default function Header() {
       <div className="header-container">
         {/* ==== NHÓM 1: LOGO ==== */}
         <div className="header-logo">
-          
           <button className="burger-btn" onClick={toggleMobileMenu}>
-            <FontAwesomeIcon 
-              icon={isMobileMenuOpen ? faTimes : faBars} 
+            <FontAwesomeIcon
+              icon={isMobileMenuOpen ? faTimes : faBars}
               className="burger-icon"
             />
           </button>
           <Link to="/home" className={isActive("/home") ? "active" : ""}>
-          <img src={logo} alt="Logo" />
+            <img src={logo} alt="Logo" />
           </Link>
         </div>
 
         {/* ==== NHÓM 2: NAV ==== */}
-        <nav className={`nav ${isMobileMenuOpen ? 'nav-open' : ''}`}>
+        <nav className={`nav ${isMobileMenuOpen ? "nav-open" : ""}`}>
           <ul>
             <li>
               <Link to="/home" className={isActive("/home") ? "active" : ""}>
@@ -331,48 +331,54 @@ export default function Header() {
               </Link>
             </li>
             {/* Mobile Search */}
-              <li className="mobile-search-item">
-                <div className="mobile-search-container">
-                  <input
-                    type="text"
-                    placeholder={t("search")}
-                    className="mobile-search-input"
-                    onKeyPress={(e) => {
-                      if (e.key === "Enter") {
-                        const query = e.target.value.trim();
-                        if (query) {
-                          navigate(`/search?q=${encodeURIComponent(query)}`);
-                          setIsMobileMenuOpen(false);
-                        }
+            <li className="mobile-search-item">
+              <div className="mobile-search-container">
+                <input
+                  type="text"
+                  placeholder={t("search")}
+                  className="mobile-search-input"
+                  onKeyPress={(e) => {
+                    if (e.key === "Enter") {
+                      const query = e.target.value.trim();
+                      if (query) {
+                        navigate(`/search?q=${encodeURIComponent(query)}`);
+                        setIsMobileMenuOpen(false);
                       }
-                    }}
-                  />
-                  <FontAwesomeIcon icon={faSearch} className="mobile-search-icon" />
-                </div>
-              </li>
+                    }
+                  }}
+                />
+                <FontAwesomeIcon
+                  icon={faSearch}
+                  className="mobile-search-icon"
+                />
+              </div>
+            </li>
             {/* Mobile-only items */}
             <SignedIn>
-              
-              
               {/* Mobile Admin Link */}
               {isAdmin() && (
                 <li className="mobile-admin-item-link-link">
-                  <Link 
-                    to="/dashboard" 
+                  <Link
+                    to="/dashboard"
                     className={isActive("/dashboard") ? "active" : ""}
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    <FontAwesomeIcon icon={faCrown} className="mobile-admin-icon" />
+                    <FontAwesomeIcon
+                      icon={faCrown}
+                      className="mobile-admin-icon"
+                    />
                     {t("adminDashboard")}
                   </Link>
                 </li>
               )}
             </SignedIn>
-            
+
             {/* Mobile Language Selector */}
             <li className="mobile-language-item">
               <div className="mobile-language-selector">
-                <span className="mobile-language-label">{t("common:language")}:</span>
+                <span className="mobile-language-label">
+                  {t("common:language")}:
+                </span>
                 <div className="mobile-language-options">
                   {Object.entries(languages).map(([code, lang]) => (
                     <button
@@ -399,39 +405,39 @@ export default function Header() {
         <div className="header-user-actions">
           {/* Search Icon */}
           <div
-              id="an-tren-tablet-mobile"
-              className={`search-container ${
-                isSearchExpanded ? "expanded" : "collapsed"
-              }`}
+            id="an-tren-tablet-mobile"
+            className={`search-container ${
+              isSearchExpanded ? "expanded" : "collapsed"
+            }`}
+          >
+            {isSearchExpanded && (
+              <input
+                ref={searchInputRef}
+                type="text"
+                placeholder={t("search")}
+                className="search-input-expanded"
+                onKeyPress={(e) => {
+                  if (e.key === "Enter") {
+                    handleSearch();
+                  }
+                }}
+                onBlur={() => {
+                  if (!searchInputRef.current?.value.trim()) {
+                    setTimeout(() => setIsSearchExpanded(false), 150);
+                  }
+                }}
+              />
+            )}
+            <button
+              className="header-icon-btn search-icon-btn"
+              onClick={handleSearch}
             >
-              {isSearchExpanded && (
-                <input
-                  ref={searchInputRef}
-                  type="text"
-                  placeholder={t("search")}
-                  className="search-input-expanded"
-                  onKeyPress={(e) => {
-                    if (e.key === "Enter") {
-                      handleSearch();
-                    }
-                  }}
-                  onBlur={() => {
-                    if (!searchInputRef.current?.value.trim()) {
-                      setTimeout(() => setIsSearchExpanded(false), 150);
-                    }
-                  }}
-                />
-              )}
-              <button
-                className="header-icon-btn search-icon-btn"
-                onClick={handleSearch}
-              >
-                <FontAwesomeIcon
-                  icon={isSearchExpanded ? faTimes : faSearch}
-                  className="icon-btn-search"
-                />
-              </button>
-            </div>
+              <FontAwesomeIcon
+                icon={isSearchExpanded ? faTimes : faSearch}
+                className="icon-btn-search"
+              />
+            </button>
+          </div>
           <SignedOut>
             <SignInButton mode="modal">
               <div className="login-button">
@@ -445,8 +451,6 @@ export default function Header() {
           </SignedOut>
 
           <SignedIn>
-            
-
             {/* Nút chat: toggle popup */}
             <button
               className={`header-icon-btn ${
@@ -537,8 +541,8 @@ export default function Header() {
 
       {/* ==== MOBILE MENU OVERLAY ==== */}
       {isMobileMenuOpen && (
-        <div 
-          className="mobile-menu-overlay" 
+        <div
+          className="mobile-menu-overlay"
           onClick={() => setIsMobileMenuOpen(false)}
         ></div>
       )}
