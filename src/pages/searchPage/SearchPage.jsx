@@ -227,7 +227,7 @@ export default function SearchPage() {
                         </div>
                          <div className="filter-group form-price-to-price" >
                             <div>
-                                <div className="price-range">
+                                <div>
                                     <span>{t('priceFrom')}:</span>
                                 <input
                                     type="number"
