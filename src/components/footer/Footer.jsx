@@ -44,7 +44,7 @@ function Footer() {
           <h3>{t('footer:contact')}</h3>
           <ul>
             <li><b>{t('footer:email')}:</b> <a href="mailto:notungphoco@gmail.com">notungphoco@gmail.com</a></li>
-            <li><b>{t('footer:phone')}:</b> <a href="tel:0877619159">0877619159</a></li>
+            <li><b>{t('footer:phone')}:</b> <a href="tel:0949667463">0949667463</a></li>
             <li><b>{t('footer:address')}:</b> {t('footer:addressDetail')}</li>
           </ul>
         </div>

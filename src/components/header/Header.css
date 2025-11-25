@@ -209,6 +209,7 @@
   justify-content: flex-end; /* Dồn các icon về bên phải */
   gap: 1.2vw;
   flex-wrap: wrap;
+  width: 470px;
 }
 .header-icon-btn {
   display: flex;
