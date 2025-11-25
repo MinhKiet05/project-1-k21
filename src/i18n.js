@@ -79,15 +79,18 @@ i18n
   .use(initReactI18next) // passes i18n down to react-i18next
   .init({
     resources,
-    lng: undefined, // let the detector determine the language
     fallbackLng: "vi", // fallback language if key not found
+    debug: false,
 
     // Language detection configuration
     detection: {
-      order: ['localStorage', 'sessionStorage', 'navigator', 'htmlTag', 'path', 'subdomain'],
-      caches: ['localStorage', 'sessionStorage'],
-      excludeCacheFor: ['cimode'], // languages to not persist (cookie, localStorage)
-      checkWhitelist: true // check if the detected language is in the whitelist
+      order: ['localStorage', 'sessionStorage', 'cookie'],
+      lookupLocalStorage: 'i18nextLng',
+      lookupSessionStorage: 'i18nextLng', 
+      lookupCookie: 'i18nextLng',
+      caches: ['localStorage', 'sessionStorage', 'cookie'],
+      excludeCacheFor: ['cimode'],
+      checkWhitelist: true
     },
 
     interpolation: {
@@ -116,7 +119,16 @@ i18n
     
     // Whitelist of allowed languages
     supportedLngs: ['vi', 'en'],
-    nonExplicitSupportedLngs: true
+    nonExplicitSupportedLngs: false,
+    cleanCode: true,
+    
+    // Load synchronously to prevent language issues
+    initImmediate: false,
+    
+    // React specific options
+    react: {
+      useSuspense: false
+    }
   });
 
 export default i18n;

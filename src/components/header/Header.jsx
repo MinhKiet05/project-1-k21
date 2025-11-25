@@ -187,8 +187,25 @@ export default function Header() {
 
   // Handle language change
   const changeLanguage = (lng) => {
+    console.log('Changing language to:', lng);
     i18n.changeLanguage(lng);
+    // Force save to localStorage
+    localStorage.setItem('i18nextLng', lng);
+    console.log('Language saved to localStorage:', localStorage.getItem('i18nextLng'));
   };
+
+  // Debug language initialization
+  useEffect(() => {
+    console.log('Header mounted - Current language:', i18n.language);
+    console.log('localStorage i18nextLng:', localStorage.getItem('i18nextLng'));
+    
+    // Ensure language is loaded from storage
+    const savedLng = localStorage.getItem('i18nextLng');
+    if (savedLng && savedLng !== i18n.language) {
+      console.log('Applying saved language:', savedLng);
+      i18n.changeLanguage(savedLng);
+    }
+  }, []);
 
   // Fetch unread notifications count
   useEffect(() => {
@@ -378,7 +395,7 @@ export default function Header() {
                     <button
                       key={code}
                       className={`mobile-language-btn ${
-                        i18n.language === code ? "active" : ""
+                        (i18n.language || 'vi') === code ? "active" : ""
                       }`}
                       onClick={() => {
                         changeLanguage(code);
@@ -501,9 +518,9 @@ export default function Header() {
             onClick={() => setShowLanguageDropdown(!showLanguageDropdown)}
           >
             <span className="current-language">
-              <FlagIcon countryCode={i18n.language} className="flag-main" />
+              <FlagIcon countryCode={i18n.language || 'vi'} className="flag-main" />
               <span className="language-text">
-                {languages[i18n.language]?.text}
+                {languages[i18n.language || 'vi']?.text}
               </span>
             </span>
             <span
@@ -519,7 +536,7 @@ export default function Header() {
                 <div
                   key={code}
                   className={`language-option ${
-                    i18n.language === code ? "active" : ""
+                    (i18n.language || 'vi') === code ? "active" : ""
                   }`}
                   onClick={() => {
                     changeLanguage(code);
