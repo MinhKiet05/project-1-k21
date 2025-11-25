@@ -1,5 +1,6 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
+import LanguageDetector from "i18next-browser-languagedetector";
 
 // Vietnamese translations
 import viCommon from "./locales/vi/common.json";
@@ -74,20 +75,23 @@ const resources = {
 };
 
 i18n
+  .use(LanguageDetector) // detect user language
   .use(initReactI18next) // passes i18n down to react-i18next
   .init({
     resources,
-    lng: "vi", // default language
+    lng: undefined, // let the detector determine the language
     fallbackLng: "vi", // fallback language if key not found
+
+    // Language detection configuration
+    detection: {
+      order: ['localStorage', 'sessionStorage', 'navigator', 'htmlTag', 'path', 'subdomain'],
+      caches: ['localStorage', 'sessionStorage'],
+      excludeCacheFor: ['cimode'], // languages to not persist (cookie, localStorage)
+      checkWhitelist: true // check if the detected language is in the whitelist
+    },
 
     interpolation: {
       escapeValue: false, // react already does escaping
-    },
-
-    // Save language preference to localStorage
-    detection: {
-      order: ["localStorage", "navigator"],
-      caches: ["localStorage"],
     },
 
     // Configure namespaces
@@ -109,6 +113,10 @@ i18n
       "cardProductsOfInterest",
     ],
     defaultNS: "common",
+    
+    // Whitelist of allowed languages
+    supportedLngs: ['vi', 'en'],
+    nonExplicitSupportedLngs: true
   });
 
 export default i18n;
