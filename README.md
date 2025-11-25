@@ -20,7 +20,6 @@ Nền tảng thương mại điện tử hiện đại được xây dựng vớ
 ### 💬 **Hệ thống Chat**
 - 💬 Chat trực tiếp giữa người dùng
 - 🔔 Thông báo thời gian thực
-- ✅ Trạng thái đã xem/chưa xem
 - 🎯 Chat popup và cửa sổ chat riêng biệt
 
 ### 🌐 **Đa ngôn ngữ**
