@@ -21,9 +21,14 @@
   "validation": {
     "images": "Vui lòng thêm ít nhất một ảnh",
     "productName": "Tên sản phẩm phải chứa ít nhất một chữ cái",
+    "productNameSpecialChars": "Tên sản phẩm không được chứa các ký tự đặc biệt",
     "productPrice": "Giá bán phải là số hợp lệ và lớn hơn 0",
     "productPriceValid": "Giá bán phải là số hợp lệ",
+    "productPriceRange": "Giá bán phải từ 1 VNĐ đến 10,000,000 VNĐ",
     "description": "Mô tả phải chứa ít nhất một chữ cái",
+    "descriptionSpam": "Mô tả chứa ký tự lặp bất thường (spam)",
+    "descriptionTooShort": "Mô tả quá ngắn (tối thiểu 20 ký tự)",
+    "descriptionTooLong": "Mô tả quá dài (tối đa 1000 ký tự)",
     "category": "Vui lòng chọn danh mục",
     "location": "Vui lòng chọn khu vực"
   },

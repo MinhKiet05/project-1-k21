@@ -90,28 +90,71 @@ export default function UploadPost() {
         }
     };
 
-    // Helpers để validate theo trường (dùng cho onBlur)
+    // Validation helper functions
     const containsLetter = (s) => /\p{L}/u.test(s || '');
+    
     const isValidNumber = (s) => {
         if (!s) return false;
         const normalized = s.replace(/[.,\s]/g, '');
         return /^-?\d+(\.\d+)?$/.test(normalized);
     };
 
+    const hasSpecialCharacters = (s) => {
+        // Allow letters, numbers, spaces, and basic punctuation like commas, periods, dashes, parentheses
+        return !/^[\p{L}\p{N}\s.,\-()]+$/u.test(s || '');
+    };
+
+    const validateDescription = (text) => {
+        if (!text) return null;
+        
+        // Check for spam (5+ repeated characters)
+        if (/(.)\1{4,}/.test(text)) {
+            return t('validation.descriptionSpam');
+        }
+        
+        // Check length
+        if (text.length < 20) {
+            return t('validation.descriptionTooShort');
+        }
+        
+        if (text.length > 1000) {
+            return t('validation.descriptionTooLong');
+        }
+        
+        return null;
+    };
+
+    const validatePrice = (priceStr) => {
+        if (!priceStr || !isValidNumber(priceStr)) {
+            return t('validation.productPriceValid');
+        }
+        
+        const price = Number(priceStr.replace(/[.,\s]/g, ''));
+        if (price <= 0 || price > 10000000) {
+            return t('validation.productPriceRange');
+        }
+        
+        return null;
+    };
+
     const validateField = (fieldName, value) => {
         setFormErrors(prev => {
             const next = { ...prev };
+            
             if (fieldName === 'productName') {
                 if (!value || !containsLetter(value)) {
                     next.productName = t('validation.productName');
+                } else if (hasSpecialCharacters(value)) {
+                    next.productName = t('validation.productNameSpecialChars');
                 } else {
                     delete next.productName;
                 }
             }
 
             if (fieldName === 'productPrice') {
-                if (!value || !isValidNumber(value) || Number(value) <= 0) {
-                    next.productPrice = t('validation.productPrice');
+                const priceError = validatePrice(value);
+                if (priceError) {
+                    next.productPrice = priceError;
                 } else {
                     delete next.productPrice;
                 }
@@ -121,7 +164,12 @@ export default function UploadPost() {
                 if (!value || !containsLetter(value)) {
                     next.description = t('validation.description');
                 } else {
-                    delete next.description;
+                    const descError = validateDescription(value);
+                    if (descError) {
+                        next.description = descError;
+                    } else {
+                        delete next.description;
+                    }
                 }
             }
 
@@ -154,24 +202,27 @@ export default function UploadPost() {
         const categoryId = formData.get('category') || '';
         const locationId = formData.get('location') || '';
 
-        const containsLetter = (s) => /\p{L}/u.test(s || '');
-        const isValidNumber = (s) => {
-            if (!s) return false;
-            // Remove common formatting characters like commas and spaces
-            const normalized = s.replace(/[.,\s]/g, '');
-            return /^-?\d+(\.\d+)?$/.test(normalized);
-        };
-
+        // Validate product name
         if (!name || !containsLetter(name)) {
             errors.productName = t('validation.productName');
+        } else if (hasSpecialCharacters(name)) {
+            errors.productName = t('validation.productNameSpecialChars');
         }
 
-        if (!price || !isValidNumber(price)) {
-            errors.productPrice = t('validation.productPriceValid');
+        // Validate price
+        const priceError = validatePrice(price);
+        if (priceError) {
+            errors.productPrice = priceError;
         }
 
+        // Validate description
         if (!description || !containsLetter(description)) {
             errors.description = t('validation.description');
+        } else {
+            const descError = validateDescription(description);
+            if (descError) {
+                errors.description = descError;
+            }
         }
 
         if (!categoryId) {
