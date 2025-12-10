@@ -44,8 +44,6 @@ export const cleanupDuplicateConversations = async (userId) => {
         const keepConversation = conversations[0];
         const duplicateConversations = conversations.slice(1);
         
-        console.log(`Found ${duplicateConversations.length} duplicate conversations for participants: ${participants}`);
-        
         // Move all messages from duplicates to the main conversation
         for (const dupConv of duplicateConversations) {
           // Move messages
@@ -70,8 +68,6 @@ export const cleanupDuplicateConversations = async (userId) => {
             .from('conversations')
             .delete()
             .eq('id', dupConv.id);
-            
-          console.log(`Merged conversation ${dupConv.id} into ${keepConversation.id}`);
         }
       }
     }

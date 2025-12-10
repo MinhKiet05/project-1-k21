@@ -187,22 +187,16 @@ export default function Header() {
 
   // Handle language change
   const changeLanguage = (lng) => {
-    console.log('Changing language to:', lng);
     i18n.changeLanguage(lng);
     // Force save to localStorage
     localStorage.setItem('i18nextLng', lng);
-    console.log('Language saved to localStorage:', localStorage.getItem('i18nextLng'));
   };
 
   // Debug language initialization
   useEffect(() => {
-    console.log('Header mounted - Current language:', i18n.language);
-    console.log('localStorage i18nextLng:', localStorage.getItem('i18nextLng'));
-    
     // Ensure language is loaded from storage
     const savedLng = localStorage.getItem('i18nextLng');
     if (savedLng && savedLng !== i18n.language) {
-      console.log('Applying saved language:', savedLng);
       i18n.changeLanguage(savedLng);
     }
   }, []);
