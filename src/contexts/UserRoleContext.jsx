@@ -1,35 +1,56 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 import { useUser } from '@clerk/clerk-react'
-import { supabase } from '../lib/supabase'
+import { useSupabase } from '../hooks/useSupabase'
 
 const UserRoleContext = createContext()
 
 export function UserRoleProvider({ children }) {
   const { user, isLoaded } = useUser()
+  const { supabaseClient, isReady: isSupabaseReady, error: supabaseError } = useSupabase()
   const [userRole, setUserRole] = useState(null)
   const [isLoadingRole, setIsLoadingRole] = useState(true)
+  const [roleError, setRoleError] = useState(null)
 
   useEffect(() => {
-    if (!isLoaded || !user) {
+    if (!isLoaded || !isSupabaseReady) {
+      setIsLoadingRole(true)
+      return
+    }
+
+    if (!user) {
       setUserRole(null)
       setIsLoadingRole(false)
+      setRoleError(null)
+      return
+    }
+
+    if (supabaseError) {
+      setUserRole('user')
+      setIsLoadingRole(false)
+      setRoleError(supabaseError)
       return
     }
 
     const fetchUserRole = async () => {
       try {
         setIsLoadingRole(true)
+        setRoleError(null)
         
-        const { data, error } = await supabase
+        const { data, error } = await supabaseClient
           .from('profiles')
           .select('roles')
           .eq('id', user.id)
           .single()
 
         if (error) {
-          setUserRole('user') // Default to user role
+          if (error.code === 'PGRST116') {
+            await createDefaultProfile(user.id)
+            setUserRole('user')
+          } else {
+            setUserRole('user')
+            setRoleError(error.message)
+          }
         } else {
-          // roles là array, lấy role cao nhất
           const rolesArray = data?.roles || ['user']
           
           if (rolesArray.includes('super_admin')) {
@@ -42,13 +63,24 @@ export function UserRoleProvider({ children }) {
         }
       } catch (err) {
         setUserRole('user')
+        setRoleError(err.message)
       } finally {
         setIsLoadingRole(false)
       }
     }
 
+    const createDefaultProfile = async (userId) => {
+      try {
+        await supabaseClient
+          .from('profiles')
+          .insert({ id: userId, roles: ['user'] })
+      } catch {
+        // Profile creation failed
+      }
+    }
+
     fetchUserRole()
-  }, [user, isLoaded])
+  }, [user, isLoaded, supabaseClient, isSupabaseReady, supabaseError])
 
   const isAdmin = () => userRole === 'admin' || userRole === 'super_admin'
   const isSuperAdmin = () => userRole === 'super_admin'
@@ -82,12 +114,16 @@ export function UserRoleProvider({ children }) {
   const value = {
     userRole,
     isLoadingRole,
+    roleError,
     isAdmin,
     isSuperAdmin,
     canModerateContent,
     canEditRoles,
     canEditUserRole,
-    getAvailableRoles
+    getAvailableRoles,
+    // Expose authenticated Supabase client để các component khác có thể sử dụng
+    supabaseClient: isSupabaseReady ? supabaseClient : null,
+    isSupabaseReady,
   }
 
   return (
