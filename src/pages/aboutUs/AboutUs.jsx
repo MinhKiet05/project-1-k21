@@ -28,7 +28,7 @@ const AboutUs = () => {
           <div className="story-content">
             <img src={storyIMG} alt="Our Story" className="story-image" />
             <div className="story-text">
-              <h3 className="story-heading">{t('story.heading')}</h3>
+              <h3 className="story-heading">TradeHub</h3>
               <p className="story-description">
                 {t('story.description')}
               </p>

@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useRef, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import logo from "../../assets/logo.webp";
+import logo from "../../assets/logoTradeHub.webp";
 import {
   faBell,
   faSearch,

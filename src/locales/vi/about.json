@@ -1,22 +1,22 @@
 {
   "story": {
     "title": "Câu chuyện",
-    "heading": "Nổ Tung Phố Cổ",
-    "description": "Chúng tôi ra đời từ mong muốn đơn giản là kết nối những người có cùng nhu cầu mua và bán một cách trực tiếp, không rào cản. Nổ Tung Phố Cổ là dự án phi lợi nhuận, được xây dựng để tạo ra một không gian trao đổi minh bạch, hiệu quả, nơi cộng đồng có thể tin cậy lẫn nhau mà không cần trung gian thương mại."
+    "heading": "TradeHub",
+    "description": "Chúng tôi ra đời từ mong muốn đơn giản là kết nối những người có cùng nhu cầu mua và bán một cách trực tiếp, không rào cản. TradeHub là dự án phi lợi nhuận, được xây dựng để tạo ra một không gian trao đổi minh bạch, hiệu quả, nơi cộng đồng có thể tin cậy lẫn nhau mà không cần trung gian thương mại."
   },
   "values": {
     "title": "Giá trị",
     "convenience": {
       "title": "Tiện ích",
-      "description": "Nổ Tung Phố Cổ cung cấp một nền tảng tìm kiếm và kết nối chuyên biệt hoàn toàn miễn phí, loại bỏ mọi rào cản thương mại. Tiện ích cốt lõi của chúng tôi là tạo ra môi trường giao tiếp trực tiếp, minh bạch, giúp người mua và người bán dễ dàng trao đổi thông tin để đạt được thỏa thuận cá nhân nhanh chóng nhất."
+      "description": "TradeHub cung cấp một nền tảng tìm kiếm và kết nối chuyên biệt hoàn toàn miễn phí, loại bỏ mọi rào cản thương mại. Tiện ích cốt lõi của chúng tôi là tạo ra môi trường giao tiếp trực tiếp, minh bạch, giúp người mua và người bán dễ dàng trao đổi thông tin để đạt được thỏa thuận cá nhân nhanh chóng nhất."
     },
     "quality": {
       "title": "Chất lượng sản phẩm",
-      "description": "Chúng tôi đặt chất lượng sản phẩm làm ưu tiên hàng đầu. Mọi bài đăng trên Nổ Tung Phố Cổ đều được đội ngũ quản trị viên kiểm duyệt kỹ lưỡng trước khi hiển thị, nhằm đảm bảo thông tin mô tả rõ ràng, hình ảnh chân thực và giá cả hợp lý. Nhờ đó, người mua có thể yên tâm lựa chọn sản phẩm và trải nghiệm giao dịch minh bạch, đáng tin cậy."
+      "description": "Chúng tôi đặt chất lượng sản phẩm làm ưu tiên hàng đầu. Mọi bài đăng trên TradeHub đều được đội ngũ quản trị viên kiểm duyệt kỹ lưỡng trước khi hiển thị, nhằm đảm bảo thông tin mô tả rõ ràng, hình ảnh chân thực và giá cả hợp lý. Nhờ đó, người mua có thể yên tâm lựa chọn sản phẩm và trải nghiệm giao dịch minh bạch, đáng tin cậy."
     },
     "connection": {
       "title": "Kết nối nhanh chóng",
-      "description": "Nổ Tung Phố Cổ là cầu nối tối giản giúp bạn tìm thấy đối tác giao dịch (mua/bán) ngay lập tức. Chúng tôi rút ngắn mọi quy trình, cho phép người dùng liên hệ trực tiếp với nhau thông qua tin nhắn sản phẩm. Mục tiêu là tạo ra sự trao đổi thân thiện, dễ hiểu, giúp giao dịch cá nhân khởi động dễ dàng và không chậm trễ."
+      "description": "TradeHub là cầu nối tối giản giúp bạn tìm thấy đối tác giao dịch (mua/bán) ngay lập tức. Chúng tôi rút ngắn mọi quy trình, cho phép người dùng liên hệ trực tiếp với nhau thông qua tin nhắn sản phẩm. Mục tiêu là tạo ra sự trao đổi thân thiện, dễ hiểu, giúp giao dịch cá nhân khởi động dễ dàng và không chậm trễ."
     }
   }
 }

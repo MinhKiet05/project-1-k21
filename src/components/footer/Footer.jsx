@@ -2,7 +2,7 @@ import React from "react";
 import "./Footer.css";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
-import logo from '../../assets/logo.webp';
+import logo from '../../assets/logoTradeHub.webp';
 function Footer() {
   const { t } = useTranslation(['common', 'header', 'footer']);
   const location = useLocation();
@@ -23,8 +23,7 @@ function Footer() {
         <div className="footer-logo">
                   <img src={logo} alt="Logo" />
                   <div className="footer-name">
-                    <div className="footer-name-top">Nổ Tung </div>
-                    <div className="footer-name-bottom">Phố Cổ</div>
+                    <div className="footer-name-top">TradeHub</div>
                   </div>
                 </div>
 
