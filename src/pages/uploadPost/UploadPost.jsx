@@ -8,6 +8,35 @@ import { useCreatePost } from '../../hooks/useCreatePost';
 import { uploadImages } from '../../utils/uploadImages';
 import { useUser } from '@clerk/clerk-react';
 
+// Utility functions for input sanitization
+const sanitizeHtml = (str) => {
+    if (!str) return '';
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#x27;')
+        .replace(/\//g, '&#x2F;');
+};
+
+const sanitizeInput = (str) => {
+    if (!str) return '';
+    return str
+        .trim()
+        .replace(/[\x00-\x1F\x7F-\x9F]/g, '') // Remove control characters
+        .replace(/\s+/g, ' ') // Normalize whitespace
+        .substring(0, 1000); // Limit length
+};
+
+const sanitizeNumeric = (str) => {
+    if (!str) return '';
+    return str
+        .replace(/[^\d.,\s-]/g, '') // Only allow digits, commas, periods, spaces, minus
+        .replace(/\s+/g, '')
+        .substring(0, 20);
+};
+
 export default function UploadPost() {
     const { t } = useTranslation(['upload', 'common']);
     const [images, setImages] = useState([]);
@@ -196,41 +225,48 @@ export default function UploadPost() {
         }
 
         const formData = new FormData(e.target);
-        const name = (formData.get('productName') || '').toString().trim();
-        const price = (formData.get('productPrice') || '').toString().trim();
-        const description = (formData.get('description') || '').toString().trim();
+        const rawName = (formData.get('productName') || '').toString();
+        const rawPrice = (formData.get('productPrice') || '').toString();
+        const rawDescription = (formData.get('description') || '').toString();
         const categoryId = formData.get('category') || '';
         const locationId = formData.get('location') || '';
 
-        // Validate product name
-        if (!name || !containsLetter(name)) {
+        // Sanitize all inputs
+        const name = sanitizeInput(rawName);
+        const price = sanitizeNumeric(rawPrice);
+        const description = sanitizeInput(rawDescription);
+
+        // Additional validation after sanitization
+        if (!name || name.length < 2) {
             errors.productName = t('validation.productName');
-        } else if (hasSpecialCharacters(name)) {
+        }
+
+        if (!price || !isValidNumber(price)) {
+            errors.productPrice = t('validation.productPriceValid');
+        }
+
+        if (!description || description.length < 10) {
+            errors.description = t('validation.description');
+        }
+
+        if (!categoryId || categoryId.length < 1) {
+            errors.category = t('validation.category');
+        }
+
+        if (!locationId || locationId.length < 1) {
+            errors.location = t('validation.location');
+        }
+
+        // Validate sanitized inputs against business rules
+        if (name && hasSpecialCharacters(name)) {
             errors.productName = t('validation.productNameSpecialChars');
         }
 
-        // Validate price
-        const priceError = validatePrice(price);
-        if (priceError) {
-            errors.productPrice = priceError;
-        }
-
-        // Validate description
-        if (!description || !containsLetter(description)) {
-            errors.description = t('validation.description');
-        } else {
+        if (description) {
             const descError = validateDescription(description);
             if (descError) {
                 errors.description = descError;
             }
-        }
-
-        if (!categoryId) {
-            errors.category = t('validation.category');
-        }
-
-        if (!locationId) {
-            errors.location = t('validation.location');
         }
 
         if (Object.keys(errors).length > 0) {
@@ -260,16 +296,35 @@ export default function UploadPost() {
                 return;
             }
 
-            // 2. Tạo post trong database
+            // 2. Tạo post trong database với sanitized data
             const postData = {
-                title: name,
-                description: description,
-                price: price.replace(/[.,\s]/g, ''), // Loại bỏ định dạng
+                title: sanitizeHtml(name), // Additional HTML sanitization for storage
+                description: sanitizeHtml(description),
+                price: parseFloat(price.replace(/[.,\s]/g, '')), // Convert to number
                 imageUrls: uploadResult.urls,
-                authorId: user.id,
-                categoryId: categoryId,
-                locationId: locationId
+                authorId: user.id, // Already validated by Clerk
+                categoryId: categoryId, // UUID from select options
+                locationId: locationId  // UUID from select options
             };
+
+            // Final validation before database insert
+            if (postData.price <= 0 || postData.price > 10000000) {
+                setError(t('errors.invalidPrice'));
+                toast.error(t('errors.invalidPrice'));
+                return;
+            }
+
+            if (postData.title.length < 2 || postData.title.length > 255) {
+                setError(t('errors.invalidTitle'));
+                toast.error(t('errors.invalidTitle'));
+                return;
+            }
+
+            if (postData.description.length < 10 || postData.description.length > 1000) {
+                setError(t('errors.invalidDescription'));
+                toast.error(t('errors.invalidDescription'));
+                return;
+            }
 
             const createResult = await createPost(postData);
             
